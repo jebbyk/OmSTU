@@ -1,6 +1,7 @@
 #include <windows.h>
 #include <stdio.h>
 
+//realy it's a crutch
 void Wait(HANDLE out)
 {
 	int a;
@@ -29,7 +30,7 @@ void main()
 		printf("\nOutput handle - %d ", hstdout);
 		printf("\nError handle - %d ", hstderror);*/
 
-		//files
+		//open files to work with ones
 		outFileHandle = CreateFile("lab1out.txt", GENERIC_WRITE, 0, 0, CREATE_ALWAYS, 0, 0);
 		inputFileHandle = CreateFile("lab1input.txt", GENERIC_READ, 0, 0, OPEN_ALWAYS, 0, 0);
 		if(outFileHandle ==  INVALID_HANDLE_VALUE)
@@ -43,11 +44,12 @@ void main()
 			Wait(hstdout);
 		}
 
+		//some kind of controlling buffer
 		char c[1];
 		WriteFile(hstdout, "\n1 - read from keyboard, 0 - read from file\n", 44, &actLength, NULL);
-		
 		ReadFile(hstdin, c, 1, &actLength, NULL);
 		
+		//read from keyboard
 		if(c[0] == '1')
 		{
 			WriteFile(hstdout, "\nEnter your text\n",17, &actLength, NULL);
@@ -57,6 +59,7 @@ void main()
 			WriteFile(hstdout, buffer, length, &actLength, NULL);
 			WriteFile(hstdout, "\n1 - write to file, 0 - do nothing\n", 35, &actLength, NULL);
 		}
+		//read from file
 		if(c[0] == '0')
 		{
 			ReadFile(inputFileHandle, buffer, 128, &length, NULL);
@@ -65,18 +68,18 @@ void main()
 			WriteFile(hstdout, "\n1 - write to file, 0 - do nothing\n", 35, &actLength, NULL);
 			getchar();
 		}
-	
+		//some controls again
 		ReadFile(hstdin, c, 1, &actLength, NULL);
-
+		//if 1 - write it to file, else do nothing
 		if(c[0] == '1') 
 		{
 			WriteFile(outFileHandle, "\nFrom program: ", 15, &actLength, NULL);
 			WriteFile(outFileHandle, buffer, length, &actLength, NULL);
-			//CloseHandle(outFileHandle);
-			//CloseHandle(inputFileHandle);
+			CloseHandle(outFileHandle);
+			CloseHandle(inputFileHandle);
 			WriteFile(hstdout, "\nNow this text in a file lab1out.txt:", 37, &actLength, NULL);
 		}
-
+		//some kind of crutch i gues (see the begining of the program)
 		Wait(hstdout);	
 	}
 	return;
