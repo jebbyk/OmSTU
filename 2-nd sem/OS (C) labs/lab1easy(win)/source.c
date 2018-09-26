@@ -26,13 +26,14 @@ void main()
 		hstdin = GetStdHandle(STD_INPUT_HANDLE);
 		hstdout = GetStdHandle(STD_OUTPUT_HANDLE);
 		hstderror = GetStdHandle(STD_ERROR_HANDLE);
-		/*printf("\nInput handle - %d ", hstdin);
+		printf("\nInput handle - %d ", hstdin);
 		printf("\nOutput handle - %d ", hstdout);
-		printf("\nError handle - %d ", hstderror);*/
+		printf("\nError handle - %d ", hstderror);
+		fflush(hstdout);
 
 		//open files to work with ones
-		outFileHandle = CreateFile("lab1out.txt", GENERIC_WRITE, 0, 0, CREATE_ALWAYS, 0, 0);
-		inputFileHandle = CreateFile("lab1input.txt", GENERIC_READ, 0, 0, OPEN_ALWAYS, 0, 0);
+		outFileHandle = CreateFile("output.txt", GENERIC_WRITE, 0, 0, CREATE_ALWAYS, 0, 0);
+		inputFileHandle = CreateFile("input.txt", GENERIC_READ, 0, 0, OPEN_ALWAYS, 0, 0);
 		if(outFileHandle ==  INVALID_HANDLE_VALUE)
 		{
 			WriteFile(hstdout, "\n Error creating output file \n", 30, &actLength, NULL );
@@ -45,12 +46,12 @@ void main()
 		}
 
 		//some kind of controlling buffer
-		char c[1];
+		char c;
 		WriteFile(hstdout, "\n1 - read from keyboard, 0 - read from file\n", 44, &actLength, NULL);
-		ReadFile(hstdin, c, 1, &actLength, NULL);
+		c = getchar();
 		
 		//read from keyboard
-		if(c[0] == '1')
+		if(c == '1')
 		{
 			WriteFile(hstdout, "\nEnter your text\n",17, &actLength, NULL);
 			getchar();
@@ -60,7 +61,7 @@ void main()
 			WriteFile(hstdout, "\n1 - write to file, 0 - do nothing\n", 35, &actLength, NULL);
 		}
 		//read from file
-		if(c[0] == '0')
+		if(c == '0')
 		{
 			ReadFile(inputFileHandle, buffer, 128, &length, NULL);
 			WriteFile(hstdout, "\nText was readed from file", 26, &actLength, NULL);
@@ -69,9 +70,9 @@ void main()
 			getchar();
 		}
 		//some controls again
-		ReadFile(hstdin, c, 1, &actLength, NULL);
+		c = getchar();
 		//if 1 - write it to file, else do nothing
-		if(c[0] == '1') 
+		if(c == '1') 
 		{
 			WriteFile(outFileHandle, "\nFrom program: ", 15, &actLength, NULL);
 			WriteFile(outFileHandle, buffer, length, &actLength, NULL);

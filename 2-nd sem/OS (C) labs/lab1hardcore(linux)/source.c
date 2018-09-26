@@ -1,37 +1,37 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include <time.h>
 
 void main()
 {
     int bites, previousBites;
-    char buffer[128] = "\nReaded text: ";// buffer with our text
+    char buffer[128] = "Readed text: \n";// buffer with our text
     bites = 14;//14 simbols in a buffer now
-    char controlBuffer[1];
+    char control;
     int fileHandle;
     char fileName[] = "input.txt";
 
-    fileHandle = open(fileName, O_WRONLY|O_CREAT|O_APPEND, 0600);
+    fileHandle = open(fileName, O_RDONLY|O_CREAT|O_APPEND, 0600);
     if(fileHandle == -1) 
     {
-        write(1, "\n error opening file", 20);
+        write(1, " error opening file \n", 20);
         return;
     }
 
-    write(1, "\n1-read from file, 0-read from keyboard", 39);
-    read(0, controlBuffer, 1);
-    if(controlBuffer[0] == '0')
+    write(1, "1-read from file, 0-read from keyboard\n", 39);
+   // read(0, controlBuffer, 1);
+   control = getchar();
+    if(control == '0')
     {
-        write(1, "\nInput your text ", 17); // print to std linux output
+        write(1, "Input your text \n", 17); // print to std linux output
         // place pointer to end of text in buffer (buffer + 14) and read std input
         bites += read(0, buffer+bites, 128);//returns count of inputed simbols
         //write text from buffer to std output
         write(1,buffer, bites);
     }
-    if(controlBuffer[0] == '1')
+    if(control == '1')
     {
-        write(1, "\nText from file: ", 17);
+        write(1, "Reading text from file: \n", 25);
         bites += read(fileHandle,buffer + bites,  128);
         write(1, buffer, bites);
     }
