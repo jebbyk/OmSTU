@@ -1,0 +1,6 @@
+﻿  main.cpp
+  main.obj : найден .netmodule MSIL или модуль, откомпилированный с параметром /GL; перезапускается компоновка с параметром /LTCG; добавьте /LTCG в командную строку компоновки для повышения производительности компоновщика
+LINK : warning LNK4075: 
+  
+w:\users\jebbyk\source\repos\orbitanium205.03.2018\orbitanium2\button.h(54): warning C4715: Button::IsUnderCursor: w:\users\jebbyk\source\repos\orbitanium205.03.2018\orbitanium2\componentcontainer.h(194) : warning C4715: FindGameObjectWithTag:
+  Orbitanium2.vcxproj -> W:\Users\Jebbyk\source\repos\Orbitanium205.03.2018\Debug\Orbitanium2.exe

@@ -1,0 +1,44 @@
+﻿  Создание кода
+LINK : fatal error C1001: Внутренняя ошибка в файле компилятора.
+  (файл компилятора "f:\dd\vctools\compiler\utc\src\p2\main.c", строка 258)
+   Чтобы обойти эту неполадку, попытайтесь упростить или изменить программу в строках около указанной позиции.
+  Для получения дополнительных сведений выберите команду "Техническая поддержка" 
+  в меню "Справка" Visual C++ или откройте файл справки технической поддержки.
+    link!InvokeCompilerPass()+0x1f260
+    link!InvokeCompilerPass()+0x1f260
+    link!InvokeCompilerPass()+0x1ec7a
+    link!DllGetC2Telemetry()+0x1079da
+  
+LINK : fatal error C1001: Внутренняя ошибка в файле компилятора.
+  (файл компилятора "f:\dd\vctools\compiler\utc\src\p2\main.c", строка 258)
+   Чтобы обойти эту неполадку, попытайтесь упростить или изменить программу в строках около указанной позиции.
+  Для получения дополнительных сведений выберите команду "Техническая поддержка" 
+  в меню "Справка" Visual C++ или откройте файл справки технической поддержки.
+    link!InvokeCompilerPass()+0x1f260
+    link!InvokeCompilerPass()+0x1ec7a
+    link!DllGetC2Telemetry()+0x1079da
+  
+  
+LINK : fatal error LNK1000: Internal error during IMAGE::BuildImage
+  
+    Version 14.12.25830.2
+  
+    ExceptionCode            = C0000005
+    ExceptionFlags           = 00000000
+    ExceptionAddress         = 578834E2 (57450000) "W:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.12.25827\bin\HostX86\x64\c2.dll"
+    NumberParameters         = 00000002
+    ExceptionInformation[ 0] = 00000000
+    ExceptionInformation[ 1] = 0BCBCC84
+  
+  CONTEXT:
+    Eax    = 0BCBCC84  Esp    = 0019EA30
+    Ebx    = 080B0114  Ebp    = 0019EA60
+    Ecx    = 00000005  Esi    = 0BCBCC84
+    Edx    = 07FA402C  Edi    = 0019EA40
+    Eip    = 578834E2  EFlags = 00010206
+    SegCs  = 00000023  SegDs  = 0000002B
+    SegSs  = 0000002B  SegEs  = 0000002B
+    SegFs  = 00000053  SegGs  = 0000002B
+    Dr0    = 00000000  Dr3    = 00000000
+    Dr1    = 00000000  Dr6    = 00000000
+    Dr2    = 00000000  Dr7    = 00000000

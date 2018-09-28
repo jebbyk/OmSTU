@@ -1,0 +1,7 @@
+﻿  RGR Zaya.cpp
+w:\users\jebbyk\documents\visual studio projects\заяц\rgr\rgr zaya\rgr zaya\graphics.h(281): warning C4273: getch: несовместимая компоновка dll
+  w:\program files (x86)\windows kits\10\include\10.0.16299.0\ucrt\conio.h(452): note: см. предыдущее определение "getch"
+w:\users\jebbyk\documents\visual studio projects\заяц\rgr\rgr zaya\rgr zaya\graphics.h(282): warning C4273: kbhit: несовместимая компоновка dll
+  w:\program files (x86)\windows kits\10\include\10.0.16299.0\ucrt\conio.h(458): note: см. предыдущее определение "kbhit"
+w:\users\jebbyk\documents\visual studio projects\заяц\rgr\rgr zaya\rgr zaya\rgr zaya.cpp(132): warning C4838: преобразование из "int" в "SHORT" требует сужающего преобразования
+  RGR Zaya.vcxproj -> W:\Users\Jebbyk\Documents\Visual Studio Projects\Заяц\RGR\RGR Zaya\Debug\RGR Zaya.exe

@@ -1,0 +1,37 @@
+﻿  RGR Zaya.cpp
+w:\users\jebbyk\documents\visual studio projects\заяц\rgr\rgr zaya\rgr zaya\graphics.h(281): warning C4273: getch: несовместимая компоновка dll
+  W:\Program Files (x86)\Windows Kits\10\Include\10.0.16299.0\ucrt\conio.h(452): note: см. предыдущее определение "getch"
+w:\users\jebbyk\documents\visual studio projects\заяц\rgr\rgr zaya\rgr zaya\graphics.h(282): warning C4273: kbhit: несовместимая компоновка dll
+  W:\Program Files (x86)\Windows Kits\10\Include\10.0.16299.0\ucrt\conio.h(458): note: см. предыдущее определение "kbhit"
+RGR Zaya.cpp(258): warning C4244: =: преобразование "double" в "float", возможна потеря данных
+RGR Zaya.cpp(269): warning C4244: =: преобразование "double" в "float", возможна потеря данных
+RGR Zaya.cpp(402): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+RGR Zaya.cpp(406): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+RGR Zaya.cpp(412): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+RGR Zaya.cpp(415): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+RGR Zaya.cpp(421): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+RGR Zaya.cpp(424): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+RGR Zaya.cpp(432): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+RGR Zaya.cpp(433): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+RGR Zaya.cpp(436): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+RGR Zaya.cpp(444): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+RGR Zaya.cpp(445): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+RGR Zaya.cpp(446): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+RGR Zaya.cpp(450): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+RGR Zaya.cpp(451): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+RGR Zaya.cpp(452): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+RGR Zaya.cpp(457): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+RGR Zaya.cpp(458): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+RGR Zaya.cpp(459): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+RGR Zaya.cpp(460): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+RGR Zaya.cpp(662): warning C4305: =: усечение из "int" в "short"
+RGR Zaya.cpp(662): warning C4309: =: усечение константного значения
+RGR Zaya.cpp(695): warning C4305: =: усечение из "int" в "short"
+RGR Zaya.cpp(695): warning C4309: =: усечение константного значения
+RGR Zaya.cpp(872): warning C4244: =: преобразование "LONG" в "short", возможна потеря данных
+  Создание кода
+  1 of 130 functions ( 0.8%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    1 functions had inline decision re-evaluated but remain unchanged
+  Создание кода завершено
+  RGR Zaya.vcxproj -> W:\Users\Jebbyk\Documents\Visual Studio Projects\Заяц\RGR\RGR Zaya\Release\RGR Zaya.exe
