@@ -12,8 +12,6 @@ public class Main {
             numbers.add(a);
        }
 
-
-
        Collections.sort(numbers);
        Collections.reverse(numbers);
 
