@@ -1,6 +1,6 @@
 #include "stdio.h"
 #include <windows.h>
-#include <dos.h>
+//#include <dos.h>
 
 void main() {
     char buffer[128];
@@ -24,14 +24,14 @@ void main() {
             if(error == ERROR_SHARING_VIOLATION)
             {
                 WriteFile(hstdout, "can't open file! it's being used by another process\n", 52, &length, NULL);
-                sleep(3);
+                Sleep(3000);
             }
             if(error == ERROR_FILE_NOT_FOUND)
             {
                 WriteFile(hstdout, "The system cannot find the file\n", 32, &length, NULL);
                 WriteFile(hstdout, "Press any key to exit\n", 22, &length, NULL);
                 getchar();
-                sleep(3);
+                Sleep(3000);
                 return;
             }
         }else{
@@ -42,7 +42,7 @@ void main() {
             WriteFile(hstdout, buffer, length, &actlength, NULL);
             SetConsoleTextAttribute(hstdout, FOREGROUND_INTENSITY);
             getchar();
-            sleep(7);
+            Sleep(7000);
             CloseHandle(fileHandle);
             return;
         }
