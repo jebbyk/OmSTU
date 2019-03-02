@@ -10,25 +10,25 @@ int main(char *argv[])
     hstdin = GetStdHandle(STD_INPUT_HANDLE);
     int a = 3,b;
     char text1[] = "\n Hello!! I'm a child process";
-    char text2[] = "\n Creating vnuk yopta process";
-    char text3[] = "\n Error creating yopta process";
+    char text2[] = "\n Creating vnuk process";
+    char text3[] = "\n Error creating vnuk process";
 
 
     STARTUPINFO cif;
 	ZeroMemory(&cif,sizeof(STARTUPINFO));
 	PROCESS_INFORMATION pi;
-        if (CreateProcess("v.exe"," My name vnuchok Valera",NULL,NULL,FALSE,NULL,NULL,NULL,&cif,&pi)==TRUE)
+
+        if (CreateProcess("v.exe","\nMy name vnuchok Valera",NULL,NULL,TRUE,NULL,NULL,NULL,&cif,&pi)==TRUE)
         {
-            AssignProcessToJobObject(hJob,pi.hProcess);
+           // AssignProcessToJobObject(hJob,pi.hProcess);
             WriteFile(hstdout, text2,sizeof(text2),&actlen, NULL);
-            
         }else{
             WriteFile(hstdout, text3,sizeof(text3),&actlen, NULL);
         }
 
         while(TRUE)
         {
-            Sleep(1300);
+            Sleep(2600);
             printf(GetCommandLine());
         }
 
