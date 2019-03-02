@@ -8,10 +8,11 @@ int main()
     hstdout = GetStdHandle(STD_OUTPUT_HANDLE);
     hstdin = GetStdHandle(STD_INPUT_HANDLE);
     int a = 3,b;
-    while(TRUE)
+    for(int i = 0; i < 15; i++)
     {
         Sleep(3400);
         printf(GetCommandLine());
+        printf(" %d", i);
     }
     return 0;
 }
