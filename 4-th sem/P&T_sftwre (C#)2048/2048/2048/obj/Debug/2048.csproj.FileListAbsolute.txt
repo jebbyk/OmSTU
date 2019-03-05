@@ -1,0 +1,7 @@
+C:\Users\Jebbyk\Documents\GitHub\OmSTU\4-th sem\P&T_sftwre (C#)2048\2048\2048\bin\Debug\2048.exe.config
+C:\Users\Jebbyk\Documents\GitHub\OmSTU\4-th sem\P&T_sftwre (C#)2048\2048\2048\bin\Debug\2048.exe
+C:\Users\Jebbyk\Documents\GitHub\OmSTU\4-th sem\P&T_sftwre (C#)2048\2048\2048\bin\Debug\2048.pdb
+C:\Users\Jebbyk\Documents\GitHub\OmSTU\4-th sem\P&T_sftwre (C#)2048\2048\2048\obj\Debug\2048.csprojAssemblyReference.cache
+C:\Users\Jebbyk\Documents\GitHub\OmSTU\4-th sem\P&T_sftwre (C#)2048\2048\2048\obj\Debug\2048.csproj.CoreCompileInputs.cache
+C:\Users\Jebbyk\Documents\GitHub\OmSTU\4-th sem\P&T_sftwre (C#)2048\2048\2048\obj\Debug\2048.exe
+C:\Users\Jebbyk\Documents\GitHub\OmSTU\4-th sem\P&T_sftwre (C#)2048\2048\2048\obj\Debug\2048.pdb
