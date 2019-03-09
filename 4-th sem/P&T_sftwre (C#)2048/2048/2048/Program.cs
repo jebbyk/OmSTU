@@ -292,10 +292,164 @@ namespace _2048
                 AddNumber();
             }
         }
+
+        public class Score
+        {
+            int points;
+            string name;
+            Score()
+            {
+                name = "DEFAULT";
+                points = 0;
+            }
+            Score(int _points, string _name)
+            {
+                points = _points;
+                name = _name;
+            }
+        }
+
+        public class LeaderBoard
+        {
+            List<Score> leaders;
+            LeaderBoard()
+            {
+                leaders = new List<Score>();
+            }
+        }
+
+        public class SessionStarter
+        {
+            SessionStarter() { }
+        }
+
+       /* public class Game
+        {
+            Menu menu;
+            int state;
+            Game()
+            {
+                state = 0;
+            }
+
+            public void Update()
+            {
+                switch(state)
+                {
+                    case 0:
+                        {
+                            
+                            break;
+                        }
+                }
+            }
+        }*/
+
+        public class Menu
+        {
+            int currentItem;
+            string[] names = { "new game", "leaders board", "exit" };
+            public  Menu()
+            {
+                currentItem = 0;
+            }
+
+            private void ModSelection()
+            {
+                for (int i = 0; i < names.Length; i++)
+                {
+                    names[i] = names[i].ToLower();
+                }
+                names[currentItem] = names[currentItem].ToUpper();
+            }
+
+            private void Down()
+            {
+                if (currentItem < names.Length-1) currentItem++;
+                else currentItem = 0;
+                ModSelection();
+            }
+
+            private void  Up()
+            {
+                if (currentItem > 0) currentItem--;
+                else currentItem = names.Length -1;
+                ModSelection();
+            }
+            
+
+
+            private String ConstuctString()
+            {
+                String s = "";
+                for(int i = 0; i < names.Length; i++)
+                {
+                    s = s + "\n" + names[i];
+                }
+                return s;
+            }
+
+            public String Update(ConsoleKey key)
+            {
+                switch(key)
+                {
+                    case ConsoleKey.UpArrow:
+                        {
+                            Up();
+                            return ConstuctString();
+                        }
+                    case ConsoleKey.DownArrow:
+                        {
+                            Down();
+                            return ConstuctString();
+                        }
+                    case ConsoleKey.Enter:
+                        {
+                            return "Enter";
+                        }
+                    case ConsoleKey.Escape:
+                        {
+                            return "Esc";
+                        }
+                    default: return "Default";
+                }
+            }
+
+            public String Display()
+            {
+                ModSelection();x
+                return ConstuctString();
+            }
+
+        }
+
+    
         public static void Main()
         {
-            Board board = new Board(4);
 
+
+            Menu menu = new Menu();
+            Console.Write(menu.Display());
+            int state = 0;
+            
+            while(true)
+            {
+                ConsoleKey key = Console.ReadKey().Key;
+                 switch(state)
+                {
+                    case 0:
+                        {
+                            Console.Clear();
+                            Console.Write(menu.Update(key));
+                            break;
+                        }
+                    default: break;
+                }
+
+            }
+
+
+           /* Board board = new Board(4);
             while (true)
             {
                 ConsoleKey key;
@@ -304,7 +458,7 @@ namespace _2048
                 board.UpdateTable(key);
                 Console.Write(board.GetTable());
             }
-
+            */
         }
     }
 }
