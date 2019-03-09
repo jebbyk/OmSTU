@@ -9,13 +9,21 @@ namespace _2048
     class Program
     {
 
+        static int state = 0;
+
         public class Board
         {
             public int[,] table;
             int size;
 
-            public void AddNumber()
+            public int AddNumber()
             {
+                bool empty = false;
+                foreach(int i in table)
+                {
+                    if (i == 0) { empty = true; break; }
+                }
+                if (!empty) return -1;
                 Random r = new Random();
                 int x, y;
                 x = r.Next(0, size);
@@ -26,6 +34,7 @@ namespace _2048
                     y = r.Next(0, size);
                 }
                 table[y, x] = 2;
+                return 1;
             }
 
             public Board()
@@ -36,17 +45,6 @@ namespace _2048
                 AddNumber();
             }
 
-            //creates a board with size
-            public Board(int _size)
-            {
-                size = _size;
-                table = new int[size, size];
-
-                AddNumber();
-                AddNumber();
-            }
-
-            //returns a string of numbers
             public string GetTable()
             {
                 string s = "";
@@ -60,7 +58,6 @@ namespace _2048
                 }
                 return s;
             }
-
             private void Right()
             {
                 
@@ -257,9 +254,7 @@ namespace _2048
                     }
                 }
             }
-
-
-            public void UpdateTable(ConsoleKey key)
+            public int UpdateTable(ConsoleKey key)
             {
                 switch (key)
                 {
@@ -267,198 +262,144 @@ namespace _2048
                         {
                             Console.Clear();
                             Up();
-                            Console.WriteLine("UP"); break;
+                            return AddNumber();
                         }
                     case ConsoleKey.DownArrow:
                         {
                             Console.Clear();
                             Down();
-                            Console.WriteLine("DOWN"); break;
+                            return AddNumber();
                         }
                     case ConsoleKey.RightArrow:
                         {
                             Console.Clear();
                             Right();
-                            Console.WriteLine("RIGTHT"); break;
+                            return AddNumber();
                         }
                     case ConsoleKey.LeftArrow:
                         {
                             Console.Clear();
                             Left();
-                            Console.WriteLine("LEFT"); break;
+                            return AddNumber();
                         }
-                    default: break;
+                    default: { Console.Clear(); return 1; }
                 }
-                AddNumber();
+                
             }
         }
-
-        public class Score
+        
+        static void Game()
         {
-            int points;
-            string name;
-            Score()
-            {
-                name = "DEFAULT";
-                points = 0;
-            }
-            Score(int _points, string _name)
-            {
-                points = _points;
-                name = _name;
-            }
-        }
-
-        public class LeaderBoard
-        {
-            List<Score> leaders;
-            LeaderBoard()
-            {
-                leaders = new List<Score>();
-            }
-        }
-
-        public class SessionStarter
-        {
-            SessionStarter() { }
-        }
-
-       /* public class Game
-        {
-            Menu menu;
-            int state;
-            Game()
-            {
-                state = 0;
-            }
-
-            public void Update()
-            {
-                switch(state)
-                {
-                    case 0:
-                        {
-                            
-                            break;
-                        }
-                }
-            }
-        }*/
-
-        public class Menu
-        {
-            int currentItem;
-            string[] names = { "new game", "leaders board", "exit" };
-            public  Menu()
-            {
-                currentItem = 0;
-            }
-
-            private void ModSelection()
-            {
-                for (int i = 0; i < names.Length; i++)
-                {
-                    names[i] = names[i].ToLower();
-                }
-                names[currentItem] = names[currentItem].ToUpper();
-            }
-
-            private void Down()
-            {
-                if (currentItem < names.Length-1) currentItem++;
-                else currentItem = 0;
-                ModSelection();
-            }
-
-            private void  Up()
-            {
-                if (currentItem > 0) currentItem--;
-                else currentItem = names.Length -1;
-                ModSelection();
-            }
-            
-
-
-            private String ConstuctString()
-            {
-                String s = "";
-                for(int i = 0; i < names.Length; i++)
-                {
-                    s = s + "\n" + names[i];
-                }
-                return s;
-            }
-
-            public String Update(ConsoleKey key)
-            {
-                switch(key)
-                {
-                    case ConsoleKey.UpArrow:
-                        {
-                            Up();
-                            return ConstuctString();
-                        }
-                    case ConsoleKey.DownArrow:
-                        {
-                            Down();
-                            return ConstuctString();
-                        }
-                    case ConsoleKey.Enter:
-                        {
-                            return "Enter";
-                        }
-                    case ConsoleKey.Escape:
-                        {
-                            return "Esc";
-                        }
-                    default: return "Default";
-                }
-            }
-
-            public String Display()
-            {
-                ModSelection();x
-                return ConstuctString();
-            }
-
-        }
-
-    
-        public static void Main()
-        {
-
-
-            Menu menu = new Menu();
-            Console.Write(menu.Display());
-            int state = 0;
-            
-            while(true)
-            {
-                ConsoleKey key = Console.ReadKey().Key;
-                 switch(state)
-                {
-                    case 0:
-                        {
-                            Console.Clear();
-                            Console.Write(menu.Update(key));
-                            break;
-                        }
-                    default: break;
-                }
-
-            }
-
-
-           /* Board board = new Board(4);
+            Console.Clear();
+            Board board = new Board();
+            Console.Write(board.GetTable());
             while (true)
             {
                 ConsoleKey key;
                 key = Console.ReadKey().Key;
-                if (key == ConsoleKey.Escape) return;
-                board.UpdateTable(key);
-                Console.Write(board.GetTable());
+                if (key == ConsoleKey.Escape) { state = 0; return; }
+                if (board.UpdateTable(key) == 1)
+                {
+                    Console.Write(board.GetTable());
+                }
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine("Game over, no places for new numbers");
+                    if (Console.ReadKey().Key == ConsoleKey.Escape ) { state = 0; return; };
+                }
             }
-            */
+        }
+
+        static void LeaderBoard()
+        {
+            Console.Clear();
+            Console.WriteLine("Leader board!! There only best players... not you))))");
+            if (Console.ReadKey().Key == ConsoleKey.Escape) { Console.Clear(); state = 0; return; }
+        }
+        
+        static void Menu()
+        {
+            int currentItem = 0;
+            String[] items = { "new game", "leadrs", "exit" };
+            
+            while(true)
+            {
+                Console.Clear();
+                for (int i = 0; i < items.Length; i++)
+                {
+                    if (i == currentItem) items[i] = items[i].ToUpper();
+                    else items[i] = items[i].ToLower();
+                    Console.WriteLine(items[i]);
+                }
+                ConsoleKey key = Console.ReadKey().Key;
+                if(key == ConsoleKey.UpArrow)
+                {
+                    if(currentItem > 0)
+                    {
+                        currentItem--;
+                    }
+                    else
+                    {
+                        currentItem = items.Length-1;
+                    }
+                }
+                if (key == ConsoleKey.DownArrow)
+                {
+                    if (currentItem < items.Length - 1)
+                    {
+                        currentItem++;
+                    }
+                    else
+                    {
+                        currentItem = 0;
+                    }
+                }
+                if(key == ConsoleKey.Escape)
+                {
+                    return;
+                }
+                if(key == ConsoleKey.Enter)
+                {
+                    state = currentItem+1;
+                    return;
+                }
+
+                
+            }
+        }
+
+        public static void Main()
+        {
+            while (true)
+            {
+                
+                 switch(state)
+                {
+                    case 0:
+                        {
+                            Menu();
+                            if (state == 0) return;
+                            else break;
+                        }
+                    case 1:
+                        {
+                            Game();
+                            break;
+                        }
+                    case 2:
+                        {
+                            LeaderBoard();
+                            break;
+                        }
+                    case 3:
+                        {
+                            return;
+                        }
+                    default: break;
+                }
+
+            }
         }
     }
 }
