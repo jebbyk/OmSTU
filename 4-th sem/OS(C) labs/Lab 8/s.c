@@ -66,7 +66,7 @@ void main()
 {
     int k;
     int rc;
-    printf("\033[2J\n");
+    printf("\033[2J\n");//cls
     pthread_mutex_init(&hmtx, NULL);
     rc=pthread_create(&tid1, NULL, (void*)procthread1, (void*)2);
     rc=pthread_create(&tid2, NULL, (void*)procthread2, (void*)3);
