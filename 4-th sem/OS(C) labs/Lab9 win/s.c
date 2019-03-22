@@ -1,83 +1,198 @@
 #include <windows.h>
 #include <process.h>
 #include <stdio.h>
-char lbuk[ ]="abcdefghijklmnoprqstuwxy";
 HANDLE hstdout;
 DWORD actlen;
 CRITICAL_SECTION csec;
 
-void procthread1(void *arg)
+
+
+char buf[12] = "123456789012";
+
+HANDLE hthreadRdr1, hthreadRdr2, hthreadRdr3, hthreadWrtr1, hthreadWrtr2, hthreadWrtr3;
+unsigned long rdrThrd1, rdrThrd2, rdrThrd3, wrtrThrd1, wrtrThrd2, wrtrThrd3;
+
+
+void procThreadWriter1(void *arg)
 {
-    int k, j;
-    COORD pos;
-    for (k=0; k<24; k++) 
+    char pat[12] = "abcdefghijkl";
+    int k;
+    for(k = 0; k < 56; k++)
     {
-        pos.X=20; pos.Y=k+1;
+        int i;
         EnterCriticalSection(&csec);
-        SetConsoleCursorPosition(hstdout,pos); // установить курсор в позицию (20,k+1)
-        SetConsoleTextAttribute(hstdout,FOREGROUND_BLUE); // и синий цвет
-        for (j=0; j<(int)arg; j++) printf("%c",lbuk[k]);
+        for(i = 0; i < 6; i++)
+        {
+            buf[i] = pat[i];
+        }
         LeaveCriticalSection(&csec);
-        Sleep(800);
+
+        Sleep(1);
+
+        EnterCriticalSection(&csec);
+        for(i = 6; i < 12; i++)
+        {
+            buf[i] = pat[i];
+        }
+        LeaveCriticalSection(&csec);
+
+        Sleep(1);
     }
+    EnterCriticalSection(&csec);
+    COORD pos;
+    pos.X=80; pos.Y=4;
+    SetConsoleCursorPosition(hstdout,pos);
+    printf("wirtiter1 ended");
+    LeaveCriticalSection(&csec);
 }
-void procthread2(void *arg)
+
+void procThreadWriter2(void *arg)
 {
-    int k, j;
-    COORD pos;
-    for (k=0; k<24; k++) 
+    char pat[12] = "ABCDEFGHIJKL";
+    int k;
+    for(k = 0; k < 56; k++)
     {
-        pos.X=40; pos.Y=k+1;
+        int i;
         EnterCriticalSection(&csec);
-        SetConsoleCursorPosition(hstdout,pos); // установить курсор в позицию (40,k+1)
-        SetConsoleTextAttribute(hstdout,FOREGROUND_GREEN); // и зеленый цвет
-        for (j=0; j<(int)arg; j++) printf("%c",lbuk[k]);
+        for(i = 0; i < 6; i++)
+        {
+            buf[i] = pat[i];
+        }
         LeaveCriticalSection(&csec);
-        Sleep(1300);
+
+       Sleep(2);
+
+        EnterCriticalSection(&csec);
+        for(i = 6; i < 12; i++)
+        {
+            buf[i] = pat[i];
+        }
+        LeaveCriticalSection(&csec);
+
+       Sleep(2);
     }
+    EnterCriticalSection(&csec);
+    COORD pos;
+    pos.X=80; pos.Y=6;
+    SetConsoleCursorPosition(hstdout,pos);
+    printf("wirtiter2 ended");
+    LeaveCriticalSection(&csec);
 }
-void procthread3(void *arg)
+
+void procThreadWriter3(void *arg)
 {
-    int k, j;
-    COORD pos;
-    for (k=0; k<24; k++) 
+    char pat[12] = "-<+_!\%^&*\\|@";
+    int k;
+    for(k = 0; k < 56; k++)
     {
-        pos.X=60; pos.Y=k+1;
+        int i;
         EnterCriticalSection(&csec);
-        SetConsoleCursorPosition(hstdout,pos); // установить курсор в позицию (60,k+1)
-        SetConsoleTextAttribute(hstdout,FOREGROUND_RED); // и красный цвет
-        for (j=0; j<(int)arg; j++) printf("%c",lbuk[k]);
+        for(i = 0; i < 6; i++)
+        {
+            buf[i] = pat[i];
+        }
         LeaveCriticalSection(&csec);
-        Sleep(1100);
+
+        Sleep(3);
+
+        EnterCriticalSection(&csec);
+        for(i = 6; i < 12; i++)
+        {
+            buf[i] = pat[i];
+        }
+        LeaveCriticalSection(&csec);
+
+        Sleep(3);
     }
+
+    EnterCriticalSection(&csec);
+    COORD pos;
+    pos.X=80; pos.Y=8;
+    SetConsoleCursorPosition(hstdout,pos);
+    printf("wirtiter3 ended");
+    LeaveCriticalSection(&csec);
 }
+
+
+void procThreadReader1(void *arg)
+{
+    int j;
+    for(j = 0; j < 56; j++)
+    {
+        COORD pos;
+        pos.X=20; pos.Y=j+1;
+        EnterCriticalSection(&csec);
+        SetConsoleCursorPosition(hstdout,pos);
+        SetConsoleTextAttribute(hstdout,FOREGROUND_BLUE);
+        int i;
+        for(i = 0; i < 12; i++)
+        {
+            printf("%c", buf[i]);
+        }
+        LeaveCriticalSection(&csec);
+        Sleep(2);
+    } 
+}
+
+void procThreadReader2(void *arg)
+{
+    int j;
+    for(j = 0; j < 56; j++)
+    {
+        COORD pos;
+        pos.X=40; pos.Y=j+1;
+        EnterCriticalSection(&csec);
+        SetConsoleCursorPosition(hstdout,pos);
+        SetConsoleTextAttribute(hstdout,FOREGROUND_RED);
+        int i;
+        for(i = 0; i < 12; i++)
+        {
+            printf("%c", buf[i]);
+        }
+        LeaveCriticalSection(&csec);
+        Sleep(4);
+    } 
+}
+
+void procThreadReader3(void *arg)
+{
+   
+    int j;
+    for(j = 0; j < 56; j++)
+    {
+        COORD pos;
+        pos.X=60; pos.Y=j+1;
+        EnterCriticalSection(&csec);
+        SetConsoleCursorPosition(hstdout,pos);
+        SetConsoleTextAttribute(hstdout,FOREGROUND_GREEN);
+        int i;
+        for(i = 0; i < 12; i++)
+        {
+            printf("%c", buf[i]);
+        }
+        LeaveCriticalSection(&csec);
+        Sleep(6);
+    } 
+}
+
 void main()
 {
-    HANDLE hthread1, hthread2, hthread3;
-    unsigned long threadid1, threadid2, threadid3;
-    int k;
-    COORD pos;
+   
     hstdout=GetStdHandle(STD_OUTPUT_HANDLE);
+    system("cls");
     InitializeCriticalSection(&csec);
-    hthread1=(HANDLE)_beginthreadNT(procthread1, 4096, (void *)2, NULL, 0,
-    &threadid1);
-    hthread2=(HANDLE)_beginthreadNT(procthread2, 4096, (void *)3, NULL, 0,
-    &threadid2);
-    hthread3=(HANDLE)_beginthreadNT(procthread3, 4096, (void *)4, NULL, 0,
-    &threadid3);
-    Sleep(600);
-    for (k=0; k<24; k++) 
-    {
-        pos.X=1; pos.Y=k+1;
-        EnterCriticalSection(&csec);
-        SetConsoleCursorPosition(hstdout,pos); // установить курсор в позицию (10,k+1)
-        SetConsoleTextAttribute(hstdout, // и белый цвет
-        FOREGROUND_BLUE|FOREGROUND_GREEN|FOREGROUND_RED);
-        printf("%c++",lbuk[k]);
-        LeaveCriticalSection(&csec);
-        Sleep(1000); 
-    }
+    hthreadWrtr1 = (HANDLE)_beginthreadex(NULL, 4096, procThreadWriter1, (void *)2, 0,&wrtrThrd1);
+    hthreadWrtr2 = (HANDLE)_beginthreadex(NULL, 4096, procThreadWriter2, (void *)3, 0,&wrtrThrd2);
+    hthreadWrtr3 = (HANDLE)_beginthreadex(NULL, 4096, procThreadWriter3, (void *)4, 0,&wrtrThrd3);
+
+    hthreadRdr1 = (HANDLE)_beginthreadex(NULL, 4096, procThreadReader1, (void *)2, 0,&rdrThrd1);
+    hthreadRdr2 = (HANDLE)_beginthreadex(NULL, 4096, procThreadReader2, (void *)3, 0,&rdrThrd2);
+    hthreadRdr3 = (HANDLE)_beginthreadex(NULL, 4096, procThreadReader3, (void *)4, 0,&rdrThrd3);
+    
+    
     getchar();
     DeleteCriticalSection(&csec);
-    CloseHandle(hthread1); CloseHandle(hthread2); CloseHandle(hthread3);
+
+    CloseHandle(hthreadWrtr1); CloseHandle(hthreadWrtr2); CloseHandle(hthreadWrtr3);
+    CloseHandle(hthreadRdr1); CloseHandle(hthreadRdr2); CloseHandle(hthreadRdr3);
 } 
