@@ -44,9 +44,11 @@ struct bus{
 int dir4;//world dirrection
 int dir2;//dirrection on route
 int x, y;
+int tx, ty;
 int passangers;
 int speed;
 int waitingTime;
+int waitingFlag;
 } b_bus;
 
 
@@ -59,108 +61,89 @@ void ProcBus(void *_arg)
     struct bus b = bussesList[arg];
     while(1)
     {
-        
-        if(b.dir2 == 0) 
-        { 
-            if(b.dir4 == 0)
-            {
-                if(b.x < hPadding + citySize/2 + hDistance - rThickness/4)
-                {
-                        b.x += b.speed;
-                        usleep(10000);
-                }else{
-                    usleep(b.waitingTime);
-                    b.dir4++;
-                }
-            }
-            if(b.dir4 == 1)
-            {
-                if(b.y < vPadding + citySize/2 + vDistance - rThickness/4)
-                {
-                        b.y += b.speed;
-                        usleep(10000);
-                }else{
-                    usleep(b.waitingTime);
-                    b.dir4++;
-                }
-            }
-            if(b.dir4 == 2)
-            {
-                if(b.x > hPadding + citySize/2 + roadTickness/4)
-                {
-                        b.x -= b.speed;
-                        usleep(10000);
-                }else{
-                    usleep(b.waitingTime);
-                    b.dir4++;
-                }
-            }
-            if(b.dir4 == 3)
-            {
-                if(b.y > vPadding + citySize/2 + rThickness/4)
-                {
-                        b.y -= b.speed;
-                        usleep(10000);
-                }else{
-                    usleep(b.waitingTime);
-                    b.dir4 = 0;
-                }
-            }
-        }
-
-        if(b.dir2 == 1) 
-        { 
-            if(b.dir4 == 0)
-            {
-                if(b.x < hPadding + citySize/2 + hDistance + rThickness/4)
-                {
-                        b.x += b.speed;
-                        usleep(10000);
-                }else{
-                    usleep(b.waitingTime);
-                    b.dir4 = 3;
-                }
-            }
-            if(b.dir4 == 1)
-            {
-                if(b.y < vPadding + citySize/2 + vDistance + rThickness/4)
-                {
-                        b.y += b.speed;
-                        usleep(10000);
-                }else{
-                    usleep(b.waitingTime);
-                    b.dir4--;
-                }
-            }
-            if(b.dir4 == 2)
-            {
-                if(b.x > hPadding + citySize/2 - rThickness/4)
-                {
-                        b.x -= b.speed;
-                        usleep(10000);
-                }else{
-                    usleep(b.waitingTime);
-                    b.dir4--;
-                }
-            }
-            if(b.dir4 == 3)
-            {
-                if(b.y > vPadding + citySize/2 - rThickness/4)
-                {
-                        b.y -= b.speed;
-                        usleep(10000);
-                }else{
-                    usleep(b.waitingTime);
-                    b.dir4--;
-                }
-            }
-        }
+        if(b.x < b.tx) b.x += b.speed; 
+        if(b.y < b.ty) b.y += b.speed; 
+        if(b.x > b.tx) b.x -= b.speed; 
+        if(b.y > b.ty) b.y -= b.speed; 
         bussesList[arg] = b;
+        usleep(1000000/50);
+        if(b.y == b.ty && b.x == b.tx) 
+        {
+            b.waitingFlag = 1;
+            bussesList[arg] = b;
+
+            usleep(b.waitingTime);
+
+            b.waitingFlag = 1;
+            bussesList[arg] = b;
+            if(b.dir2 == 0) 
+            { 
+                if(b.dir4 != 3) b.dir4++;
+                else b.dir4 = 0;
+                switch(b.dir4)
+                {
+                    case 0:
+                    {
+                        b.tx = hPadding + hDistance + citySize/2 - rThickness/4;
+                        b.ty = vPadding + citySize/2 + rThickness/4;
+                        break;
+                    }
+                    case 1:
+                    {
+                        b.tx = hPadding + hDistance + citySize/2 - rThickness/4;
+                        b.ty = vPadding + citySize/2 + vDistance - rThickness/4;
+                        break;
+                    }
+                    case 2:
+                    {
+                        b.tx = hPadding + citySize/2 + rThickness/4;
+                        b.ty = vPadding + citySize/2 + vDistance - rThickness/4;
+                        break;
+                    }
+                    case 3:
+                    {
+                        b.tx = hPadding + citySize/2 + rThickness/4;
+                        b.ty = vPadding + citySize/2 + rThickness/4;
+                        break;
+                    }
+                }
+            }else{
+                if(b.dir4 != 0) b.dir4--;
+                else b.dir4 = 3;
+                switch(b.dir4)
+                {
+                    case 0:
+                    {
+                        b.tx = hPadding + hDistance + citySize/2 + rThickness/4;
+                        b.ty = vPadding + citySize/2 + vDistance + rThickness/4;
+                        break;
+                    }
+                    case 1:
+                    {
+                        b.tx = hPadding + citySize/2 - rThickness/4;
+                        b.ty = vPadding + citySize/2 + vDistance + rThickness/4;
+                        break;
+                    }
+                    case 2:
+                    {
+                        b.tx = hPadding + citySize/2 - rThickness/4;
+                        b.ty = vPadding + citySize/2 - rThickness/4;
+                        break;
+                    }
+                    case 3:
+                    {
+                        b.tx = hPadding + citySize/2 + hDistance + rThickness/4;
+                        b.ty = vPadding + citySize/2 - rThickness/4;
+                        break;
+                    }
+                }
+            }
+        }
     }
 }
 
 struct passanger{
-    int x, y, waitingTime, curTime, waitingFlag;
+    int x, y, waitingFlag, tx, ty;
 }p_passanger;
 
 struct passanger passangersList[8];
@@ -251,11 +234,14 @@ void main()
     struct bus busF;
     busF.x = hPadding + citySize/2;
     busF.y = vPadding + citySize/2 + rThickness/4;
+    busF.tx = hPadding + citySize/2 + hDistance - rThickness/4;
+    busF.ty = vPadding + citySize/2 + rThickness/4;
     busF.speed = 1;
     busF.dir2 = 0;
     busF.passangers = 0;
     busF.dir4 = 0;
     busF.waitingTime = 2000000;
+    busF.waitingFlag = 1;
     int rc;
     bussesList[0] = busF;
     pthread_t busFthread;
@@ -265,11 +251,14 @@ void main()
     struct bus busB;
     busB.x = hPadding + citySize/2 - rThickness/4;
     busB.y = vPadding + citySize/2;
+    busB.tx = hPadding + citySize/2 - rThickness/4;
+    busB.ty = vPadding + citySize/2 + vDistance + rThickness/4;
     busB.dir2 = 1;
     busB.speed = 2;
     busB.passangers = 0;
     busB.dir4 = 1;
     busB.waitingTime = 4000000;
+    busB.waitingFlag = 0;
     bussesList[1] = busB;
     pthread_t busBthread;
     pthread_create(&busBthread, NULL, (void*)ProcBus, (void*)1);
