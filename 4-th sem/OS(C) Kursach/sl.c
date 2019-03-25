@@ -34,11 +34,16 @@ int vDistance = 256+128;
 int hDistance = 512+256 + 128;
 int rThickness = 32;
 
-void DrawBack()
-{
-        
-        
-}
+struct city{
+    int x, y;
+    int stopFx, stopFy;
+    int stopBx, stopBy;
+};
+
+struct city cityList[4];
+
+
+
 
 struct bus{
 int dir4;//world dirrection
@@ -143,13 +148,38 @@ void ProcBus(void *_arg)
 }
 
 struct passanger{
-    int x, y, waitingFlag, tx, ty;
+    int x, y, waitingFlag, maxStayTime, tx, ty, busNum, curCity;
 }p_passanger;
 
 struct passanger passangersList[8];
 
-void ProcPassanger(int *arg)
+void ProcPassanger(void *_arg)
 {
+    int arg = (int)_arg;
+    struct passanger p = passangersList[arg];
+    int rCity = rand() % 5;//selekting start city
+    p.curCity = rCity;
+    p.x = cityList[rCity].x - citySize/2 + rand()%citySize;//setting rnd pos in city
+    p.y = cityList[rCity].y - citySize/2 + rand()%citySize;
+
+
+    int rS = rand() % p.maxStayTime;//setting wait time
+    
+    p.waitingFlag = 1;//wait
+    passangersList[arg] = p;
+    usleep(rS);
+    p.waitingFlag = 0;
+    passangersList[arg] = p;
+
+    int rD = random()%2;//selecting rnd bus direction
+
+    if(rD == 0) {p.tx = cityList[p.curCity].stopFx; p.ty = cityList[p.curCity].stopFy;}
+    else {p.tx = cityList[p.curCity].stopBx; p.ty = cityList[p.curCity].stopBy;}
+
+    if(p.x < p.tx) p.x++;//moving to the bus stop
+    if(p.x > p.tx) p.x--;
+    if(p.y < p.ty) p.y++;
+    if(p.y > p.ty) p.y--;
 
 }
 
@@ -198,6 +228,46 @@ void Draw(int sleepTime)
 
 void main()
 {
+
+    struct city c1;
+    c1.x = hPadding + citySize/2;
+    c1.y = vPadding + citySize/2;
+    c1.stopFx = c1.x + rThickness;
+    c1.stopFy = c1.y + rThickness;
+    c1.stopBx = c1.x;
+    c1.stopBy = c1.y - rThickness;
+
+    struct city c2;
+    c2.x = hPadding + hDistance + citySize/2;
+    c2.y = vPadding + citySize/2;
+    c2.stopFx = c2.x - rThickness;
+    c2.stopFy = c2.y + rThickness;
+    c2.stopBx = c2.x + rThickness ;
+    c2.stopBy = c2.y;
+
+    struct city c3;
+    c3.x = hPadding + hDistance + citySize/2;
+    c3.y = vPadding + vDistance + citySize/2;
+    c3.stopFx = c3.x - rThickness;
+    c3.stopFy = c3.y - rThickness;
+    c3.stopBx = c3.x;
+    c3.stopBy = c3.y + rThickness;
+
+    struct city c4;
+    c4.x = hPadding + citySize/2;
+    c4.y = vPadding + vDistance + citySize/2;
+    c4.stopFx = c4.x + rThickness;
+    c4.stopFy = c4.y - rThickness;
+    c4.stopBx = c4.x - rThickness;
+    c4.stopBy = c4.y;
+
+    cityList[0] = c1;
+    cityList[1] = c2;
+    cityList[2] = c3;
+    cityList[3] = c4;
+
+
+
     dspl = XOpenDisplay(NULL);
     gc = XDefaultGC(dspl,0);
     if(dspl == 0) {printf("Error XOpenDisplay\n"); exit(1);}
