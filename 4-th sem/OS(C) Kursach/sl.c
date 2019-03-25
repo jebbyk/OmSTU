@@ -27,14 +27,6 @@ int passangersCount = 0;
 
 
 
-void procThreadReader1(void *arg)
-{
-        pthread_mutex_lock(&hmtx);
-      //  printf("\033[%d;0H\033[1;34m",1);
-        pthread_mutex_unlock(&hmtx);
-        usleep(2*speed);
-}
-
 int citySize = 256;
 int vPadding = 32;
 int hPadding = 64;
@@ -44,8 +36,144 @@ int rThickness = 32;
 
 void DrawBack()
 {
-    XClearWindow(dspl,hwnd);
-    
+        
+        
+}
+
+struct bus{
+int dir4;//world dirrection
+int dir2;//dirrection on route
+int x, y;
+int passangers;
+int speed;
+int waitingTime;
+} b_bus;
+
+
+int bussesCount = 2;//must bee the same
+struct bus bussesList[2];//SAAAAAAMEEEEE!!!!
+
+void ProcBus(void *_arg)
+{
+    int arg  = (int)_arg;
+    struct bus b = bussesList[arg];
+    while(1)
+    {
+        
+        if(b.dir2 == 0) 
+        { 
+            if(b.dir4 == 0)
+            {
+                if(b.x < hPadding + citySize/2 + hDistance - rThickness/4)
+                {
+                        b.x += b.speed;
+                        usleep(10000);
+                }else{
+                    usleep(b.waitingTime);
+                    b.dir4++;
+                }
+            }
+            if(b.dir4 == 1)
+            {
+                if(b.y < vPadding + citySize/2 + vDistance - rThickness/4)
+                {
+                        b.y += b.speed;
+                        usleep(10000);
+                }else{
+                    usleep(b.waitingTime);
+                    b.dir4++;
+                }
+            }
+            if(b.dir4 == 2)
+            {
+                if(b.x > hPadding + citySize/2 + roadTickness/4)
+                {
+                        b.x -= b.speed;
+                        usleep(10000);
+                }else{
+                    usleep(b.waitingTime);
+                    b.dir4++;
+                }
+            }
+            if(b.dir4 == 3)
+            {
+                if(b.y > vPadding + citySize/2 + rThickness/4)
+                {
+                        b.y -= b.speed;
+                        usleep(10000);
+                }else{
+                    usleep(b.waitingTime);
+                    b.dir4 = 0;
+                }
+            }
+        }
+
+        if(b.dir2 == 1) 
+        { 
+            if(b.dir4 == 0)
+            {
+                if(b.x < hPadding + citySize/2 + hDistance + rThickness/4)
+                {
+                        b.x += b.speed;
+                        usleep(10000);
+                }else{
+                    usleep(b.waitingTime);
+                    b.dir4 = 3;
+                }
+            }
+            if(b.dir4 == 1)
+            {
+                if(b.y < vPadding + citySize/2 + vDistance + rThickness/4)
+                {
+                        b.y += b.speed;
+                        usleep(10000);
+                }else{
+                    usleep(b.waitingTime);
+                    b.dir4--;
+                }
+            }
+            if(b.dir4 == 2)
+            {
+                if(b.x > hPadding + citySize/2 - rThickness/4)
+                {
+                        b.x -= b.speed;
+                        usleep(10000);
+                }else{
+                    usleep(b.waitingTime);
+                    b.dir4--;
+                }
+            }
+            if(b.dir4 == 3)
+            {
+                if(b.y > vPadding + citySize/2 - rThickness/4)
+                {
+                        b.y -= b.speed;
+                        usleep(10000);
+                }else{
+                    usleep(b.waitingTime);
+                    b.dir4--;
+                }
+            }
+        }
+        bussesList[arg] = b;
+    }
+}
+
+struct passanger{
+    int x, y, waitingTime, curTime, waitingFlag;
+}p_passanger;
+
+struct passanger passangersList[8];
+
+void ProcPassanger(int *arg)
+{
+
+}
+
+
+void Draw(int sleepTime)
+{
+    XClearWindow(dspl, hwnd);
     char name1[] = "Dijon";
     XDrawRectangle(dspl, hwnd, gc, hPadding, vPadding, citySize, citySize);
     XDrawString(dspl, hwnd, gc, hPadding + 16, vPadding + 16, name1, 5);
@@ -68,15 +196,21 @@ void DrawBack()
     XDrawRectangle(dspl, hwnd, gc, hPadding + citySize/2 - rThickness/2, vPadding + citySize/2 + vDistance - rThickness/2, hDistance + rThickness, rThickness);
     XDrawRectangle(dspl, hwnd, gc, hPadding + citySize/2 - rThickness/2 + hDistance, vPadding + citySize/2 - rThickness/2, rThickness, vDistance + rThickness);
 
+
+    for(int i = 0; i < bussesCount; i++)
+    {
+        struct bus b = bussesList[i];
+        if(b.dir4 == 0 || b.dir4 == 2)
+        {
+            XDrawRectangle(dspl, hwnd, gc, b.x - 8, b.y -  4, 16, 8);
+        }else
+        {
+            XDrawRectangle(dspl, hwnd, gc, b.x - 4, b.y - 8, 8, 16);
+        } 
+    }
     XFlush(dspl);
-    usleep(100);
+    usleep(sleepTime);
 }
-
-
-    
-
-
-
 
 
 void main()
@@ -90,9 +224,6 @@ void main()
     XSelectInput(dspl, hwnd, ExposureMask | KeyPressMask );//input mask
     XMapWindow(dspl, hwnd);
 
-    
-    
-    
     
     while(passangersCount == 0)
     {
@@ -116,12 +247,38 @@ void main()
         }
     }
 
-    while(1){
-        DrawBack();
-    }
-    
 
-   // rc=pthread_create(&rdrThrd1, NULL, (void*)procThreadReader1, (void*)2);
+    struct bus busF;
+    busF.x = hPadding + citySize/2;
+    busF.y = vPadding + citySize/2 + rThickness/4;
+    busF.speed = 1;
+    busF.dir2 = 0;
+    busF.passangers = 0;
+    busF.dir4 = 0;
+    busF.waitingTime = 2000000;
+    int rc;
+    bussesList[0] = busF;
+    pthread_t busFthread;
+    pthread_create(&busFthread, NULL, (void*)ProcBus, (void*)0);
+
+
+    struct bus busB;
+    busB.x = hPadding + citySize/2 - rThickness/4;
+    busB.y = vPadding + citySize/2;
+    busB.dir2 = 1;
+    busB.speed = 2;
+    busB.passangers = 0;
+    busB.dir4 = 1;
+    busB.waitingTime = 4000000;
+    bussesList[1] = busB;
+    pthread_t busBthread;
+    pthread_create(&busBthread, NULL, (void*)ProcBus, (void*)1);
+
+    
+    while(1)
+    {
+        Draw(1000000/50);//bigger number - lower FPS
+    }
 
     getchar(); printf("\033[0m");
 }
