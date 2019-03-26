@@ -76,7 +76,7 @@ void ProcBus(void *_arg)
         {
             b.waitingFlag = 1;
             bussesList[arg] = b;
-
+ty
             usleep(b.waitingTime);
 
             b.waitingFlag = 1;
@@ -94,21 +94,21 @@ void ProcBus(void *_arg)
                         break;
                     }
                     case 1:
-                    {
-                        b.tx = hPadding + hDistance + citySize/2 - rThickness/4;
-                        b.ty = vPadding + citySize/2 + vDistance - rThickness/4;
-                        break;
-                    }
-                    case 2:
-                    {
-                        b.tx = hPadding + citySize/2 + rThickness/4;
-                        b.ty = vPadding + citySize/2 + vDistance - rThickness/4;
-                        break;
-                    }
-                    case 3:
-                    {
-                        b.tx = hPadding + citySize/2 + rThickness/4;
-                        b.ty = vPadding + citySize/2 + rThickness/4;
+                    {ty
+                     tyistance + citySize/2 - rThickness/4;
+                     tytySize/2 + vDistance - rThickness/4;
+                     ty
+                    }ty
+                    cty
+                    {ty
+                     tytySize/2 + rThickness/4;
+                     tytySize/2 + vDistance - rThickness/4;
+                     ty
+                    }ty
+                    cty
+                    {ty
+                     tytySize/2 + rThickness/4;
+                     tytySize/2 + rThickness/4;
                         break;
                     }
                 }
@@ -147,8 +147,9 @@ void ProcBus(void *_arg)
     }
 }
 
+
 struct passanger{
-    int x, y, waitingFlag, maxStayTime, tx, ty, busNum, curCity;
+    int x, y, waitingFlag, maxStayTime, tx, ty, busNum, curCity, drivingFlag, leaweBusFlag;
 }p_passanger;
 
 struct passanger passangersList[8];
@@ -162,7 +163,6 @@ void ProcPassanger(void *_arg)
     p.x = cityList[rCity].x - citySize/2 + rand()%citySize;//setting rnd pos in city
     p.y = cityList[rCity].y - citySize/2 + rand()%citySize;
 
-
     int rS = rand() % p.maxStayTime;//setting wait time
     
     p.waitingFlag = 1;//wait
@@ -173,14 +173,64 @@ void ProcPassanger(void *_arg)
 
     int rD = random()%2;//selecting rnd bus direction
 
-    if(rD == 0) {p.tx = cityList[p.curCity].stopFx; p.ty = cityList[p.curCity].stopFy;}
+    if(rD == 0) {p.tx = cityList[p.curCity].stopFx; p.ty = cityList[p.curCity].stopFy;}//selecting buss stop position and settig targetPoint
     else {p.tx = cityList[p.curCity].stopBx; p.ty = cityList[p.curCity].stopBy;}
 
-    if(p.x < p.tx) p.x++;//moving to the bus stop
-    if(p.x > p.tx) p.x--;
-    if(p.y < p.ty) p.y++;
-    if(p.y > p.ty) p.y--;
+    if(p.waitingFlag == 0)//if not waiting
+    {
+        if(p.x < p.tx) p.x++;//moving to the targetPoint
+        if(p.x > p.tx) p.x--;
+        if(p.y < p.ty) p.y++;
+        if(p.y > p.ty) p.y--;
+    }
 
+    struct bus b;
+    if(rD == 0) 
+    {
+        b = bussesList[0];
+    }else{ b = bussesList[1]; }
+  
+    if(abs(p.x -  b.x) <  16 && abs(p.y -  b.y) <  16 && b.waitingFlag == 1)//if buss waits and distance little
+    {
+        p.leaweBusFlag = 0;
+        p.tx = b.x;//move to buss
+        p.ty = b.y; 
+        p.drivingFlag = 1;    
+    }
+
+    if(p.drivingFlag == 1 && b.waitingFlag == 0)//if driwing and not waiting
+    {
+        p.x = b.x;//set pos as bus pos
+        p.y = b.y;
+        p.leaweBusFlag = 1;
+    }
+
+    if(p.drivingFlag == 1 && p.leaweBusFlag == 1 && b.waitingFlag == 0)//if driving but can leave and not waiting then leave bus
+    {
+        curCity++;
+        p.tx = cityList[p.curCity].x - citySize/2 + rand()%citySize;//select rnd pos in curent city
+        p.ty = cityList[p.curCity].y - citySize/2 + rand()%citySize;
+    }
+
+    if(p.waitingFlag == 0)//if not waiting
+    {
+        if(p.x < p.tx) p.x++;//moving to the targetPoint
+        if(p.x > p.tx) p.x--;
+        if(p.y < p.ty) p.y++;
+        if(p.y > p.ty) p.y--;
+
+        if(p.x = p.tx && p.y == p.ty)
+        {
+            p.waitingFlag = 1;
+            passangersList[arg] = p;
+            usleep(p.maxStayTime);
+            p.waitingFlag = 0;
+            passangersList[arg]  = p;
+        }
+    }
+
+
+    
 }
 
 
