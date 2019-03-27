@@ -71,12 +71,16 @@ void ProcBus(void *_arg)
         if(b.y == b.ty && b.x == b.tx) 
         {
             b.waitingFlag = 1;
+            pthread_mutex_lock(&hmtx);
             bussesList[arg] = b;
+            pthread_mutex_unlock(&hmtx);
 
             usleep(b.waitingTime);
 
+            pthread_mutex_lock(&hmtx);
+            b = bussesList[arg];
+            pthread_mutex_unlock(&hmtx);
             b.waitingFlag = 0;
-            bussesList[arg] = b;
             if(b.dir2 == 0) //forward or backwrd direction
             { 
                 if(b.dir4 != 3) b.dir4++;
@@ -140,7 +144,9 @@ void ProcBus(void *_arg)
                 }
             }
         }
+        pthread_mutex_lock(&hmtx);
         bussesList[arg] = b;//update bus info
+        pthread_mutex_unlock(&hmtx);
         usleep(1000000/50);// do it 50 times in second
     }
 }
@@ -200,7 +206,7 @@ void ProcPassenger(void *_arg)
 
         if(p.wait)
         {
-            if(abs(p.x - b.x) < 64 && abs(p.y - b.y) < 64 && b.waitingFlag == 1)//if bus is close and it's waits
+            if(abs(p.x - b.x) < 64 && abs(p.y - b.y) < 64 && b.waitingFlag == 1 && bussesList[p.curDir].passengers < 5)//if bus is close and it's waits
             {
                 p.tx = b.x; p.ty = b.y;//start moving to bus
                 p.wait = 0;
@@ -212,15 +218,46 @@ void ProcPassenger(void *_arg)
         {
             if(b.waitingFlag == 1)//if buss waits
             {
-                if(p.x < p.tx) p.x++;//move to it
-                if(p.x > p.tx) p.x--;
-                if(p.y < p.ty) p.y++;
-                if(p.y > p.ty) p.y--;
+                if(bussesList[p.curDir].passengers < 5)
+                {
+                    if(p.x < p.tx) p.x++;//move to it
+                    if(p.x > p.tx) p.x--;
+                    if(p.y < p.ty) p.y++;
+                    if(p.y > p.ty) p.y--;
+                }else{
+                    if(p.curDir == 0)//returns to needed stop
+                    {
+                        p.tx = cityList[p.curCity].stopFx - 8 + rand()%16;
+                        p.ty = cityList[p.curCity].stopFy - 8 + rand()%16;
+                    }else{
+                        p.tx = cityList[p.curCity].stopBx - 8 + rand()%16;
+                        p.ty = cityList[p.curCity].stopBy - 8 + rand()%16;
+                    }
+                    p.toStop = 1;
+                    p.toBus = 0;
+                }
 
                 if(p.x == p.tx && p.y == p.ty){//if comes to bus then drive and can't leave in the same city
-                    p.drive = 1;
-                    p.canLeave = 0;
-                    p.toBus = 0;
+                    if(bussesList[p.curDir].passengers < 5)
+                    {
+                        p.drive = 1;
+                        pthread_mutex_lock(&hmtx);
+                        bussesList[p.curDir].passengers++;
+                        pthread_mutex_unlock(&hmtx);
+                        p.canLeave = 0;
+                        p.toBus = 0;
+                    }else{
+                        if(p.curDir == 0)//returns to needed stop
+                        {
+                            p.tx = cityList[p.curCity].stopFx - 8 + rand()%16;
+                            p.ty = cityList[p.curCity].stopFy - 8 + rand()%16;
+                        }else{
+                            p.tx = cityList[p.curCity].stopBx - 8 + rand()%16;
+                            p.ty = cityList[p.curCity].stopBy - 8 + rand()%16;
+                        }
+                        p.toStop = 1;
+                        p.toBus = 0;
+                    }
                 }
             }else{//if bus not waiting
                 if(p.curDir == 0)//returns to needed stop
@@ -245,6 +282,12 @@ void ProcPassenger(void *_arg)
             {
                 p.drive = 0;
                 p.toCity = 1;
+                if(bussesList[p.curDir].passengers > 0)
+                {
+                    pthread_mutex_lock(&hmtx);
+                    bussesList[p.curDir].passengers--;
+                    pthread_mutex_unlock(&hmtx);
+                }
                 if(p.curDir == 0)//update info about curent city depending on curentDirrection
                 {
                     if(p.curCity != 3) p.curCity++;
@@ -293,7 +336,17 @@ void ProcPassenger(void *_arg)
         
 
         passengersList[i] = p;
-        usleep(1000000/50);//do it 50 times per second
+        usleep(1000000/20);
+
+        /*int calcHardness = 1024;
+        int res = 0;
+        for(int i = 1; i < calcHardness; i++)
+        {
+            for(int j = 1; j < calcHardness; j++)
+            {
+                res = i + j - i%j + j%i + i/j - j/i * 7;
+            }
+        }*/
     }
 
     
@@ -345,19 +398,18 @@ void Draw(int sleepTime)
         {
             XDrawRectangle(dspl, hwnd, gc, b.x - 4, b.y - 8, 8, 16);
         } 
-        char d[1];
-        if(b.waitingFlag == 0) d[0] = '.';//some debug ingfo
-        else d[0] = 'W';
-        XDrawString(dspl,hwnd, gc, b.x, b.y, d, 1);
+        char cn[1];
+        sprintf(cn, "%d", b.passengers);
+        XDrawString(dspl,hwnd, gc, b.x-2, b.y+4, cn, 1);
     }
 
     for(int i = 0; i < passengersCount; i++)//draw each passanger
     {
         struct passenger p = passengersList[i];
-        XDrawRectangle(dspl, hwnd, gc, p.x-2, p.y-2, 4,4);
+        if(p.sleep == 0 && p.drive  == 0)  XDrawRectangle(dspl, hwnd, gc, p.x-2, p.y-2, 4,4);
     }
     XFlush(dspl);
-    usleep(sleepTime);
+    usleep(1000000/50);
 }
 
 
