@@ -19,8 +19,6 @@ int speed = 100000;
 
 int roadTickness = 16;
 
-
-pthread_t rdrThrd1;
 pthread_mutex_t hmtx;
 
 int passengersCount = 0;
@@ -79,15 +77,15 @@ void ProcBus(void *_arg)
 
             b.waitingFlag = 0;
             bussesList[arg] = b;
-            if(b.dir2 == 0) 
+            if(b.dir2 == 0) //forward or backwrd direction
             { 
                 if(b.dir4 != 3) b.dir4++;
                 else b.dir4 = 0;
-                switch(b.dir4)
+                switch(b.dir4)//world dirrection
                 {
                     case 0:
                     {
-                        b.tx = cityList[1].x - rThickness/4;
+                        b.tx = cityList[1].x - rThickness/4;//setting target points
                         b.ty = cityList[1].y + rThickness/4;
                         break;
                     }
@@ -142,8 +140,8 @@ void ProcBus(void *_arg)
                 }
             }
         }
-        bussesList[arg] = b;
-        usleep(1000000/50);
+        bussesList[arg] = b;//update bus info
+        usleep(1000000/50);// do it 50 times in second
     }
 }
 
@@ -161,26 +159,26 @@ void ProcPassenger(void *_arg)
     struct passenger p;
     p = passengersList[i];
 
-    int rS = rand()%4;
+    int rS = rand()%4;//selecting random city
     p.curCity = rS;
-    p.x = cityList[rS].x - citySize/2  + rand()%citySize;
+    p.x = cityList[rS].x - citySize/2  + rand()%citySize;//setting random start position 
     p.y = cityList[rS].y - citySize/2  + rand()%citySize;
 
 
-    int rD = rand()%2;
+    int rD = rand()%2;//selecting random route direction
     p.curDir = rD;
     if(p.curDir == 0)
     {
-        p.tx = cityList[p.curCity].stopFx - 8 + rand()%16;
-        p.ty = cityList[p.curCity].stopFy - 8 + rand()%16;
+        p.tx = cityList[p.curCity].stopFx - 8 + rand()%16;//setting random point on needed stop
+        p.ty = cityList[p.curCity].stopFy - 8 + rand()%16;//depending on selected dirrection
     }else{
         p.tx = cityList[p.curCity].stopBx - 8 + rand()%16;
         p.ty = cityList[p.curCity].stopBy - 8 + rand()%16;
     }
 
 
-    p.sleepTime = p.maxSleepTime/2 + rand()%p.maxSleepTime/2;
-    p.sleepTime = p.sleepTime * 1000;
+    p.sleepTime = p.maxSleepTime/2 + rand()%p.maxSleepTime/2;//setting random sleepInCity time
+    p.sleepTime = p.sleepTime * 1000;// rand generates not bigger then ~32000, so its just a mult to get bigger number
     while(1)
     {
         struct bus b;
@@ -194,7 +192,7 @@ void ProcPassenger(void *_arg)
             if(p.y < p.ty) p.y++;
             if(p.y > p.ty) p.y--;
 
-            if(p.x == p.tx && p.y == p.ty){
+            if(p.x == p.tx && p.y == p.ty){// if comes to stop then wait
                 p.toStop = 0;
                 p.wait = 1;
             }
@@ -202,9 +200,9 @@ void ProcPassenger(void *_arg)
 
         if(p.wait)
         {
-            if(abs(p.x - b.x) < 64 && abs(p.y - b.y) < 64 && b.waitingFlag == 1)
+            if(abs(p.x - b.x) < 64 && abs(p.y - b.y) < 64 && b.waitingFlag == 1)//if bus is close and it's waits
             {
-                p.tx = b.x; p.ty = b.y;
+                p.tx = b.x; p.ty = b.y;//start moving to bus
                 p.wait = 0;
                 p.toBus  = 1;
             }
@@ -212,20 +210,20 @@ void ProcPassenger(void *_arg)
 
         if(p.toBus == 1)
         {
-            if(b.waitingFlag == 1)
+            if(b.waitingFlag == 1)//if buss waits
             {
-                if(p.x < p.tx) p.x++;
+                if(p.x < p.tx) p.x++;//move to it
                 if(p.x > p.tx) p.x--;
                 if(p.y < p.ty) p.y++;
                 if(p.y > p.ty) p.y--;
 
-                if(p.x == p.tx && p.y == p.ty){
+                if(p.x == p.tx && p.y == p.ty){//if comes to bus then drive and can't leave in the same city
                     p.drive = 1;
                     p.canLeave = 0;
                     p.toBus = 0;
                 }
-            }else{
-                if(p.curDir == 0)
+            }else{//if bus not waiting
+                if(p.curDir == 0)//returns to needed stop
                 {
                     p.tx = cityList[p.curCity].stopFx - 8 + rand()%16;
                     p.ty = cityList[p.curCity].stopFy - 8 + rand()%16;
@@ -240,14 +238,14 @@ void ProcPassenger(void *_arg)
 
         if(p.drive == 1)
         {
-            p.x = b.x;
+            p.x = b.x;//pos = bus pos
             p.y = b.y;
-            if(b.waitingFlag == 0) p.canLeave = 1;
-            if(b.waitingFlag == 1 && p.canLeave ==1)
+            if(b.waitingFlag == 0) p.canLeave = 1;//if bus not waits then can leave 
+            if(b.waitingFlag == 1 && p.canLeave ==1)//(will leave only when bus stops
             {
                 p.drive = 0;
                 p.toCity = 1;
-                if(p.curDir == 0)
+                if(p.curDir == 0)//update info about curent city depending on curentDirrection
                 {
                     if(p.curCity != 3) p.curCity++;
                     else p.curCity = 0;
@@ -255,7 +253,7 @@ void ProcPassenger(void *_arg)
                     if(p.curCity != 0) p.curCity--;
                     else p.curCity = 3;
                 }
-                p.tx = cityList[p.curCity].x - citySize/2  + rand()%citySize;
+                p.tx = cityList[p.curCity].x - citySize/2  + rand()%citySize;//selecting random target point in curent city
                 p.ty = cityList[p.curCity].y - citySize/2  + rand()%citySize;
             }
         }
@@ -267,7 +265,7 @@ void ProcPassenger(void *_arg)
             if(p.y < p.ty) p.y++;
             if(p.y > p.ty) p.y--;
 
-            if(p.x == p.tx && p.y == p.ty){
+            if(p.x == p.tx && p.y == p.ty){//if comes to target point then sleep some seconds
                 p.sleep = 1;
                 passengersList[i] = p;
 
@@ -279,11 +277,11 @@ void ProcPassenger(void *_arg)
                 p.toStop = 1;
                 p.wait = 0;
 
-                rD = rand()%2;
+                rD = rand()%2;//select random direction (backwards or forwards)
                 p.curDir = rD;
                 if(p.curDir == 0)
                 {
-                    p.tx = cityList[p.curCity].stopFx - 8 + rand()%16;
+                    p.tx = cityList[p.curCity].stopFx - 8 + rand()%16;//and selcting target point on stop
                     p.ty = cityList[p.curCity].stopFy - 8 + rand()%16;
                 }else{
                     p.tx = cityList[p.curCity].stopBx - 8 + rand()%16;
@@ -292,10 +290,10 @@ void ProcPassenger(void *_arg)
             }
         }
 
-
+        
 
         passengersList[i] = p;
-        usleep(1000000/50);//fps
+        usleep(1000000/50);//do it 50 times per second
     }
 
     
@@ -312,7 +310,7 @@ void Draw(int sleepTime)
     sprintf(pc, "%d", passengersCount);
     XDrawString(dspl,hwnd, gc, 20, 20, pc, 3);
 
-    for(int i = 0; i < 4; i++)
+    for(int i = 0; i < 4; i++)//draws cities
     {
         struct city c = cityList[i];
         XDrawRectangle(dspl, hwnd, gc, c.x - citySize/2, c.y - citySize/2, citySize, citySize);
@@ -330,30 +328,30 @@ void Draw(int sleepTime)
         sprintf(cn, "%d", i);
         XDrawString(dspl,hwnd, gc, c.x, c.y - citySize/4, cn, 1);
     }
-
+//draw roads
     XDrawRectangle(dspl, hwnd, gc, hPadding + citySize/2 - rThickness/2, vPadding + citySize/2 - rThickness/2, hDistance + rThickness, rThickness);
     XDrawRectangle(dspl, hwnd, gc, hPadding + citySize/2 - rThickness/2, vPadding + citySize/2 - rThickness/2, rThickness, vDistance + rThickness);
     XDrawRectangle(dspl, hwnd, gc, hPadding + citySize/2 - rThickness/2, vPadding + citySize/2 + vDistance - rThickness/2, hDistance + rThickness, rThickness);
     XDrawRectangle(dspl, hwnd, gc, hPadding + citySize/2 - rThickness/2 + hDistance, vPadding + citySize/2 - rThickness/2, rThickness, vDistance + rThickness);
 
 
-    for(int i = 0; i < bussesCount; i++)
+    for(int i = 0; i < bussesCount; i++)//draw each bus
     {
         struct bus b = bussesList[i];
-        if(b.dir4 == 0 || b.dir4 == 2)
+        if(b.dir4 == 0 || b.dir4 == 2)//depending on it's direction 
         {
-            XDrawRectangle(dspl, hwnd, gc, b.x - 8, b.y -  4, 16, 8);
+            XDrawRectangle(dspl, hwnd, gc, b.x - 8, b.y -  4, 16, 8);//draw vertycal or horizontal
         }else
         {
             XDrawRectangle(dspl, hwnd, gc, b.x - 4, b.y - 8, 8, 16);
         } 
         char d[1];
-        if(b.waitingFlag == 0) d[0] = '.';
+        if(b.waitingFlag == 0) d[0] = '.';//some debug ingfo
         else d[0] = 'W';
         XDrawString(dspl,hwnd, gc, b.x, b.y, d, 1);
     }
 
-    for(int i = 0; i < passengersCount; i++)
+    for(int i = 0; i < passengersCount; i++)//draw each passanger
     {
         struct passenger p = passengersList[i];
         XDrawRectangle(dspl, hwnd, gc, p.x-2, p.y-2, 4,4);
@@ -365,7 +363,7 @@ void Draw(int sleepTime)
 
 void main()
 {
-    struct city c1;
+    struct city c1;//setting cityes positions 
     c1.x = hPadding + citySize/2;
     c1.y = vPadding + citySize/2;
     c1.stopFx = c1.x + rThickness;
@@ -404,7 +402,7 @@ void main()
 
 
 
-    dspl = XOpenDisplay(NULL);
+    dspl = XOpenDisplay(NULL);//setting up new window
     gc = XDefaultGC(dspl,0);
     if(dspl == 0) {printf("Error XOpenDisplay\n"); exit(1);}
     screen = XDefaultScreen(dspl);
@@ -414,7 +412,7 @@ void main()
     XMapWindow(dspl, hwnd);
 
     
-    while(passengersCount == 0)
+    while(passengersCount == 0)//inputs char from keyboard while it more then -1 and less then 10
     {
         char buf[]= "Enter number of passangers!";
         XDrawString(dspl, hwnd, gc, 10, 10, buf, 27);
@@ -432,7 +430,7 @@ void main()
                 int r = 1;
                 for(int c = 0; c < i; c++ )
                 {
-                    r*=2;
+                    r*=2;//makes 2^inputedNumber to create more passangers
                 }
                 passengersCount = r;
             }
@@ -441,7 +439,7 @@ void main()
     }
 
 
-    struct bus busF;
+    struct bus busF;//creating two busses
     busF.x = hPadding + citySize/2;
     busF.y = vPadding + citySize/2 + rThickness/4;
     busF.tx = hPadding + citySize/2 + hDistance - rThickness/4;
@@ -455,7 +453,7 @@ void main()
     int rc;
     bussesList[0] = busF;
     pthread_t busFthread;
-    pthread_create(&busFthread, NULL, (void*)ProcBus, (void*)0);
+    pthread_create(&busFthread, NULL, (void*)ProcBus, (void*)0);//starts thread with selected bus
 
 
     struct bus busB;
@@ -474,7 +472,7 @@ void main()
     pthread_create(&busBthread, NULL, (void*)ProcBus, (void*)1);
 
 
-    for(int i = 0; i < passengersCount; i++)
+    for(int i = 0; i < passengersCount; i++)//creats needed count of passengers
     {
         struct passenger p;
         p.x=0;
@@ -492,7 +490,7 @@ void main()
       
         passengersList[i] = p;
         pthread_t p1Thread;
-        pthread_create(&p1Thread, NULL, (void*)ProcPassenger, (void*)i);
+        pthread_create(&p1Thread, NULL, (void*)ProcPassenger, (void*)i);//starts thread with passenger
     }
 
     while(1)
