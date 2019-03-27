@@ -13,9 +13,6 @@ Window hwnd;
 XEvent event;
 KeySym ks;
 GC gc;
-int x, y,w,h;
-int count = 0;
-int speed = 100000;
 
 int roadTickness = 16;
 
@@ -26,11 +23,11 @@ int passengersCount = 0;
 
 
 int citySize = 256;
-int vPadding = 32;
-int hPadding = 64;
-int vDistance = 256+128;
+int vPadding = 32;// distances from top of the window to the city edge
+int hPadding = 64;//
+int vDistance = 256+128;//distances between cities
 int hDistance = 512+256 + 128;
-int rThickness = 32;
+int rThickness = 32;//thickness of roads
 
 struct city{
     int x, y;
@@ -40,15 +37,12 @@ struct city{
 
 struct city cityList[4];
 
-
-
-
 struct bus{
 int dir4;//world dirrection
 int dir2;//dirrection on route
 int x, y;
-int tx, ty;
-int passengers;
+int tx, ty;//target coordinates
+int passengers;//count
 int speed;
 int waitingTime;
 int waitingFlag;
@@ -64,7 +58,7 @@ void ProcBus(void *_arg)
     struct bus b = bussesList[arg];
     while(1)
     {
-        if(b.x < b.tx) b.x += b.speed; 
+        if(b.x < b.tx) b.x += b.speed; //movement
         if(b.y < b.ty) b.y += b.speed; 
         if(b.x > b.tx) b.x -= b.speed; 
         if(b.y > b.ty) b.y -= b.speed; 
@@ -75,7 +69,7 @@ void ProcBus(void *_arg)
             bussesList[arg] = b;
             pthread_mutex_unlock(&hmtx);
 
-            usleep(b.waitingTime);
+            usleep(b.waitingTime);//waits near the busStop
 
             pthread_mutex_lock(&hmtx);
             b = bussesList[arg];
@@ -154,6 +148,7 @@ void ProcBus(void *_arg)
 
 
 struct passenger{
+    //coordinates of passengers and some flags about passenger satate (what they doing)
     int x, y, tx, ty, sleep, maxSleepTime, sleepTime, wait, drive, toStop, toCity, toBus, curCity, curDir, canLeave;
 };
 
@@ -193,7 +188,7 @@ void ProcPassenger(void *_arg)
 
         if(p.toStop == 1)
         {
-            if(p.x < p.tx) p.x++;
+            if(p.x < p.tx) p.x++;//movement
             if(p.x > p.tx) p.x--;
             if(p.y < p.ty) p.y++;
             if(p.y > p.ty) p.y--;
@@ -227,7 +222,7 @@ void ProcPassenger(void *_arg)
                 }else{
                     if(p.curDir == 0)//returns to needed stop
                     {
-                        p.tx = cityList[p.curCity].stopFx - 8 + rand()%16;
+                        p.tx = cityList[p.curCity].stopFx - 8 + rand()%16;//random position on busstop
                         p.ty = cityList[p.curCity].stopFy - 8 + rand()%16;
                     }else{
                         p.tx = cityList[p.curCity].stopBx - 8 + rand()%16;
@@ -249,7 +244,7 @@ void ProcPassenger(void *_arg)
                     }else{
                         if(p.curDir == 0)//returns to needed stop
                         {
-                            p.tx = cityList[p.curCity].stopFx - 8 + rand()%16;
+                            p.tx = cityList[p.curCity].stopFx - 8 + rand()%16;//random position on busstop
                             p.ty = cityList[p.curCity].stopFy - 8 + rand()%16;
                         }else{
                             p.tx = cityList[p.curCity].stopBx - 8 + rand()%16;
@@ -262,7 +257,7 @@ void ProcPassenger(void *_arg)
             }else{//if bus not waiting
                 if(p.curDir == 0)//returns to needed stop
                 {
-                    p.tx = cityList[p.curCity].stopFx - 8 + rand()%16;
+                    p.tx = cityList[p.curCity].stopFx - 8 + rand()%16;//random position on busstop
                     p.ty = cityList[p.curCity].stopFy - 8 + rand()%16;
                 }else{
                     p.tx = cityList[p.curCity].stopBx - 8 + rand()%16;
@@ -303,7 +298,7 @@ void ProcPassenger(void *_arg)
 
         if(p.toCity)
         {
-            if(p.x < p.tx) p.x++;
+            if(p.x < p.tx) p.x++;//movement
             if(p.x > p.tx) p.x--;
             if(p.y < p.ty) p.y++;
             if(p.y > p.ty) p.y--;
@@ -338,7 +333,7 @@ void ProcPassenger(void *_arg)
         passengersList[i] = p;
         usleep(1000000/20);
 
-        /*int calcHardness = 1024;
+        /*int calcHardness = 1024;//                                  ///////////////////////////////////MEGACALCULATION\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
         int res = 0;
         for(int i = 1; i < calcHardness; i++)
         {
@@ -346,7 +341,7 @@ void ProcPassenger(void *_arg)
             {
                 res = i + j - i%j + j%i + i/j - j/i * 7;
             }
-        }*/
+        }*///                                              \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\whill make your processor very very hot!!///////////////////////////////////
     }
 
     
@@ -360,7 +355,7 @@ void Draw(int sleepTime)
     
     
     char pc[3];
-    sprintf(pc, "%d", passengersCount);
+    sprintf(pc, "%d", passengersCount);//draws passenger coutn
     XDrawString(dspl,hwnd, gc, 20, 20, pc, 3);
 
     for(int i = 0; i < 4; i++)//draws cities
@@ -473,7 +468,7 @@ void main()
         {
             XClearWindow(dspl,hwnd);
             char kb[1];
-            XLookupString(&event.xkey, kb,1, &ks, 0);
+            XLookupString(&event.xkey, kb,1, &ks, 0);//converts keyKode to char symbol
             XDrawString(dspl, hwnd, gc, 10, 10, kb, 1);
             char c = kb[0];
             int i = c - '0';
