@@ -35,6 +35,7 @@ struct city{
     int x, y;
     int stopFx, stopFy;
     int stopBx, stopBy;
+    char name[5];
 };
 
 struct city cityList[4];
@@ -152,7 +153,7 @@ void ProcBus(void *_arg)
 struct passenger{
     //coordinates of passengers and some flags about passenger satate (what they doing)
     int x, y, tx, ty, sleep, maxSleepTime, sleepTime, wait, drive, toStop, toCity, toBus, curCity, curDir, canLeave;
-    float fx,fy;
+    float fx,fy,fSpeed;
 };
 
 struct passenger passengersList[512];
@@ -162,6 +163,10 @@ void ProcPassenger(void *_arg)
     int i = (int)_arg;
     struct passenger p;
     p = passengersList[i];
+
+    /*int iSpeed = 40 + rand()%60;
+    p.fSpeed = (float)iSpeed/100.0f;*/
+    p.fSpeed = 1;
 
     int rS = rand()%4;//selecting random city
     p.curCity = rS;
@@ -202,8 +207,8 @@ void ProcPassenger(void *_arg)
                 vy /= vl;
             }
 
-            p.fx += vx;//replacing passenger;
-            p.fy += vy;
+            p.fx += vx * p.fSpeed;//replacing passenger;
+            p.fy += vy * p.fSpeed;
             p.x = p.fx;
             p.y = p.fy;
 
@@ -237,8 +242,8 @@ void ProcPassenger(void *_arg)
                         vx /= vl;
                         vy /= vl;
                     }
-                    p.fx += vx;//replacing passenger;
-                    p.fy += vy;
+                    p.fx += vx * p.fSpeed;//replacing passenger;
+                    p.fy += vy * p.fSpeed;
                     p.x = p.fx;
                     p.y = p.fy;
                 }else{
@@ -331,8 +336,8 @@ void ProcPassenger(void *_arg)
                 vy /= vl;
             }
 
-            p.fx += vx;//replacing passenger;
-            p.fy += vy;
+            p.fx += vx * p.fSpeed;//replacing passenger;
+            p.fy += vy * p.fSpeed;
             p.x = p.fx;
             p.y = p.fy;
 
@@ -405,9 +410,8 @@ void Draw(int sleepTime)
         XDrawRectangle(dspl, hwnd, gc, c.stopBx - 8, c.stopBy - 8, 16, 16);
         XDrawString(dspl,hwnd, gc, c.stopBx, c.stopBy-8, d, 1);
 
-        char cn[1];
-        sprintf(cn, "%d", i);
-        XDrawString(dspl,hwnd, gc, c.x, c.y - citySize/4, cn, 1);
+        
+        XDrawString(dspl,hwnd, gc, c.x+citySize/4, c.y - citySize/4, c.name, sizeof(c.name));
     }
 //draw roads
     XDrawRectangle(dspl, hwnd, gc, hPadding + citySize/2 - rThickness/2, vPadding + citySize/2 - rThickness/2, hDistance + rThickness, rThickness);
@@ -450,6 +454,7 @@ void main()
     c1.stopFy = c1.y + rThickness;
     c1.stopBx = c1.x;
     c1.stopBy = c1.y - rThickness;
+    strcpy(c1.name, "Dijon");
 
     struct city c2;
     c2.x = hPadding + hDistance + citySize/2;
@@ -458,6 +463,7 @@ void main()
     c2.stopFy = c2.y + rThickness;
     c2.stopBx = c2.x + rThickness ;
     c2.stopBy = c2.y;
+    strcpy(c2.name, "Ruan");
 
     struct city c3;
     c3.x = hPadding + hDistance + citySize/2;
@@ -466,6 +472,7 @@ void main()
     c3.stopFy = c3.y - rThickness;
     c3.stopBx = c3.x;
     c3.stopBy = c3.y + rThickness;
+    strcpy(c3.name, "Paris");
 
     struct city c4;
     c4.x = hPadding + citySize/2;
@@ -474,6 +481,7 @@ void main()
     c4.stopFy = c4.y - rThickness;
     c4.stopBx = c4.x - rThickness;
     c4.stopBy = c4.y;
+    strcpy(c4.name, "Lion");
 
     cityList[0] = c1;
     cityList[1] = c2;
