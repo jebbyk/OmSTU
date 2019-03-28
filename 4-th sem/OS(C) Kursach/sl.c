@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <X11/Xlib.h>
 
+#include <math.h>
+
 
 Display *dspl;
 int screen;
@@ -77,13 +79,13 @@ void ProcBus(void *_arg)
             b.waitingFlag = 0;
             if(b.dir2 == 0) //forward or backwrd direction
             { 
-                if(b.dir4 != 3) b.dir4++;
+                if(b.dir4 != 3) b.dir4++;//clockwise
                 else b.dir4 = 0;
                 switch(b.dir4)//world dirrection
                 {
                     case 0:
                     {
-                        b.tx = cityList[1].x - rThickness/4;//setting target points
+                        b.tx = cityList[1].x - rThickness/4;//setting target points depending on direction
                         b.ty = cityList[1].y + rThickness/4;
                         break;
                     }
@@ -107,7 +109,7 @@ void ProcBus(void *_arg)
                     }
                 }
             }else{
-                if(b.dir4 != 0) b.dir4--;
+                if(b.dir4 != 0) b.dir4--;//counter-clockwise
                 else b.dir4 = 3;
                 switch(b.dir4)
                 {
@@ -150,6 +152,7 @@ void ProcBus(void *_arg)
 struct passenger{
     //coordinates of passengers and some flags about passenger satate (what they doing)
     int x, y, tx, ty, sleep, maxSleepTime, sleepTime, wait, drive, toStop, toCity, toBus, curCity, curDir, canLeave;
+    float fx,fy;
 };
 
 struct passenger passengersList[512];
@@ -164,6 +167,8 @@ void ProcPassenger(void *_arg)
     p.curCity = rS;
     p.x = cityList[rS].x - citySize/2  + rand()%citySize;//setting random start position 
     p.y = cityList[rS].y - citySize/2  + rand()%citySize;
+    p.fx = p.x;
+    p.fy = p.y;
 
 
     int rD = rand()%2;//selecting random route direction
@@ -188,10 +193,19 @@ void ProcPassenger(void *_arg)
 
         if(p.toStop == 1)
         {
-            if(p.x < p.tx) p.x++;//movement
-            if(p.x > p.tx) p.x--;
-            if(p.y < p.ty) p.y++;
-            if(p.y > p.ty) p.y--;
+            float vx = p.tx - p.fx;//setting moveing vector
+            float vy = p.ty - p.fy;
+            float vl = sqrt(vx*vx + vy*vy);
+            if(vl > 1)
+            {
+                vx /= vl;
+                vy /= vl;
+            }
+
+            p.fx += vx;//replacing passenger;
+            p.fy += vy;
+            p.x = p.fx;
+            p.y = p.fy;
 
             if(p.x == p.tx && p.y == p.ty){// if comes to stop then wait
                 p.toStop = 0;
@@ -215,10 +229,18 @@ void ProcPassenger(void *_arg)
             {
                 if(bussesList[p.curDir].passengers < 5)
                 {
-                    if(p.x < p.tx) p.x++;//move to it
-                    if(p.x > p.tx) p.x--;
-                    if(p.y < p.ty) p.y++;
-                    if(p.y > p.ty) p.y--;
+                    float vx = p.tx - p.fx;//setting moveing vector
+                    float vy = p.ty - p.fy;
+                    float vl = sqrt(vx*vx + vy*vy);
+                    if(vl > 1)
+                    {
+                        vx /= vl;
+                        vy /= vl;
+                    }
+                    p.fx += vx;//replacing passenger;
+                    p.fy += vy;
+                    p.x = p.fx;
+                    p.y = p.fy;
                 }else{
                     if(p.curDir == 0)//returns to needed stop
                     {
@@ -232,10 +254,10 @@ void ProcPassenger(void *_arg)
                     p.toBus = 0;
                 }
 
-                if(p.x == p.tx && p.y == p.ty){//if comes to bus then drive and can't leave in the same city
+                if(p.x == p.tx && p.y == p.ty){//if comes to bus 
                     if(bussesList[p.curDir].passengers < 5)
                     {
-                        p.drive = 1;
+                        p.drive = 1;//then drive and can't leave in the same city
                         pthread_mutex_lock(&hmtx);
                         bussesList[p.curDir].passengers++;
                         pthread_mutex_unlock(&hmtx);
@@ -272,6 +294,8 @@ void ProcPassenger(void *_arg)
         {
             p.x = b.x;//pos = bus pos
             p.y = b.y;
+            p.fx = p.x;
+            p.fy = p.y;
             if(b.waitingFlag == 0) p.canLeave = 1;//if bus not waits then can leave 
             if(b.waitingFlag == 1 && p.canLeave ==1)//(will leave only when bus stops
             {
@@ -298,10 +322,19 @@ void ProcPassenger(void *_arg)
 
         if(p.toCity)
         {
-            if(p.x < p.tx) p.x++;//movement
-            if(p.x > p.tx) p.x--;
-            if(p.y < p.ty) p.y++;
-            if(p.y > p.ty) p.y--;
+            float vx = p.tx - p.fx;//setting moveing vector
+            float vy = p.ty - p.fy;
+            float vl = sqrt(vx*vx + vy*vy);
+            if(vl > 1)
+            {
+                vx /= vl;
+                vy /= vl;
+            }
+
+            p.fx += vx;//replacing passenger;
+            p.fy += vy;
+            p.x = p.fx;
+            p.y = p.fy;
 
             if(p.x == p.tx && p.y == p.ty){//if comes to target point then sleep some seconds
                 p.sleep = 1;
@@ -331,9 +364,9 @@ void ProcPassenger(void *_arg)
         
 
         passengersList[i] = p;
-        usleep(1000000/20);
+        usleep(1000000/50);
 
-        /*int calcHardness = 1024;//                                  ///////////////////////////////////MEGACALCULATION\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+        /*int calcHardness = 1024;/////////////////////////////////MEGACALCULATION\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
         int res = 0;
         for(int i = 1; i < calcHardness; i++)
         {
@@ -341,7 +374,7 @@ void ProcPassenger(void *_arg)
             {
                 res = i + j - i%j + j%i + i/j - j/i * 7;
             }
-        }*///                                              \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\whill make your processor very very hot!!///////////////////////////////////
+        }*///     \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\whill make your processor very very hot!!///////////////////////////////////
     }
 
     
