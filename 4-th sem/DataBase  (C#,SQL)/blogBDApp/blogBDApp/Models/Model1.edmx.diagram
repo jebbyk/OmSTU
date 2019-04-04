@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="7c7411ae8e3245f6b7f778b704e5a95c" Name="Diagram1" ZoomLevel="101">
+        <EntityTypeShape EntityType="blogDataBaseModel.comments" Width="1.5" PointX="5" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="blogDataBaseModel.messages" Width="1.5" PointX="2.125" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="blogDataBaseModel.publications" Width="1.5" PointX="6" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="blogDataBaseModel.themes" Width="1.5" PointX="8" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="blogDataBaseModel.users" Width="1.5" PointX="4" PointY="4.75" IsExpanded="true" />
+        <AssociationConnector Association="blogDataBaseModel.commentPublicationFK" ManuallyRouted="false" />
+        <AssociationConnector Association="blogDataBaseModel.commentUserFK" ManuallyRouted="false" />
+        <AssociationConnector Association="blogDataBaseModel.messageSenderFK" ManuallyRouted="false" />
+        <AssociationConnector Association="blogDataBaseModel.publicationThemeFK" ManuallyRouted="false" />
+        <AssociationConnector Association="blogDataBaseModel.publicationUserFK" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
