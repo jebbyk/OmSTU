@@ -1,0 +1,203 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<doc>
+  <assembly>
+    <name>Microsoft.Owin.Host.SystemWeb</name>
+  </assembly>
+  <members>
+    <member name="T:Microsoft.Owin.Host.SystemWeb.OwinHttpHandler">
+      <summary>Обрабатывает запросы, поступающие от System.Web, в виде запросов OWIN.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Host.SystemWeb.OwinHttpHandler.#ctor">
+      <summary>Обрабатывает запросы с помощью приложения OWIN по умолчанию.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Host.SystemWeb.OwinHttpHandler.BeginProcessRequest(System.Web.HttpContextBase,System.AsyncCallback,System.Object)">
+      <summary>Инициирует асинхронный вызов на обработчика HTTP-данных.</summary>
+      <returns>System.IAsyncResult, который содержит сведения о состоянии процесса.</returns>
+      <param name="httpContext">Объект System.Web.HttpContextBase, предоставляющий ссылки на внутренние объекты сервера (например, Request, Response, Session и Server), используемые для обслуживания HTTP-запросов.</param>
+      <param name="callback">System.AsyncCallback для вызова, когда вызов асинхронного метода завершен.Если обратный вызов имеет значение null, делегат не вызывается.</param>
+      <param name="extraData">Любые дополнительные данные, необходимые для обработки запроса.</param>
+    </member>
+    <member name="M:Microsoft.Owin.Host.SystemWeb.OwinHttpHandler.EndProcessRequest(System.IAsyncResult)">
+      <summary>Предоставляет асинхронный метод End для окончания процесса.</summary>
+      <param name="result">System.IAsyncResult, который содержит сведения о состоянии процесса.</param>
+    </member>
+    <member name="P:Microsoft.Owin.Host.SystemWeb.OwinHttpHandler.IsReusable">
+      <summary>Получает значение, указывающее, может ли другой запрос использовать экземпляр System.Web.IHttpHandler.</summary>
+      <returns>значение true.</returns>
+    </member>
+    <member name="M:Microsoft.Owin.Host.SystemWeb.OwinHttpHandler.System#Web#IHttpAsyncHandler#BeginProcessRequest(System.Web.HttpContext,System.AsyncCallback,System.Object)">
+      <summary>Инициирует асинхронный вызов на обработчика HTTP-данных.</summary>
+      <returns>
+        <see cref="T:System.IAsyncResult" />, который содержит сведения о состоянии процесса.</returns>
+      <param name="context">Объект <see cref="T:System.Web.HttpContext" />, предоставляющий ссылки на внутренние объекты сервера (например, Request, Response, Session и Server), используемые для обслуживания HTTP-запросов.</param>
+      <param name="cb">
+        <see cref="T:System.AsyncCallback" /> для вызова, когда вызов асинхронного метода завершен.Если обратный вызов имеет значение null, делегат не вызывается.</param>
+      <param name="extraData">Любые дополнительные данные, необходимые для обработки запроса.</param>
+    </member>
+    <member name="M:Microsoft.Owin.Host.SystemWeb.OwinHttpHandler.System#Web#IHttpHandler#ProcessRequest(System.Web.HttpContext)">
+      <summary>Обрабатывает запрос для обработчика HTTP-данных.</summary>
+      <param name="context">Контекст.</param>
+    </member>
+    <member name="T:Microsoft.Owin.Host.SystemWeb.OwinRouteHandler">
+      <summary>Обрабатывает маршрут через конвейер OWIN.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Host.SystemWeb.OwinRouteHandler.#ctor(System.Action{Owin.IAppBuilder})">
+      <summary>Инициализирует OwinRouteHandler</summary>
+      <param name="startup">Метод инициализации конвейера, который обрабатывает запросы для маршрута.</param>
+    </member>
+    <member name="M:Microsoft.Owin.Host.SystemWeb.OwinRouteHandler.GetHttpHandler(System.Web.Routing.RequestContext)">
+      <summary>Предоставляет объект, который обрабатывает запрос.</summary>
+      <returns>Объект, который обрабатывает запрос.</returns>
+      <param name="requestContext">Объект, инкапсулирующий сведения о запросе.</param>
+    </member>
+    <member name="M:Microsoft.Owin.Host.SystemWeb.OwinRouteHandler.System#Web#Routing#IRouteHandler#GetHttpHandler(System.Web.Routing.RequestContext)">
+      <summary>Предоставляет объект, который обрабатывает запрос.</summary>
+      <returns>Объект, который обрабатывает запрос.</returns>
+      <param name="requestContext">Объект, инкапсулирующий сведения о запросе.</param>
+    </member>
+    <member name="T:Microsoft.Owin.Host.SystemWeb.PreApplicationStart">
+      <summary>Регистрирует модуль обработки запросов OWIN при запуске приложения.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Host.SystemWeb.PreApplicationStart.Initialize">
+      <summary>Регистрирует модуль обработки запросов OWIN.</summary>
+    </member>
+    <member name="T:System.Web.HttpContextBaseExtensions">
+      <summary>Предоставляет методы расширения для <see cref="T:System.Web.HttpContextBase" />.</summary>
+    </member>
+    <member name="M:System.Web.HttpContextBaseExtensions.GetOwinContext(System.Web.HttpContextBase)">
+      <summary>Получает <see cref="T:Microsoft.Owin.IOwinContext" /> для текущего запроса.</summary>
+    </member>
+    <member name="M:System.Web.HttpContextBaseExtensions.GetOwinContext(System.Web.HttpRequestBase)">
+      <summary>Получает <see cref="T:Microsoft.Owin.IOwinContext" /> для текущего запроса.</summary>
+    </member>
+    <member name="T:System.Web.HttpContextExtensions">
+      <summary>Предоставляет методы расширения для <see cref="T:System.Web.HttpContext" />.</summary>
+    </member>
+    <member name="M:System.Web.HttpContextExtensions.GetOwinContext(System.Web.HttpContext)">
+      <summary>Получает <see cref="T:Microsoft.Owin.IOwinContext" /> для текущего запроса.</summary>
+    </member>
+    <member name="M:System.Web.HttpContextExtensions.GetOwinContext(System.Web.HttpRequest)">
+      <summary>Получает <see cref="T:Microsoft.Owin.IOwinContext" /> для текущего запроса.</summary>
+    </member>
+    <member name="T:System.Web.Routing.RouteCollectionExtensions">
+      <summary>Обеспечивает методы расширения для регистрации приложений OWIN в качестве маршрутов System.Web.</summary>
+    </member>
+    <member name="M:System.Web.Routing.RouteCollectionExtensions.MapOwinPath(System.Web.Routing.RouteCollection,System.String)">
+      <summary>Регистрирует маршрут для стандартного приложения OWIN.</summary>
+      <returns>Созданный маршрут.</returns>
+      <param name="routes">Коллекция маршрутов.</param>
+      <param name="pathBase">Путь маршрута для сопоставления со стандартным приложением OWIN.</param>
+    </member>
+    <member name="M:System.Web.Routing.RouteCollectionExtensions.MapOwinPath(System.Web.Routing.RouteCollection,System.String,System.Action{Owin.IAppBuilder})">
+      <summary>Вызывает делегата запуска System.Action для построения приложения OWIN и затем регистрирует для него маршрут по заданному пути.</summary>
+      <returns>Созданный маршрут.</returns>
+      <param name="routes">Коллекция маршрутов.</param>
+      <param name="pathBase">Путь маршрута для сопоставления с заданным приложением OWIN.</param>
+      <param name="startup">Вызванный делегат System.Action для построения приложения OWIN.</param>
+    </member>
+    <member name="M:System.Web.Routing.RouteCollectionExtensions.MapOwinPath(System.Web.Routing.RouteCollection,System.String,System.String)">
+      <summary> Регистрирует маршрут для стандартного приложения OWIN. </summary>
+      <returns>Созданный маршрут.</returns>
+      <param name="routes">Коллекция маршрутов.</param>
+      <param name="name">Заданное имя маршрута.</param>
+      <param name="pathBase">Путь маршрута для сопоставления со стандартным приложением OWIN.</param>
+    </member>
+    <member name="M:System.Web.Routing.RouteCollectionExtensions.MapOwinPath(System.Web.Routing.RouteCollection,System.String,System.String,System.Action{Owin.IAppBuilder})">
+      <summary> Вызывает делегата запуска System.Action для построения приложения OWIN и затем регистрирует для него маршрут по заданному пути. </summary>
+      <returns>Созданный маршрут.</returns>
+      <param name="routes">Коллекция маршрутов.</param>
+      <param name="name">Заданное имя маршрута.</param>
+      <param name="pathBase">Путь маршрута для сопоставления с заданным приложением OWIN.</param>
+      <param name="startup">Вызванный делегат System.Action для построения приложения OWIN.</param>
+    </member>
+    <member name="M:System.Web.Routing.RouteCollectionExtensions.MapOwinPath``1(System.Web.Routing.RouteCollection,System.String,System.String,``0)">
+      <summary> Регистрирует маршрут для определенной точки входа приложения OWIN. </summary>
+      <returns>Созданный маршрут.</returns>
+      <param name="routes">Коллекция маршрутов.</param>
+      <param name="name">Заданное имя маршрута.</param>
+      <param name="pathBase">Путь маршрута для сопоставления с заданным приложением OWIN.</param>
+      <param name="app">Точка входа приложения OWIN.</param>
+      <typeparam name="TApp">Тип точки входа приложения OWIN.</typeparam>
+    </member>
+    <member name="M:System.Web.Routing.RouteCollectionExtensions.MapOwinPath``1(System.Web.Routing.RouteCollection,System.String,``0)">
+      <summary> Регистрирует маршрут для определенной точки входа приложения OWIN. </summary>
+      <returns>Созданный маршрут.</returns>
+      <param name="routes">Коллекция маршрутов.</param>
+      <param name="pathBase">Путь маршрута для сопоставления с заданным приложением OWIN.</param>
+      <param name="app">Точка входа приложения OWIN.</param>
+      <typeparam name="TApp">Тип точки входа приложения OWIN.</typeparam>
+    </member>
+    <member name="M:System.Web.Routing.RouteCollectionExtensions.MapOwinRoute(System.Web.Routing.RouteCollection,System.String,System.Action{Owin.IAppBuilder})">
+      <summary>Предоставляет способ определения маршрутов для конвейера OWIN.</summary>
+      <returns>Созданный маршрут.</returns>
+      <param name="routes">Коллекция маршрутов.</param>
+      <param name="routeUrl">Шаблон URL-адреса для маршрута.</param>
+      <param name="startup">Метод инициализации конвейера, который обрабатывает запросы для маршрута.</param>
+    </member>
+    <member name="M:System.Web.Routing.RouteCollectionExtensions.MapOwinRoute(System.Web.Routing.RouteCollection,System.String,System.String,System.Action{Owin.IAppBuilder})">
+      <summary> Предоставляет способ определения маршрутов для конвейера OWIN. </summary>
+      <returns>Созданный маршрут.</returns>
+      <param name="routes">Коллекция маршрутов.</param>
+      <param name="routeName">Имя маршрута.</param>
+      <param name="routeUrl">Шаблон URL-адреса для маршрута.</param>
+      <param name="startup">Метод инициализации конвейера, который обрабатывает запросы для маршрута.</param>
+    </member>
+    <member name="M:System.Web.Routing.RouteCollectionExtensions.MapOwinRoute(System.Web.Routing.RouteCollection,System.String,System.String,System.Web.Routing.RouteValueDictionary,System.Action{Owin.IAppBuilder})">
+      <summary> Предоставляет способ определения маршрутов для конвейера OWIN. </summary>
+      <returns>Созданный маршрут.</returns>
+      <param name="routes">Коллекция маршрутов.</param>
+      <param name="routeName">Имя маршрута.</param>
+      <param name="routeUrl">Шаблон URL-адреса для маршрута.</param>
+      <param name="defaults">Значения для использования в случае, если URL-адрес не содержит все параметры.</param>
+      <param name="startup">Метод инициализации конвейера, который обрабатывает запросы для маршрута.</param>
+    </member>
+    <member name="M:System.Web.Routing.RouteCollectionExtensions.MapOwinRoute(System.Web.Routing.RouteCollection,System.String,System.String,System.Web.Routing.RouteValueDictionary,System.Web.Routing.RouteValueDictionary,System.Action{Owin.IAppBuilder})">
+      <summary> Предоставляет способ определения маршрутов для конвейера OWIN. </summary>
+      <returns>Созданный маршрут.</returns>
+      <param name="routes">Коллекция маршрутов.</param>
+      <param name="routeName">Имя маршрута.</param>
+      <param name="routeUrl">Шаблон URL-адреса для маршрута.</param>
+      <param name="defaults">Значения для использования в случае, если URL-адрес не содержит все параметры.</param>
+      <param name="constraints">Регулярное выражение, задающее допустимые значения для параметра URL-адреса.</param>
+      <param name="startup">Метод инициализации конвейера, который обрабатывает запросы для маршрута.</param>
+    </member>
+    <member name="M:System.Web.Routing.RouteCollectionExtensions.MapOwinRoute(System.Web.Routing.RouteCollection,System.String,System.String,System.Web.Routing.RouteValueDictionary,System.Web.Routing.RouteValueDictionary,System.Web.Routing.RouteValueDictionary,System.Action{Owin.IAppBuilder})">
+      <summary> Предоставляет способ определения маршрутов для конвейера OWIN. </summary>
+      <returns>Созданный маршрут.</returns>
+      <param name="routes">Коллекция маршрутов.</param>
+      <param name="routeName">Имя маршрута.</param>
+      <param name="routeUrl">Шаблон URL-адреса для маршрута.</param>
+      <param name="defaults">Значения для использования в случае, если URL-адрес не содержит все параметры.</param>
+      <param name="constraints">Регулярное выражение, задающее допустимые значения для параметра URL-адреса.</param>
+      <param name="dataTokens">Настраиваемые значения, которые передаются обработчику маршрута, но не используются для определения того, совпадает ли маршрут с указанным шаблоном URL-адреса.Эти значения передаются обработчику маршрутов, где они используются для обработки запросов.</param>
+      <param name="startup">Метод инициализации конвейера, который обрабатывает запросы для маршрута.</param>
+    </member>
+    <member name="M:System.Web.Routing.RouteCollectionExtensions.MapOwinRoute(System.Web.Routing.RouteCollection,System.String,System.Web.Routing.RouteValueDictionary,System.Action{Owin.IAppBuilder})">
+      <summary> Предоставляет способ определения маршрутов для конвейера OWIN. </summary>
+      <returns>Созданный маршрут.</returns>
+      <param name="routes">Коллекция маршрутов.</param>
+      <param name="routeUrl">Шаблон URL-адреса для маршрута.</param>
+      <param name="defaults">Значения для использования в случае, если URL-адрес не содержит все параметры.</param>
+      <param name="startup">Метод инициализации конвейера, который обрабатывает запросы для маршрута.</param>
+    </member>
+    <member name="M:System.Web.Routing.RouteCollectionExtensions.MapOwinRoute(System.Web.Routing.RouteCollection,System.String,System.Web.Routing.RouteValueDictionary,System.Web.Routing.RouteValueDictionary,System.Action{Owin.IAppBuilder})">
+      <summary> Предоставляет способ определения маршрутов для конвейера OWIN. </summary>
+      <returns>Созданный маршрут.</returns>
+      <param name="routes">Коллекция маршрутов.</param>
+      <param name="routeUrl">Шаблон URL-адреса для маршрута.</param>
+      <param name="defaults">Значения для использования в случае, если URL-адрес не содержит все параметры.</param>
+      <param name="constraints">Регулярное выражение, задающее допустимые значения для параметра URL-адреса.</param>
+      <param name="startup">Метод инициализации конвейера, который обрабатывает запросы для маршрута.</param>
+    </member>
+    <member name="M:System.Web.Routing.RouteCollectionExtensions.MapOwinRoute(System.Web.Routing.RouteCollection,System.String,System.Web.Routing.RouteValueDictionary,System.Web.Routing.RouteValueDictionary,System.Web.Routing.RouteValueDictionary,System.Action{Owin.IAppBuilder})">
+      <summary> Предоставляет способ определения маршрутов для конвейера OWIN. </summary>
+      <returns>Созданный маршрут.</returns>
+      <param name="routes">Коллекция маршрутов.</param>
+      <param name="routeUrl">Шаблон URL-адреса для маршрута.</param>
+      <param name="defaults">Значения для использования в случае, если URL-адрес не содержит все параметры.</param>
+      <param name="constraints">Регулярное выражение, задающее допустимые значения для параметра URL-адреса.</param>
+      <param name="dataTokens">Настраиваемые значения, которые передаются обработчику маршрута, но не используются для определения того, совпадает ли маршрут с указанным шаблоном URL-адреса.Эти значения передаются обработчику маршрутов, где они используются для обработки запросов.</param>
+      <param name="startup">Метод инициализации конвейера, который обрабатывает запросы для маршрута.</param>
+    </member>
+  </members>
+</doc>

@@ -1,0 +1,196 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<doc>
+  <assembly>
+    <name>Microsoft.Owin.Security.Facebook</name>
+  </assembly>
+  <members>
+    <member name="T:Microsoft.Owin.Security.Facebook.FacebookApplyRedirectContext">
+      <summary>Передается контекст, когда запрос приводит к перенаправлению в конечную точку проверки подлинности в ПО промежуточного слоя Facebook</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Facebook.FacebookApplyRedirectContext.#ctor(Microsoft.Owin.IOwinContext,Microsoft.Owin.Security.Facebook.FacebookAuthenticationOptions,Microsoft.Owin.Security.AuthenticationProperties,System.String)">
+      <summary>Создает новый контекстный объект.</summary>
+      <param name="context">Контекст запроса OWIN</param>
+      <param name="options">Параметры ПО промежуточного слоя Facebook</param>
+      <param name="properties">Свойства проверки подлинности запроса</param>
+      <param name="redirectUri">Универсальный код ресурса (URI) первичного перенаправления</param>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Facebook.FacebookApplyRedirectContext.Properties">
+      <summary>Получает свойства проверки подлинности данного запроса</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Facebook.FacebookApplyRedirectContext.RedirectUri">
+      <summary>Получает универсальный код ресурса (URI) для перенаправления.</summary>
+    </member>
+    <member name="T:Microsoft.Owin.Security.Facebook.FacebookAuthenticatedContext">
+      <summary>Содержит сведения о сеансе входа и <see cref="T:System.Security.Claims.ClaimsIdentity" /> пользователя.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Facebook.FacebookAuthenticatedContext.#ctor(Microsoft.Owin.IOwinContext,Newtonsoft.Json.Linq.JObject,System.String,System.String)">
+      <summary>Инициализирует <see cref="T:Microsoft.Owin.Security.Facebook.FacebookAuthenticatedContext" /></summary>
+      <param name="context">Среда OWIN</param>
+      <param name="user">Пользователь, сериализованный в формате JSON</param>
+      <param name="accessToken">Маркер доступа Facebook</param>
+      <param name="expires">Количество секунд до завершения срока действия</param>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Facebook.FacebookAuthenticatedContext.AccessToken">
+      <summary>Получает токен доступа Facebook</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Facebook.FacebookAuthenticatedContext.Email">
+      <summary>Получает электронную почту Facebook</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Facebook.FacebookAuthenticatedContext.ExpiresIn">
+      <summary>Получает время завершения действия маркера доступа Facebook</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Facebook.FacebookAuthenticatedContext.Id">
+      <summary>Получает идентификатор пользователя Facebook</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Facebook.FacebookAuthenticatedContext.Identity">
+      <summary>Получает <see cref="T:System.Security.Claims.ClaimsIdentity" />, представляющий пользователя</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Facebook.FacebookAuthenticatedContext.Link">
+      <summary>Получает или задает ссылку на <see cref="T:Microsoft.Owin.Security.Facebook.FacebookAuthenticatedContext" />.</summary>
+      <returns>Ссылка на <see cref="T:Microsoft.Owin.Security.Facebook.FacebookAuthenticatedContext" />.</returns>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Facebook.FacebookAuthenticatedContext.Name">
+      <summary>Получает имя пользователя</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Facebook.FacebookAuthenticatedContext.Properties">
+      <summary>Получает или задает контейнер свойств для общих свойств проверки подлинности</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Facebook.FacebookAuthenticatedContext.User">
+      <summary>Получает пользователя, сериализованного в формате JSON</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Facebook.FacebookAuthenticatedContext.UserName">
+      <summary>Получает имя пользователя Facebook</summary>
+    </member>
+    <member name="T:Microsoft.Owin.Security.Facebook.FacebookAuthenticationMiddleware">
+      <summary>ПО промежуточного слоя OWIN для проверки подлинности пользователей с помощью Facebook</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Facebook.FacebookAuthenticationMiddleware.#ctor(Microsoft.Owin.OwinMiddleware,Owin.IAppBuilder,Microsoft.Owin.Security.Facebook.FacebookAuthenticationOptions)">
+      <summary>Инициализирует <see cref="T:Microsoft.Owin.Security.Facebook.FacebookAuthenticationMiddleware" /></summary>
+      <param name="next">Следующее вызываемое ПО промежуточного слоя в конвейере OWIN</param>
+      <param name="app">Приложение OWIN</param>
+      <param name="options">Параметры конфигурации ПО промежуточного слоя</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Facebook.FacebookAuthenticationMiddleware.CreateHandler">
+      <summary>Предоставляет объект <see cref="T:Microsoft.Owin.Security.Infrastructure.AuthenticationHandler" /> для обработки запросов, связанных с проверкой подлинности.</summary>
+      <returns>
+        <see cref="T:Microsoft.Owin.Security.Infrastructure.AuthenticationHandler" />, настроенный посредством параметров <see cref="T:Microsoft.Owin.Security.Facebook.FacebookAuthenticationOptions" />, переданных в конструктор.</returns>
+    </member>
+    <member name="T:Microsoft.Owin.Security.Facebook.FacebookAuthenticationOptions">
+      <summary>Параметры конфигурации для <see cref="T:Microsoft.Owin.Security.Facebook.FacebookAuthenticationMiddleware" /></summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Facebook.FacebookAuthenticationOptions.#ctor">
+      <summary>Инициализирует новый <see cref="T:Microsoft.Owin.Security.Facebook.FacebookAuthenticationOptions" /></summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Facebook.FacebookAuthenticationOptions.AppId">
+      <summary>Получает или задает идентификатор, присвоенный Facebook</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Facebook.FacebookAuthenticationOptions.AppSecret">
+      <summary>Получает или задает секрет приложения, присвоенный Facebook</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Facebook.FacebookAuthenticationOptions.BackchannelCertificateValidator">
+      <summary>Получает или задает проверяющий элемент управления для закрепленных сертификатов, используемый для проверки конечных точек, которые используются в операциях обмена данными через обратный канал, осуществляемых Facebook.</summary>
+      <returns>Проверяющий элемент управления для закрепленных сертификатов.</returns>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Facebook.FacebookAuthenticationOptions.BackchannelHttpHandler">
+      <summary>HttpMessageHandler, используемый для обмена данными с Facebook.Его нельзя задать одновременно с BackchannelCertificateValidator, если только значение не может быть получено нисходящим приведением WebRequestHandler.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Facebook.FacebookAuthenticationOptions.BackchannelTimeout">
+      <summary>Получает или задает значение времени ожидания в миллисекундах для обмена данными с Facebook через обратный канал.</summary>
+      <returns>Время ожидания обратного канала в миллисекундах.</returns>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Facebook.FacebookAuthenticationOptions.CallbackPath">
+      <summary>Путь запроса с базовым путем приложения, по которому будет возвращен агент пользователя.ПО промежуточного слоя обработает этот запрос после его поступления.По умолчанию используется значение "/signin-facebook".</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Facebook.FacebookAuthenticationOptions.Caption">
+      <summary>Получает или задает текст, который пользователь может отобразить в пользовательском интерфейсе входа.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Facebook.FacebookAuthenticationOptions.Provider">
+      <summary>Получает или задает <see cref="T:Microsoft.Owin.Security.Facebook.IFacebookAuthenticationProvider" />, который используется для обработки событий проверки подлинности.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Facebook.FacebookAuthenticationOptions.Scope">
+      <summary>Список запрашиваемых разрешений.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Facebook.FacebookAuthenticationOptions.SendAppSecretProof">
+      <summary>Получает или задает нужно ли создавать и отправлять appsecret_proof с вызовами API Facebook.Включено по умолчанию.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Facebook.FacebookAuthenticationOptions.SignInAsAuthenticationType">
+      <summary>Получает или задает имя другого ПО промежуточного слоя, осуществляющего проверку подлинности, которое будет отвечать за фактическую выдачу <see cref="T:System.Security.Claims.ClaimsIdentity" /> пользователя.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Facebook.FacebookAuthenticationOptions.StateDataFormat">
+      <summary>Получает или задает тип, используемый для защиты данных, обрабатываемых ПО промежуточного слоя.</summary>
+    </member>
+    <member name="T:Microsoft.Owin.Security.Facebook.FacebookAuthenticationProvider">
+      <summary>Реализация <see cref="T:Microsoft.Owin.Security.Facebook.IFacebookAuthenticationProvider" /> по умолчанию.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Facebook.FacebookAuthenticationProvider.#ctor">
+      <summary>Инициализирует <see cref="T:Microsoft.Owin.Security.Facebook.FacebookAuthenticationProvider" /></summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Facebook.FacebookAuthenticationProvider.ApplyRedirect(Microsoft.Owin.Security.Facebook.FacebookApplyRedirectContext)">
+      <summary>Вызывается, когда запросе приводит к перенаправлению в конечную точку проверки подлинности в ПО промежуточного слоя Facebook</summary>
+      <param name="context">Содержит универсальный код ресурса (URI) и <see cref="T:Microsoft.Owin.Security.AuthenticationProperties" /> запроса</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Facebook.FacebookAuthenticationProvider.Authenticated(Microsoft.Owin.Security.Facebook.FacebookAuthenticatedContext)">
+      <summary>Вызывается, если пользователь успешно проходит проверку подлинности Facebook</summary>
+      <returns>
+        <see cref="T:System.Threading.Tasks.Task" />, представляющий завершенную операцию.</returns>
+      <param name="context">Содержит сведения о сеансе входа и <see cref="T:System.Security.Claims.ClaimsIdentity" /> пользователя.</param>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Facebook.FacebookAuthenticationProvider.OnApplyRedirect">
+      <summary>Получает или задает делегат, которая вызывается при вызове метода ApplyRedirect.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Facebook.FacebookAuthenticationProvider.OnAuthenticated">
+      <summary>Получает или задает функцию, которая вызывается при вызове метода Authenticated.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Facebook.FacebookAuthenticationProvider.OnReturnEndpoint">
+      <summary>Получает или задает функцию, которая вызывается при вызове метода ReturnEndpoint.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Facebook.FacebookAuthenticationProvider.ReturnEndpoint(Microsoft.Owin.Security.Facebook.FacebookReturnEndpointContext)">
+      <summary>Вызывает перед тем, как <see cref="T:System.Security.Claims.ClaimsIdentity" /> сохраняется в локальном файле cookie и браузер перенаправляется по исходному запрошенному URL-адресу.</summary>
+      <returns>
+        <see cref="T:System.Threading.Tasks.Task" />, представляющий завершенную операцию.</returns>
+    </member>
+    <member name="T:Microsoft.Owin.Security.Facebook.FacebookReturnEndpointContext">
+      <summary>Предоставляет сведения о контексте поставщикам ПО промежуточного слоя.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Facebook.FacebookReturnEndpointContext.#ctor(Microsoft.Owin.IOwinContext,Microsoft.Owin.Security.AuthenticationTicket)">
+      <param name="context">Среда OWIN</param>
+      <param name="ticket">Билет проверки подлинности</param>
+    </member>
+    <member name="T:Microsoft.Owin.Security.Facebook.IFacebookAuthenticationProvider">
+      <summary>Указывает методы обратного вызова, которые вызывает <see cref="T:Microsoft.Owin.Security.Facebook.FacebookAuthenticationMiddleware" />, чтобы обеспечить контроль разработчика над процессом проверки подлинности./&amp;amp;gt;</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Facebook.IFacebookAuthenticationProvider.ApplyRedirect(Microsoft.Owin.Security.Facebook.FacebookApplyRedirectContext)">
+      <summary>Вызывается, когда запросе приводит к перенаправлению в конечную точку проверки подлинности в ПО промежуточного слоя Facebook</summary>
+      <param name="context">Содержит универсальный код ресурса (URI) и <see cref="T:Microsoft.Owin.Security.AuthenticationProperties" /> запроса</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Facebook.IFacebookAuthenticationProvider.Authenticated(Microsoft.Owin.Security.Facebook.FacebookAuthenticatedContext)">
+      <summary>Вызывается, если пользователь успешно проходит проверку подлинности Facebook</summary>
+      <returns>
+        <see cref="T:System.Threading.Tasks.Task" />, представляющий завершенную операцию.</returns>
+      <param name="context">Содержит сведения о сеансе входа и <see cref="T:System.Security.Claims.ClaimsIdentity" /> пользователя.</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Facebook.IFacebookAuthenticationProvider.ReturnEndpoint(Microsoft.Owin.Security.Facebook.FacebookReturnEndpointContext)">
+      <summary>Вызывает перед тем, как <see cref="T:System.Security.Claims.ClaimsIdentity" /> сохраняется в локальном файле cookie и браузер перенаправляется по исходному запрошенному URL-адресу.</summary>
+      <returns>
+        <see cref="T:System.Threading.Tasks.Task" />, представляющий завершенную операцию.</returns>
+    </member>
+    <member name="T:Owin.FacebookAuthenticationExtensions">
+      <summary>Предоставляет методы расширения для проверки подлинности Facebook.</summary>
+    </member>
+    <member name="M:Owin.FacebookAuthenticationExtensions.UseFacebookAuthentication(Owin.IAppBuilder,Microsoft.Owin.Security.Facebook.FacebookAuthenticationOptions)">
+      <summary>Формирует проверку подлинности Facebook для приложения OWIN.</summary>
+      <returns>
+        <see cref="T:Owin.IAppBuilder" />, создающий проверку подлинности.</returns>
+      <param name="app">Построитель приложений.</param>
+      <param name="options">Параметры проверки подлинности Facebook.</param>
+    </member>
+    <member name="M:Owin.FacebookAuthenticationExtensions.UseFacebookAuthentication(Owin.IAppBuilder,System.String,System.String)">
+      <summary>Формирует проверку подлинности Facebook для приложения OWIN.</summary>
+      <returns>
+        <see cref="T:Owin.IAppBuilder" />, создающий проверку подлинности.</returns>
+      <param name="app">Построитель приложений.</param>
+      <param name="appId">Идентификатор приложения.</param>
+      <param name="appSecret">Секрет приложения.</param>
+    </member>
+  </members>
+</doc>

@@ -1,0 +1,235 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<doc>
+  <assembly>
+    <name>Microsoft.Owin.Security.Twitter</name>
+  </assembly>
+  <members>
+    <member name="T:Microsoft.Owin.Security.Twitter.ITwitterAuthenticationProvider">
+      <summary>Указывает методы обратного вызова, которые вызывает <see cref="T:Microsoft.Owin.Security.Twitter.TwitterAuthenticationMiddleware" />, чтобы обеспечить контроль разработчика над процессом проверки подлинности./&amp;amp;gt;</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Twitter.ITwitterAuthenticationProvider.ApplyRedirect(Microsoft.Owin.Security.Twitter.TwitterApplyRedirectContext)">
+      <summary>Вызывается, когда запросе приводит к перенаправлению в конечную точку проверки подлинности в ПО промежуточного слоя Twitter</summary>
+      <param name="context">Содержит универсальный код ресурса (URI) и <see cref="T:Microsoft.Owin.Security.AuthenticationProperties" /> запроса</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Twitter.ITwitterAuthenticationProvider.Authenticated(Microsoft.Owin.Security.Twitter.TwitterAuthenticatedContext)">
+      <summary>Вызывается, если пользователь успешно проходит проверку подлинности Twitter</summary>
+      <returns>
+        <see cref="T:System.Threading.Tasks.Task" />, представляющий завершенную операцию.</returns>
+      <param name="context">Содержит сведения о сеансе входа и <see cref="T:System.Security.Claims.ClaimsIdentity" /> пользователя.</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Twitter.ITwitterAuthenticationProvider.ReturnEndpoint(Microsoft.Owin.Security.Twitter.TwitterReturnEndpointContext)">
+      <summary>Вызывает перед тем, как <see cref="T:System.Security.Claims.ClaimsIdentity" /> сохраняется в локальном файле cookie и браузер перенаправляется по исходному запрошенному URL-адресу.</summary>
+      <returns>
+        <see cref="T:System.Threading.Tasks.Task" />, представляющий завершенную операцию.</returns>
+    </member>
+    <member name="T:Microsoft.Owin.Security.Twitter.TwitterApplyRedirectContext">
+      <summary>Передается контекст, когда запрос приводит к перенаправлению в конечную точку проверки подлинности в ПО промежуточного слоя Twitter</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Twitter.TwitterApplyRedirectContext.#ctor(Microsoft.Owin.IOwinContext,Microsoft.Owin.Security.Twitter.TwitterAuthenticationOptions,Microsoft.Owin.Security.AuthenticationProperties,System.String)">
+      <summary>Создает новый контекстный объект.</summary>
+      <param name="context">Контекст запроса OWIN</param>
+      <param name="options">Параметры ПО промежуточного слоя Facebook</param>
+      <param name="properties">Свойства проверки подлинности запроса</param>
+      <param name="redirectUri">Универсальный код ресурса (URI) первичного перенаправления</param>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Twitter.TwitterApplyRedirectContext.Properties">
+      <summary>Получает свойства проверки подлинности данного запроса</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Twitter.TwitterApplyRedirectContext.RedirectUri">
+      <summary>Получает универсальный код ресурса (URI) для перенаправления.</summary>
+    </member>
+    <member name="T:Microsoft.Owin.Security.Twitter.TwitterAuthenticatedContext">
+      <summary>Содержит сведения о сеансе входа и <see cref="T:System.Security.Claims.ClaimsIdentity" /> пользователя.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Twitter.TwitterAuthenticatedContext.#ctor(Microsoft.Owin.IOwinContext,System.String,System.String,System.String,System.String)">
+      <summary>Инициализирует <see cref="T:Microsoft.Owin.Security.Twitter.TwitterAuthenticatedContext" /></summary>
+      <param name="context">Среда OWIN</param>
+      <param name="userId">Идентификатор пользователя Twitter</param>
+      <param name="screenName">Отображаемое имя Twitter</param>
+      <param name="accessToken">Маркер доступа Twitter</param>
+      <param name="accessTokenSecret">Секрет маркера доступа Twitter</param>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Twitter.TwitterAuthenticatedContext.AccessToken">
+      <summary>Получает маркер доступа Twitter</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Twitter.TwitterAuthenticatedContext.AccessTokenSecret">
+      <summary>Получает секрет маркера доступа Twitter</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Twitter.TwitterAuthenticatedContext.Identity">
+      <summary>Получает <see cref="T:System.Security.Claims.ClaimsIdentity" />, представляющий пользователя</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Twitter.TwitterAuthenticatedContext.Properties">
+      <summary>Получает или задает контейнер свойств для общих свойств проверки подлинности</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Twitter.TwitterAuthenticatedContext.ScreenName">
+      <summary>Получает отображаемое имя Twitter</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Twitter.TwitterAuthenticatedContext.UserId">
+      <summary>Получает идентификатор пользователя Twitter</summary>
+    </member>
+    <member name="T:Microsoft.Owin.Security.Twitter.TwitterAuthenticationMiddleware">
+      <summary>ПО промежуточного слоя OWIN для проверки подлинности пользователей с помощью Twitter</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Twitter.TwitterAuthenticationMiddleware.#ctor(Microsoft.Owin.OwinMiddleware,Owin.IAppBuilder,Microsoft.Owin.Security.Twitter.TwitterAuthenticationOptions)">
+      <summary>Инициализирует <see cref="T:Microsoft.Owin.Security.Twitter.TwitterAuthenticationMiddleware" /></summary>
+      <param name="next">Следующее вызываемое ПО промежуточного слоя в конвейере OWIN</param>
+      <param name="app">Приложение OWIN</param>
+      <param name="options">Параметры конфигурации ПО промежуточного слоя</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Twitter.TwitterAuthenticationMiddleware.CreateHandler">
+      <summary>Предоставляет объект <see cref="T:Microsoft.Owin.Security.Infrastructure.AuthenticationHandler" /> для обработки запросов, связанных с проверкой подлинности.</summary>
+      <returns>
+        <see cref="T:Microsoft.Owin.Security.Infrastructure.AuthenticationHandler" />, настроенный посредством параметров <see cref="T:Microsoft.Owin.Security.Twitter.TwitterAuthenticationOptions" />, переданных в конструктор.</returns>
+    </member>
+    <member name="T:Microsoft.Owin.Security.Twitter.TwitterAuthenticationOptions">
+      <summary>Параметры ПО промежуточного слоя Twitter, осуществляющего проверку подлинности.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Twitter.TwitterAuthenticationOptions.#ctor">
+      <summary>Инициализирует новый экземпляр класса <see cref="T:Microsoft.Owin.Security.Twitter.TwitterAuthenticationOptions" />.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Twitter.TwitterAuthenticationOptions.BackchannelCertificateValidator">
+      <summary>Получает или задает проверяющий элемент управления для закрепленных сертификатов, используемый для проверки конечных точек, которые используются в операциях обмена данными через обратный канал, осуществляемых Twitter.</summary>
+      <returns>Проверяющий элемент управления для закрепленных сертификатов.</returns>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Twitter.TwitterAuthenticationOptions.BackchannelHttpHandler">
+      <summary>HttpMessageHandler, используемый для обмена данными с Twitter.Его нельзя задать одновременно с BackchannelCertificateValidator, если только значение не может быть получено нисходящим приведением WebRequestHandler.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Twitter.TwitterAuthenticationOptions.BackchannelTimeout">
+      <summary>Получает или задает значение времени ожидания в миллисекундах для обмена данными с Twitter через обратный канал.</summary>
+      <returns>Время ожидания обратного канала.</returns>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Twitter.TwitterAuthenticationOptions.CallbackPath">
+      <summary>Путь запроса с базовым путем приложения, по которому будет возвращен агент пользователя.ПО промежуточного слоя обработает этот запрос после его поступления.По умолчанию используется значение «/signin-twitter».</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Twitter.TwitterAuthenticationOptions.Caption">
+      <summary>Получает или задает текст, который пользователь может отобразить в пользовательском интерфейсе входа.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Twitter.TwitterAuthenticationOptions.ConsumerKey">
+      <summary>Получает или задает ключ пользователя, используемый для обмена данными с Twitter.</summary>
+      <returns>Ключ пользователя, используемый для обмена данными с Twitter.</returns>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Twitter.TwitterAuthenticationOptions.ConsumerSecret">
+      <summary>Получает или задает ключ пользователя, используемый для подписывания запросов в Twitter.</summary>
+      <returns>Секрет пользователя, используемый для подписывания запросов в Twitter.</returns>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Twitter.TwitterAuthenticationOptions.Provider">
+      <summary>Получает или задает <see cref="T:Microsoft.Owin.Security.Twitter.ITwitterAuthenticationProvider" />, который используется для обработки событий проверки подлинности.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Twitter.TwitterAuthenticationOptions.SignInAsAuthenticationType">
+      <summary>Получает или задает имя другого ПО промежуточного слоя, осуществляющего проверку подлинности, которое будет отвечать за фактическую выдачу <see cref="T:System.Security.Claims.ClaimsIdentity" /> пользователя.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Twitter.TwitterAuthenticationOptions.StateDataFormat">
+      <summary>Получает или задает тип, используемый для защиты данных, обрабатываемых ПО промежуточного слоя.</summary>
+    </member>
+    <member name="T:Microsoft.Owin.Security.Twitter.TwitterAuthenticationProvider">
+      <summary>Реализация <see cref="T:Microsoft.Owin.Security.Twitter.ITwitterAuthenticationProvider" /> по умолчанию.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Twitter.TwitterAuthenticationProvider.#ctor">
+      <summary>Инициализирует <see cref="T:Microsoft.Owin.Security.Twitter.TwitterAuthenticationProvider" /></summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Twitter.TwitterAuthenticationProvider.ApplyRedirect(Microsoft.Owin.Security.Twitter.TwitterApplyRedirectContext)">
+      <summary>Вызывается, когда запросе приводит к перенаправлению в конечную точку проверки подлинности в ПО промежуточного слоя Twitter</summary>
+      <param name="context">Содержит универсальный код ресурса (URI) и <see cref="T:Microsoft.Owin.Security.AuthenticationProperties" /> запроса</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Twitter.TwitterAuthenticationProvider.Authenticated(Microsoft.Owin.Security.Twitter.TwitterAuthenticatedContext)">
+      <summary>Вызывается, если пользователь успешно проходит проверку подлинности Twitter</summary>
+      <returns>
+        <see cref="T:System.Threading.Tasks.Task" />, представляющий завершенную операцию.</returns>
+      <param name="context">Содержит сведения о сеансе входа и <see cref="T:System.Security.Claims.ClaimsIdentity" /> пользователя.</param>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Twitter.TwitterAuthenticationProvider.OnApplyRedirect">
+      <summary>Получает или задает делегат, которая вызывается при вызове метода ApplyRedirect.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Twitter.TwitterAuthenticationProvider.OnAuthenticated">
+      <summary>Получает или задает функцию, которая вызывается при вызове метода Authenticated.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Twitter.TwitterAuthenticationProvider.OnReturnEndpoint">
+      <summary>Получает или задает функцию, которая вызывается при вызове метода ReturnEndpoint.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Twitter.TwitterAuthenticationProvider.ReturnEndpoint(Microsoft.Owin.Security.Twitter.TwitterReturnEndpointContext)">
+      <summary>Вызывает перед тем, как <see cref="T:System.Security.Claims.ClaimsIdentity" /> сохраняется в локальном файле cookie и браузер перенаправляется по исходному запрошенному URL-адресу.</summary>
+      <returns>
+        <see cref="T:System.Threading.Tasks.Task" />, представляющий завершенную операцию.</returns>
+    </member>
+    <member name="T:Microsoft.Owin.Security.Twitter.TwitterReturnEndpointContext">
+      <summary>Предоставляет сведения о контексте поставщикам ПО промежуточного слоя.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Twitter.TwitterReturnEndpointContext.#ctor(Microsoft.Owin.IOwinContext,Microsoft.Owin.Security.AuthenticationTicket)">
+      <summary>Инициализирует новый <see cref="T:Microsoft.Owin.Security.Twitter.TwitterReturnEndpointContext" />.</summary>
+      <param name="context">Среда OWIN</param>
+      <param name="ticket">Билет проверки подлинности</param>
+    </member>
+    <member name="T:Microsoft.Owin.Security.Twitter.Messages.AccessToken">
+      <summary>Маркер доступа Twitter</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Twitter.Messages.AccessToken.#ctor"></member>
+    <member name="P:Microsoft.Owin.Security.Twitter.Messages.AccessToken.ScreenName">
+      <summary>Получает или задает отображаемое имя Twitter</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Twitter.Messages.AccessToken.UserId">
+      <summary>Получает или задает идентификатор пользователя Twitter</summary>
+    </member>
+    <member name="T:Microsoft.Owin.Security.Twitter.Messages.RequestToken">
+      <summary>Маркер запроса Twitter</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Twitter.Messages.RequestToken.#ctor"></member>
+    <member name="P:Microsoft.Owin.Security.Twitter.Messages.RequestToken.CallbackConfirmed"></member>
+    <member name="P:Microsoft.Owin.Security.Twitter.Messages.RequestToken.Properties">
+      <summary>Получает или задает контейнер свойств для общих свойств проверки подлинности</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Twitter.Messages.RequestToken.Token">
+      <summary>Получает или задает маркер Twitter</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Twitter.Messages.RequestToken.TokenSecret">
+      <summary>Получает или задает секрет маркера Twitter</summary>
+    </member>
+    <member name="T:Microsoft.Owin.Security.Twitter.Messages.RequestTokenSerializer">
+      <summary>Выполняет сериализацию и десериализацию маркеров запроса и доступа Twitter, чтобы их могли использовать другие компоненты приложений.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Twitter.Messages.RequestTokenSerializer.#ctor"></member>
+    <member name="M:Microsoft.Owin.Security.Twitter.Messages.RequestTokenSerializer.Deserialize(System.Byte[])">
+      <summary>Выполняет десериализацию маркера запроса</summary>
+      <returns>Маркер запроса Twitter</returns>
+      <param name="data">Массив байтов, содержащий сериализованный маркер</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Twitter.Messages.RequestTokenSerializer.Read(System.IO.BinaryReader)">
+      <summary>Выполняет чтение маркера запроса Twitter из набора байтов.Используется методом <see cref="M:Microsoft.Owin.Security.Twitter.Messages.RequestTokenSerializer.Deserialize(System.Byte[])" />.</summary>
+      <returns>Маркер</returns>
+      <param name="reader">Модуль чтения, используемый при чтении байтов маркера</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Twitter.Messages.RequestTokenSerializer.Serialize(Microsoft.Owin.Security.Twitter.Messages.RequestToken)">
+      <summary>Выполняет сериализацию маркера запроса</summary>
+      <returns>Массив байтов, содержащий сериализованный маркер</returns>
+      <param name="model">Маркер для сериализации</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Twitter.Messages.RequestTokenSerializer.Write(System.IO.BinaryWriter,Microsoft.Owin.Security.Twitter.Messages.RequestToken)">
+      <summary>Записывает маркер запроса Twitter в виде набора байтов.Используется методом <see cref="M:Microsoft.Owin.Security.Twitter.Messages.RequestTokenSerializer.Serialize(Microsoft.Owin.Security.Twitter.Messages.RequestToken)" />.</summary>
+      <param name="writer">Модуль записи, используемый при записи маркера</param>
+      <param name="token">Маркер для записи</param>
+    </member>
+    <member name="T:Microsoft.Owin.Security.Twitter.Messages.Serializers">
+      <summary>Предоставляет доступ к сериализатору маркеров запроса</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Twitter.Messages.Serializers.RequestToken">
+      <summary>Получает или задает статически доступный объект сериализатора.По умолчанию значением этого свойства будет <see cref="T:Microsoft.Owin.Security.Twitter.Messages.RequestTokenSerializer" />.</summary>
+    </member>
+    <member name="T:Owin.TwitterAuthenticationExtensions">
+      <summary>Методы расширения для использования <see cref="T:Microsoft.Owin.Security.Twitter.TwitterAuthenticationMiddleware" /></summary>
+    </member>
+    <member name="M:Owin.TwitterAuthenticationExtensions.UseTwitterAuthentication(Owin.IAppBuilder,Microsoft.Owin.Security.Twitter.TwitterAuthenticationOptions)">
+      <summary>Проверка подлинности пользователей с помощью Twitter</summary>
+      <returns>Обновленный <see cref="T:Owin.IAppBuilder" /></returns>
+      <param name="app">
+        <see cref="T:Owin.IAppBuilder" />, переданный в метод конфигурации</param>
+      <param name="options">Параметры конфигурации ПО промежуточного слоя</param>
+    </member>
+    <member name="M:Owin.TwitterAuthenticationExtensions.UseTwitterAuthentication(Owin.IAppBuilder,System.String,System.String)">
+      <summary>Проверка подлинности пользователей с помощью Twitter</summary>
+      <returns>Обновленный <see cref="T:Owin.IAppBuilder" /></returns>
+      <param name="app">
+        <see cref="T:Owin.IAppBuilder" />, переданный в метод конфигурации</param>
+      <param name="consumerKey">Выданный службой Twitter ключ пользователя</param>
+      <param name="consumerSecret">Выданный службой Twitter секрет пользователя</param>
+    </member>
+  </members>
+</doc>

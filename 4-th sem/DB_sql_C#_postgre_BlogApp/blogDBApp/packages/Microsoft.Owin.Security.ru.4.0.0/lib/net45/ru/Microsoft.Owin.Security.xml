@@ -1,0 +1,552 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<doc>
+  <assembly>
+    <name>Microsoft.Owin.Security</name>
+  </assembly>
+  <members>
+    <member name="T:Microsoft.Owin.Security.AppBuilderSecurityExtensions">
+      <summary>Предоставляет методы расширения для значений app.Property, которые необходимы только реализациям ПО промежуточного слоя проверки подлинности.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.AppBuilderSecurityExtensions.GetDefaultSignInAsAuthenticationType(Owin.IAppBuilder)">
+      <summary>Возвращает ранее заданный AuthenticationType, который ПО промежуточного слоя внешнего входа должно использовать, когда браузер переходит обратно в возвращаемый URL-адрес.</summary>
+      <param name="app">Конструктор приложений, переданный в код запуска приложения</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.AppBuilderSecurityExtensions.SetDefaultSignInAsAuthenticationType(Owin.IAppBuilder,System.String)">
+      <summary>Вызывается ПО промежуточного слоя для изменения имени AuthenticationType, который ПО промежуточного слоя должно использовать, когда браузер переходит обратно в возвращаемый URL-адрес.</summary>
+      <param name="app">Конструктор приложений, переданный в код запуска приложения</param>
+      <param name="authenticationType">AuthenticationType, который внешнее ПО промежуточного слоя должно использовать при входе.</param>
+    </member>
+    <member name="T:Microsoft.Owin.Security.AuthenticationMode">
+      <summary>Управляет поведением промежуточного ПО проверки подлинности</summary>
+    </member>
+    <member name="F:Microsoft.Owin.Security.AuthenticationMode.Active">
+      <summary>В активном режиме промежуточное ПО проверки подлинности изменяет идентификатор пользователя при получении запроса, а также изменяет «plain 401», когда уходит ответ.</summary>
+    </member>
+    <member name="F:Microsoft.Owin.Security.AuthenticationMode.Passive">
+      <summary>В пассивном режиме промежуточное ПО проверки подлинности предоставляет идентификатор пользователя только по запросу и изменяет ответы 401 только в случаях, когда тип проверки подлинности назван в данных дополнительного запроса.</summary>
+    </member>
+    <member name="T:Microsoft.Owin.Security.AuthenticationOptions">
+      <summary>Базовые параметры для всего промежуточного ПО проверки подлинности</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.AuthenticationOptions.#ctor(System.String)">
+      <summary>Инициализация свойств базового класса AuthenticationOptions</summary>
+      <param name="authenticationType">Присвоенный свойству AuthenticationType</param>
+    </member>
+    <member name="P:Microsoft.Owin.Security.AuthenticationOptions.AuthenticationMode">
+      <summary>Если промежуточное ПО проверки подлинности находится в активном режиме, оно изменяет входящие пользовательские запросы и исходящие неавторизованные ответы 401.Если промежуточное ПО проверки подлинности находится в пассивном режиме, оно обеспечивает идентификацию и изменение ответов, только когда это явным образом указано AuthenticationType.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.AuthenticationOptions.AuthenticationType">
+      <summary>AuthenticationType в параметрах соответствует свойству IIdentity AuthenticationType.Может быть присвоено другое значение, чтобы использовать одинаковый тип промежуточного ПО проверки подлинности более одного раза на конвейере.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.AuthenticationOptions.Description">
+      <summary>Дополнительная информация о типе проверки подлинности, доступная в приложении.</summary>
+    </member>
+    <member name="T:Microsoft.Owin.Security.AuthenticationTicket">
+      <summary>Содержит сведения об удостоверения пользователя, а также дополнительное состояние проверки подлинности.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.AuthenticationTicket.#ctor(System.Security.Claims.ClaimsIdentity,Microsoft.Owin.Security.AuthenticationProperties)">
+      <summary>Инициализирует новый экземпляр класса <see cref="T:Microsoft.Owin.Security.AuthenticationTicket" />.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.AuthenticationTicket.Identity">
+      <summary>Получает удостоверение прошедшего проверку пользователя.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.AuthenticationTicket.Properties">
+      <summary>Дополнительные значения состояний сеанса проверки подлинности.</summary>
+    </member>
+    <member name="T:Microsoft.Owin.Security.CertificateSubjectKeyIdentifierValidator">
+      <summary>Предоставляет закрепленную проверку сертификата на основе идентификатора ключа субъекта сертификата.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.CertificateSubjectKeyIdentifierValidator.#ctor(System.Collections.Generic.IEnumerable{System.String})">
+      <summary>Инициализирует новый экземпляр класса <see cref="T:Microsoft.Owin.Security.CertificateSubjectKeyIdentifierValidator" />.</summary>
+      <param name="validSubjectKeyIdentifiers">Набор идентификаторов ключа субъекта, допустимых для HTTPS-запроса.</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.CertificateSubjectKeyIdentifierValidator.Validate(System.Object,System.Security.Cryptography.X509Certificates.X509Certificate,System.Security.Cryptography.X509Certificates.X509Chain,System.Net.Security.SslPolicyErrors)">
+      <summary>Проверяет удаленный сертификат SSL, использованный для проверки подлинности.</summary>
+      <returns>Логическое значение, определяющее, принимается ли определенный сертификат для проверки подлинности.</returns>
+      <param name="sender">Объект, содержащий сведения о состоянии этой проверки.</param>
+      <param name="certificate">Сертификат для проверки подлинности удаленной стороны.</param>
+      <param name="chain">Цепь полномочий сертификата, связанных с удаленным сертификатом.</param>
+      <param name="sslPolicyErrors">Одна или более ошибок, связанных с удаленным сертификатом.</param>
+    </member>
+    <member name="T:Microsoft.Owin.Security.CertificateSubjectPublicKeyInfoValidator">
+      <summary>Реализует закрепляющее сертификат средство, которое можно получить на http://datatracker.ietf.org/doc/draft-ietf-websec-key-pinning/?include_text=1</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.CertificateSubjectPublicKeyInfoValidator.#ctor(System.Collections.Generic.IEnumerable{System.String},Microsoft.Owin.Security.SubjectPublicKeyInfoAlgorithm)">
+      <summary>Инициализирует новый экземпляр класса <see cref="T:Microsoft.Owin.Security.CertificateSubjectPublicKeyInfoValidator" />.</summary>
+      <param name="validBase64EncodedSubjectPublicKeyInfoHashes">Коллекция допустимых зашифрованных хэшей base64 больших двоичных объектов сведений открытого ключа сертификата.</param>
+      <param name="algorithm">Алгоритм, используемый для создания хэшей.</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.CertificateSubjectPublicKeyInfoValidator.Validate(System.Object,System.Security.Cryptography.X509Certificates.X509Certificate,System.Security.Cryptography.X509Certificates.X509Chain,System.Net.Security.SslPolicyErrors)">
+      <summary>Проверяет, известен ли хотя бы один хэш SPKI.</summary>
+      <returns>Логическое значение, определяющее, принимается ли определенный сертификат для проверки подлинности.</returns>
+      <param name="sender">Объект, содержащий сведения о состоянии этой проверки.</param>
+      <param name="certificate">Сертификат для проверки подлинности удаленной стороны.</param>
+      <param name="chain">Цепь полномочий сертификата, связанных с удаленным сертификатом.</param>
+      <param name="sslPolicyErrors">Одна или более ошибок, связанных с удаленным сертификатом.</param>
+    </member>
+    <member name="T:Microsoft.Owin.Security.CertificateThumbprintValidator">
+      <summary>Предоставляет проверку закрепленного сертификата на основе отпечатка сертификата.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.CertificateThumbprintValidator.#ctor(System.Collections.Generic.IEnumerable{System.String})">
+      <summary>Инициализирует новый экземпляр класса <see cref="T:Microsoft.Owin.Security.CertificateThumbprintValidator" />.</summary>
+      <param name="validThumbprints">Набор отпечатков, действительных для запроса HTTPS.</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.CertificateThumbprintValidator.Validate(System.Object,System.Security.Cryptography.X509Certificates.X509Certificate,System.Security.Cryptography.X509Certificates.X509Chain,System.Net.Security.SslPolicyErrors)">
+      <summary>Проверяет, чтобы отпечатки сертификатов в цепи подписи соответствуют хотя бы одному отпечатку из разрешенного списка.</summary>
+      <returns>Логическое значение, определяющее, принимается ли определенный сертификат для проверки подлинности.</returns>
+      <param name="sender">Объект, содержащий сведения о состоянии этой проверки.</param>
+      <param name="certificate">Сертификат для проверки подлинности удаленной стороны.</param>
+      <param name="chain">Цепь полномочий сертификата, связанных с удаленным сертификатом.</param>
+      <param name="sslPolicyErrors">Одна или более ошибок, связанных с удаленным сертификатом.</param>
+    </member>
+    <member name="T:Microsoft.Owin.Security.ICertificateValidator">
+      <summary>Интерфейс для предоставления закрепленной проверки сертификата, в рамках которой проводится сопоставление коммуникации HTTPS со списком известных надежных сертификатов, чтобы обеспечить защиту от скомпрометированных и ненадежных ЦС, издающих сертификаты для узлов, не имея сведений о владельце узла.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.ICertificateValidator.Validate(System.Object,System.Security.Cryptography.X509Certificates.X509Certificate,System.Security.Cryptography.X509Certificates.X509Chain,System.Net.Security.SslPolicyErrors)">
+      <summary>Проверяет удаленный сертификат SSL, использованный для проверки подлинности.</summary>
+      <returns>Логическое значение, определяющее, принимается ли определенный сертификат для проверки подлинности.</returns>
+      <param name="sender">Объект, содержащий сведения о состоянии этой проверки.</param>
+      <param name="certificate">Сертификат для проверки подлинности удаленной стороны.</param>
+      <param name="chain">Цепь полномочий сертификата, связанных с удаленным сертификатом.</param>
+      <param name="sslPolicyErrors">Одна или более ошибок, связанных с удаленным сертификатом.</param>
+    </member>
+    <member name="T:Microsoft.Owin.Security.ISecureDataFormat`1">
+      <summary>Представляет данные для защиты.</summary>
+      <typeparam name="TData">Универсальный тип данных.</typeparam>
+    </member>
+    <member name="M:Microsoft.Owin.Security.ISecureDataFormat`1.Protect(`0)">
+      <summary>Защищает данные от форматирования.</summary>
+      <returns>Защищаемые данные.</returns>
+      <param name="data">Данные.</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.ISecureDataFormat`1.Unprotect(System.String)">
+      <summary>Расшифровывает данные в указанном тексте.</summary>
+      <returns>Данные для расшифровки.</returns>
+      <param name="protectedText">Защищенный текст.</param>
+    </member>
+    <member name="T:Microsoft.Owin.Security.SubjectPublicKeyInfoAlgorithm">
+      <summary>Алгоритм, используемый для генерации хэшей больших двоичных объектов сведений открытого ключа субъекта.</summary>
+    </member>
+    <member name="F:Microsoft.Owin.Security.SubjectPublicKeyInfoAlgorithm.Sha1">
+      <summary />
+    </member>
+    <member name="F:Microsoft.Owin.Security.SubjectPublicKeyInfoAlgorithm.Sha256">
+      <summary />
+    </member>
+    <member name="T:Microsoft.Owin.Security.DataHandler.PropertiesDataFormat"></member>
+    <member name="M:Microsoft.Owin.Security.DataHandler.PropertiesDataFormat.#ctor(Microsoft.Owin.Security.DataProtection.IDataProtector)"></member>
+    <member name="T:Microsoft.Owin.Security.DataHandler.SecureDataFormat`1">
+      <typeparam name="TData"></typeparam>
+    </member>
+    <member name="M:Microsoft.Owin.Security.DataHandler.SecureDataFormat`1.#ctor(Microsoft.Owin.Security.DataHandler.Serializer.IDataSerializer{`0},Microsoft.Owin.Security.DataProtection.IDataProtector,Microsoft.Owin.Security.DataHandler.Encoder.ITextEncoder)"></member>
+    <member name="M:Microsoft.Owin.Security.DataHandler.SecureDataFormat`1.Protect(`0)"></member>
+    <member name="M:Microsoft.Owin.Security.DataHandler.SecureDataFormat`1.Unprotect(System.String)"></member>
+    <member name="T:Microsoft.Owin.Security.DataHandler.TicketDataFormat"></member>
+    <member name="M:Microsoft.Owin.Security.DataHandler.TicketDataFormat.#ctor(Microsoft.Owin.Security.DataProtection.IDataProtector)"></member>
+    <member name="T:Microsoft.Owin.Security.DataHandler.Encoder.Base64TextEncoder">
+      <summary>Представляет кодировщик текста формата base64.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.DataHandler.Encoder.Base64TextEncoder.#ctor">
+      <summary>Инициализирует новый экземпляр класса <see cref="T:Microsoft.Owin.Security.DataHandler.Encoder.Base64TextEncoder" />.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.DataHandler.Encoder.Base64TextEncoder.Decode(System.String)">
+      <summary>Расшифровывает указанный текст.</summary>
+      <returns>
+        <see cref="T:System.Byte" />, который представляет расшифрованные данные.</returns>
+      <param name="text">Текст для расшифровки.</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.DataHandler.Encoder.Base64TextEncoder.Encode(System.Byte[])">
+      <summary>Преобразовывает данные в строку в формате base64.</summary>
+      <returns>Строка данных, преобразованных в формат base64.</returns>
+      <param name="data">Данные для преобразования.</param>
+    </member>
+    <member name="T:Microsoft.Owin.Security.DataHandler.Encoder.Base64UrlTextEncoder">
+      <summary>Представляет кодировщик текста формата Base64Url.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.DataHandler.Encoder.Base64UrlTextEncoder.#ctor">
+      <summary>Инициализирует новый экземпляр класса <see cref="T:Microsoft.Owin.Security.DataHandler.Encoder.Base64UrlTextEncoder" />.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.DataHandler.Encoder.Base64UrlTextEncoder.Decode(System.String)">
+      <summary>Расшифровывает указанный текст.</summary>
+      <returns>
+        <see cref="T:System.Byte" />, который представляет расшифрованные данные.</returns>
+      <param name="text">Текст для расшифровки.</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.DataHandler.Encoder.Base64UrlTextEncoder.Encode(System.Byte[])">
+      <summary>Преобразовывает данные в строку в формате Base64Url.</summary>
+      <returns>Строка данных, преобразованных в формат base64.</returns>
+      <param name="data">Данные для преобразования.</param>
+    </member>
+    <member name="T:Microsoft.Owin.Security.DataHandler.Encoder.ITextEncoder">
+      <summary>Представляет интерфейс шифровальщика текста.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.DataHandler.Encoder.ITextEncoder.Decode(System.String)">
+      <summary>Расшифровывает указанный текст.</summary>
+      <returns>
+        <see cref="T:System.Byte" />, который представляет расшифрованные данные.</returns>
+      <param name="text">Текст для расшифровки.</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.DataHandler.Encoder.ITextEncoder.Encode(System.Byte[])">
+      <summary>Преобразовывает данные в строку.</summary>
+      <returns>Строка преобразованных данных.</returns>
+      <param name="data">Данные для преобразования.</param>
+    </member>
+    <member name="T:Microsoft.Owin.Security.DataHandler.Encoder.TextEncodings">
+      <summary>Представляет кодировки текста.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.DataHandler.Encoder.TextEncodings.Base64">
+      <summary>Получает шифровальщик текста Base64.</summary>
+      <returns>Шифровальщик текста Base64.</returns>
+    </member>
+    <member name="P:Microsoft.Owin.Security.DataHandler.Encoder.TextEncodings.Base64Url">
+      <summary>Получает шифровальщик текста Base64Url.</summary>
+      <returns>Шифровальщик текста Base64.</returns>
+    </member>
+    <member name="T:Microsoft.Owin.Security.DataHandler.Serializer.DataSerializers">
+      <summary>Предоставляет сериализаторы данных.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.DataHandler.Serializer.DataSerializers.Properties"></member>
+    <member name="P:Microsoft.Owin.Security.DataHandler.Serializer.DataSerializers.Ticket">
+      <summary>Получает или задает сериализатор данных билета.</summary>
+      <returns>Сериализатор данных билета.</returns>
+    </member>
+    <member name="T:Microsoft.Owin.Security.DataHandler.Serializer.IDataSerializer`1">
+      <summary>Представляет интерфейс сериализатора данных.</summary>
+      <typeparam name="TModel">Тип модели данных.</typeparam>
+    </member>
+    <member name="M:Microsoft.Owin.Security.DataHandler.Serializer.IDataSerializer`1.Deserialize(System.Byte[])">
+      <summary>Десериализует указанные данные.</summary>
+      <param name="data">Данные для десериализации.</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.DataHandler.Serializer.IDataSerializer`1.Serialize(`0)">
+      <summary>Сериализует данные по заданной модели.</summary>
+      <param name="model">Модель данных.</param>
+    </member>
+    <member name="T:Microsoft.Owin.Security.DataHandler.Serializer.PropertiesSerializer"></member>
+    <member name="M:Microsoft.Owin.Security.DataHandler.Serializer.PropertiesSerializer.#ctor"></member>
+    <member name="M:Microsoft.Owin.Security.DataHandler.Serializer.PropertiesSerializer.Deserialize(System.Byte[])"></member>
+    <member name="M:Microsoft.Owin.Security.DataHandler.Serializer.PropertiesSerializer.Read(System.IO.BinaryReader)"></member>
+    <member name="M:Microsoft.Owin.Security.DataHandler.Serializer.PropertiesSerializer.Serialize(Microsoft.Owin.Security.AuthenticationProperties)"></member>
+    <member name="M:Microsoft.Owin.Security.DataHandler.Serializer.PropertiesSerializer.Write(System.IO.BinaryWriter,Microsoft.Owin.Security.AuthenticationProperties)"></member>
+    <member name="T:Microsoft.Owin.Security.DataHandler.Serializer.TicketSerializer">
+      <summary>Представляет сериализатор билетов.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.DataHandler.Serializer.TicketSerializer.#ctor">
+      <summary>Инициализирует новый экземпляр класса <see cref="T:Microsoft.Owin.Security.DataHandler.Serializer.TicketSerializer" />.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.DataHandler.Serializer.TicketSerializer.Deserialize(System.Byte[])">
+      <summary>Десериализует данные билетов.</summary>
+      <returns>Десериализуемые данные.</returns>
+      <param name="data">Данные для десериализации.</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.DataHandler.Serializer.TicketSerializer.Read(System.IO.BinaryReader)">
+      <summary>Считывает указанные данные с устройства чтения.</summary>
+      <returns>Считываемые данные.</returns>
+      <param name="reader">Устройство чтения для считывания.</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.DataHandler.Serializer.TicketSerializer.Serialize(Microsoft.Owin.Security.AuthenticationTicket)">
+      <summary>Сериализует данные по заданной модели.</summary>
+      <param name="model">Модель данных.</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.DataHandler.Serializer.TicketSerializer.Write(System.IO.BinaryWriter,Microsoft.Owin.Security.AuthenticationTicket)">
+      <summary>Записывает данные из заданного модуля записи.</summary>
+      <param name="writer">Модуль записи.</param>
+      <param name="model">Модель данных.</param>
+    </member>
+    <member name="T:Microsoft.Owin.Security.DataProtection.AppBuilderExtensions">
+      <summary>Расширения построителя приложений.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.DataProtection.AppBuilderExtensions.CreateDataProtector(Owin.IAppBuilder,System.String[])">
+      <summary>Создает предохранитель данных.</summary>
+      <returns>Созданный <see cref="T:Microsoft.Owin.Security.DataProtection.IDataProtector" />.</returns>
+      <param name="app">Построитель приложений.</param>
+      <param name="purposes">Список назначений для создания предохранителя данных.</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.DataProtection.AppBuilderExtensions.GetDataProtectionProvider(Owin.IAppBuilder)">
+      <summary>Извлекает поставщик защиты данных для приложения.</summary>
+      <returns>Получаемый объект <see cref="T:Microsoft.Owin.Security.DataProtection.IDataProtectionProvider" />.</returns>
+      <param name="app">Построитель приложений.</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.DataProtection.AppBuilderExtensions.SetDataProtectionProvider(Owin.IAppBuilder,Microsoft.Owin.Security.DataProtection.IDataProtectionProvider)">
+      <summary>Задает поставщик защиты данных.</summary>
+      <param name="app">Построитель приложений.</param>
+      <param name="dataProtectionProvider">Задаваемый поставщик защиты данных.</param>
+    </member>
+    <member name="T:Microsoft.Owin.Security.DataProtection.DpapiDataProtectionProvider">
+      <summary>Используется для предоставления службы защиты данных, которая происходит из Data Protection API.Это оптимальный вариант защиты данных, если приложение не размещается на сервере ASP.NET и все процессы выполняются под одним идентификатором домена.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.DataProtection.DpapiDataProtectionProvider.#ctor">
+      <summary>Инициализирует нового поставщика DpapiDataProtectionProvider с произвольным именем приложения.Это полезно только для защиты данных во время исполнения текущего приложения.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.DataProtection.DpapiDataProtectionProvider.#ctor(System.String)">
+      <summary>Инициализирует нового поставщика DpapiDataProtectionProvider, который использует заданное имя appName как часть алгоритма защиты</summary>
+      <param name="appName">Для передачи безопасных данных по круговому пути необходимо введенное пользователем значение.Значение по умолчанию происходит из IAppBuilder.Properties["owin.AppName"] при самостоятельном размещении.</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.DataProtection.DpapiDataProtectionProvider.Create(System.String[])">
+      <summary>Возвращает новый экземпляр IDataProtection для поставщика.</summary>
+      <returns>Экземпляр службы защиты данных</returns>
+      <param name="purposes">Используется дополнительная энтропия для обеспечения того, что защита может быть снята с защищенных данных только с надлежащей целью.</param>
+    </member>
+    <member name="T:Microsoft.Owin.Security.DataProtection.IDataProtectionProvider">
+      <summary> Фабрика, используемая для создания экземпляров IDataProtection.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.DataProtection.IDataProtectionProvider.Create(System.String[])">
+      <summary> Возвращает новый экземпляр IDataProtection для поставщика. </summary>
+      <returns>Экземпляр службы защиты данных.</returns>
+      <param name="purposes">Используется дополнительная энтропия для обеспечения того, что защита может быть снята с защищенных данных только с надлежащей целью.</param>
+    </member>
+    <member name="T:Microsoft.Owin.Security.DataProtection.IDataProtector">
+      <summary> Служба, используемая для защиты и отмены защиты данных.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.DataProtection.IDataProtector.Protect(System.Byte[])">
+      <summary> Вызывается для защиты пользовательских данных.</summary>
+      <param name="userData">Исходные данные, которые необходимо защитить.</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.DataProtection.IDataProtector.Unprotect(System.Byte[])">
+      <summary> Вызывается для отмены защиты пользовательских данных.</summary>
+      <param name="protectedData">Массив байтов, возвращаемый вызовом для защиты на идентичной службе IDataProtection.</param>
+    </member>
+    <member name="T:Microsoft.Owin.Security.Infrastructure.AuthenticationHandler">
+      <summary> Базовый класс для работы по запросу, выполняемой большинством промежуточного ПО для проверки подлинности. </summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.AuthenticationHandler.#ctor">
+      <summary>Инициализирует новый экземпляр класса <see cref="T:Microsoft.Owin.Security.Infrastructure.AuthenticationHandler" />.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.AuthenticationHandler.ApplyResponseChallengeAsync">
+      <summary>Переопределите этот метод, чтобы устранить проблемы, связанные с запросом 401, если при рассматриваемой схеме проверки подлинности взаимодействие для проверки подлинности осуществляется как часть потока обработки запросов.(Примеры: добавление заголовка ответа или изменение результата 401 на 302 для страницы входа либо расположения внешнего входа.)</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.AuthenticationHandler.ApplyResponseCoreAsync">
+      <summary>Основной метод, который можно переопределить посредством обработчика.Поведение по умолчанию — вызов двух общих ответных действий. Одно из них предназначено для устранения проблем входа и выхода, а другое — для запросов 401.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.AuthenticationHandler.ApplyResponseGrantAsync">
+      <summary>Переопределите этот метод, чтобы устранить проблемы, связанные с входом и выходом, если при рассматриваемой схеме проверки подлинности предоставление и аннулирование осуществляется как часть потока обработки запросов.(Пример: настройка или удаление файлов cookie.)</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.AuthenticationHandler.AuthenticateAsync">
+      <summary>Вызывает выполнение логики проверки подлинности в AuthenticateCore для текущего запроса не более одного раза и возвращает результаты.Вызов Authenticate более одного раза всегда будет возвращать первоначальное значение.Вместо прямого вызова AuthenticateCore всегда следует вызывать этот метод.</summary>
+      <returns>Данные билета, предоставленные логикой проверки подлинности</returns>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.AuthenticationHandler.AuthenticateCoreAsync">
+      <summary>Основная логика проверки подлинности, которую должен предоставить обработчик.Будет вызываться не более одного раза для каждого запроса.Не следует вызывать ее напрямую, вместо этого следует вызывать помещающий в оболочку метод Authenticate.</summary>
+      <returns>Данные билета, предоставленные логикой проверки подлинности</returns>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.AuthenticationHandler.BaseInitializeAsync(Microsoft.Owin.Security.AuthenticationOptions,Microsoft.Owin.IOwinContext)"></member>
+    <member name="P:Microsoft.Owin.Security.Infrastructure.AuthenticationHandler.Context"></member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.AuthenticationHandler.GenerateCorrelationId(Microsoft.Owin.Security.AuthenticationProperties)"></member>
+    <member name="P:Microsoft.Owin.Security.Infrastructure.AuthenticationHandler.Helper"></member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.AuthenticationHandler.InitializeCoreAsync"></member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.AuthenticationHandler.InvokeAsync">
+      <summary>Однократно вызывается общим кодом после инициализации.Если ПО промежуточного слоя для проверки подлинности напрямую отвечает на специальные известные пути, оно должно переопределить этот виртуальный путь, сравнить путь запроса с известными путями, предоставить соответствующую информацию об ответе и передать значение «true», чтобы прекратить дальнейшую обработку.</summary>
+      <returns>Возвращение значения false приведет к тому, что общий код вызовет следующее ПО промежуточного слоя в очереди.Если возвращено значение true, общий код начнет асинхронное перемещение для выполнения, не вызывая оставшуюся часть конвейера ПО промежуточного слоя.</returns>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Infrastructure.AuthenticationHandler.Request"></member>
+    <member name="P:Microsoft.Owin.Security.Infrastructure.AuthenticationHandler.RequestPathBase"></member>
+    <member name="P:Microsoft.Owin.Security.Infrastructure.AuthenticationHandler.Response"></member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.AuthenticationHandler.TeardownCoreAsync"></member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.AuthenticationHandler.ValidateCorrelationId(Microsoft.Owin.Security.AuthenticationProperties,Microsoft.Owin.Logging.ILogger)"></member>
+    <member name="T:Microsoft.Owin.Security.Infrastructure.AuthenticationHandler`1">
+      <summary>Базовый класс для работы по запросу, выполняемой большинством промежуточного ПО для проверки подлинности.</summary>
+      <typeparam name="TOptions">Указывает тип свойства AuthenticationOptions</typeparam>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.AuthenticationHandler`1.#ctor">
+      <summary>Инициализирует новый экземпляр класса <see cref="T:Microsoft.Owin.Security.Infrastructure.AuthenticationHandler`1" />.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Infrastructure.AuthenticationHandler`1.Options"></member>
+    <member name="T:Microsoft.Owin.Security.Infrastructure.AuthenticationMiddleware`1">
+      <summary>Представляет ПО промежуточного слоя для проверки подлинности.</summary>
+      <typeparam name="TOptions">Тип параметров проверки подлинности.</typeparam>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.AuthenticationMiddleware`1.#ctor(Microsoft.Owin.OwinMiddleware,`0)">
+      <summary>Инициализирует новый экземпляр класса <see cref="T:Microsoft.Owin.Security.Infrastructure.AuthenticationMiddleware`1" />.</summary>
+      <param name="next">Следующее ПО промежуточного слоя OWIN.</param>
+      <param name="options">Параметры проверки подлинности.</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.AuthenticationMiddleware`1.CreateHandler">
+      <summary>Создает обработчик проверки подлинности.</summary>
+      <returns>Созданный <see cref="T:Microsoft.Owin.Security.Infrastructure.AuthenticationHandler`1" />.</returns>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.AuthenticationMiddleware`1.Invoke(Microsoft.Owin.IOwinContext)"></member>
+    <member name="P:Microsoft.Owin.Security.Infrastructure.AuthenticationMiddleware`1.Options">
+      <summary>Получает или задает параметры проверки подлинности.</summary>
+      <returns>Задача, выполняющая проверку подлинности.</returns>
+    </member>
+    <member name="T:Microsoft.Owin.Security.Infrastructure.AuthenticationTokenCreateContext"></member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.AuthenticationTokenCreateContext.#ctor(Microsoft.Owin.IOwinContext,Microsoft.Owin.Security.ISecureDataFormat{Microsoft.Owin.Security.AuthenticationTicket},Microsoft.Owin.Security.AuthenticationTicket)"></member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.AuthenticationTokenCreateContext.SerializeTicket"></member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.AuthenticationTokenCreateContext.SetToken(System.String)"></member>
+    <member name="P:Microsoft.Owin.Security.Infrastructure.AuthenticationTokenCreateContext.Ticket"></member>
+    <member name="P:Microsoft.Owin.Security.Infrastructure.AuthenticationTokenCreateContext.Token"></member>
+    <member name="T:Microsoft.Owin.Security.Infrastructure.AuthenticationTokenProvider"></member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.AuthenticationTokenProvider.#ctor"></member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.AuthenticationTokenProvider.Create(Microsoft.Owin.Security.Infrastructure.AuthenticationTokenCreateContext)"></member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.AuthenticationTokenProvider.CreateAsync(Microsoft.Owin.Security.Infrastructure.AuthenticationTokenCreateContext)"></member>
+    <member name="P:Microsoft.Owin.Security.Infrastructure.AuthenticationTokenProvider.OnCreate"></member>
+    <member name="P:Microsoft.Owin.Security.Infrastructure.AuthenticationTokenProvider.OnCreateAsync"></member>
+    <member name="P:Microsoft.Owin.Security.Infrastructure.AuthenticationTokenProvider.OnReceive"></member>
+    <member name="P:Microsoft.Owin.Security.Infrastructure.AuthenticationTokenProvider.OnReceiveAsync"></member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.AuthenticationTokenProvider.Receive(Microsoft.Owin.Security.Infrastructure.AuthenticationTokenReceiveContext)"></member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.AuthenticationTokenProvider.ReceiveAsync(Microsoft.Owin.Security.Infrastructure.AuthenticationTokenReceiveContext)"></member>
+    <member name="T:Microsoft.Owin.Security.Infrastructure.AuthenticationTokenReceiveContext"></member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.AuthenticationTokenReceiveContext.#ctor(Microsoft.Owin.IOwinContext,Microsoft.Owin.Security.ISecureDataFormat{Microsoft.Owin.Security.AuthenticationTicket},System.String)"></member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.AuthenticationTokenReceiveContext.DeserializeTicket(System.String)"></member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.AuthenticationTokenReceiveContext.SetTicket(Microsoft.Owin.Security.AuthenticationTicket)"></member>
+    <member name="P:Microsoft.Owin.Security.Infrastructure.AuthenticationTokenReceiveContext.Ticket"></member>
+    <member name="P:Microsoft.Owin.Security.Infrastructure.AuthenticationTokenReceiveContext.Token"></member>
+    <member name="T:Microsoft.Owin.Security.Infrastructure.IAuthenticationTokenProvider"></member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.IAuthenticationTokenProvider.Create(Microsoft.Owin.Security.Infrastructure.AuthenticationTokenCreateContext)"></member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.IAuthenticationTokenProvider.CreateAsync(Microsoft.Owin.Security.Infrastructure.AuthenticationTokenCreateContext)"></member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.IAuthenticationTokenProvider.Receive(Microsoft.Owin.Security.Infrastructure.AuthenticationTokenReceiveContext)"></member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.IAuthenticationTokenProvider.ReceiveAsync(Microsoft.Owin.Security.Infrastructure.AuthenticationTokenReceiveContext)"></member>
+    <member name="T:Microsoft.Owin.Security.Infrastructure.SecurityHelper">
+      <summary>Вспомогательный код, используемый при внедрении промежуточного ПО для проверки подлинности</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.SecurityHelper.#ctor(Microsoft.Owin.IOwinContext)">
+      <summary>Вспомогательный код, используемый при внедрении промежуточного ПО для проверки подлинности</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.SecurityHelper.AddUserIdentity(System.Security.Principal.IIdentity)">
+      <summary>Добавьте дополнительный ClaimsIdentity к ClaimsPrincipal в ключе среды "server.User"</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.SecurityHelper.Equals(Microsoft.Owin.Security.Infrastructure.SecurityHelper)"></member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.SecurityHelper.Equals(System.Object)"></member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.SecurityHelper.GetHashCode"></member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.SecurityHelper.LookupChallenge(System.String,Microsoft.Owin.Security.AuthenticationMode)">
+      <summary>Найдите подробные данные о запросе ответа для специального промежуточного ПО проверки подлинности</summary>
+      <returns>Данные, являющиеся инструкцией поведения для промежуточного ПО</returns>
+      <param name="authenticationType">Искомый тип проверки подлинности</param>
+      <param name="authenticationMode">Режим проверки подлинности в котором работает промежуточное ПО</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.SecurityHelper.LookupSignIn(System.String)">
+      <summary>Найдите входные данные ответа для специального промежуточного ПО проверки подлинности</summary>
+      <returns>Данные, являющиеся инструкцией поведения для промежуточного ПО</returns>
+      <param name="authenticationType">Искомый тип проверки подлинности</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.SecurityHelper.LookupSignOut(System.String,Microsoft.Owin.Security.AuthenticationMode)">
+      <summary>Найдите выходные данные ответа для специального промежуточного ПО проверки подлинности</summary>
+      <returns>Данные, являющиеся инструкцией поведения для промежуточного ПО</returns>
+      <param name="authenticationType">Искомый тип проверки подлинности</param>
+      <param name="authenticationMode">Режим проверки подлинности в котором работает промежуточное ПО</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.SecurityHelper.op_Equality(Microsoft.Owin.Security.Infrastructure.SecurityHelper,Microsoft.Owin.Security.Infrastructure.SecurityHelper)"></member>
+    <member name="M:Microsoft.Owin.Security.Infrastructure.SecurityHelper.op_Inequality(Microsoft.Owin.Security.Infrastructure.SecurityHelper,Microsoft.Owin.Security.Infrastructure.SecurityHelper)"></member>
+    <member name="T:Microsoft.Owin.Security.Notifications.AuthenticationFailedNotification`2">
+      <typeparam name="TMessage"></typeparam>
+      <typeparam name="TOptions"></typeparam>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Notifications.AuthenticationFailedNotification`2.#ctor(Microsoft.Owin.IOwinContext,`1)"></member>
+    <member name="P:Microsoft.Owin.Security.Notifications.AuthenticationFailedNotification`2.Exception"></member>
+    <member name="P:Microsoft.Owin.Security.Notifications.AuthenticationFailedNotification`2.ProtocolMessage"></member>
+    <member name="T:Microsoft.Owin.Security.Notifications.BaseNotification`1">
+      <typeparam name="TOptions"></typeparam>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Notifications.BaseNotification`1.#ctor(Microsoft.Owin.IOwinContext,`0)"></member>
+    <member name="P:Microsoft.Owin.Security.Notifications.BaseNotification`1.HandledResponse"></member>
+    <member name="M:Microsoft.Owin.Security.Notifications.BaseNotification`1.HandleResponse">
+      <summary>Прекращение всех обработок этого запроса и возврат к клиенту.Вызывающий ответственен за создание полного ответа.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Notifications.BaseNotification`1.Skipped"></member>
+    <member name="M:Microsoft.Owin.Security.Notifications.BaseNotification`1.SkipToNextMiddleware">
+      <summary>Прекращение обработки запроса в текущем ПО промежуточного слоя и передача управления в следующий.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Notifications.BaseNotification`1.State"></member>
+    <member name="T:Microsoft.Owin.Security.Notifications.MessageReceivedNotification`2">
+      <typeparam name="TMessage"></typeparam>
+      <typeparam name="TOptions"></typeparam>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Notifications.MessageReceivedNotification`2.#ctor(Microsoft.Owin.IOwinContext,`1)"></member>
+    <member name="P:Microsoft.Owin.Security.Notifications.MessageReceivedNotification`2.ProtocolMessage"></member>
+    <member name="T:Microsoft.Owin.Security.Notifications.NotificationResultState"></member>
+    <member name="F:Microsoft.Owin.Security.Notifications.NotificationResultState.Continue">
+      <summary>Продолжение нормальной обработки.</summary>
+    </member>
+    <member name="F:Microsoft.Owin.Security.Notifications.NotificationResultState.HandledResponse">
+      <summary>Прекратить все обработки этого запроса.</summary>
+    </member>
+    <member name="F:Microsoft.Owin.Security.Notifications.NotificationResultState.Skipped">
+      <summary>Прекращение обработки запроса в текущем ПО промежуточного слоя и передать управление в следующий.</summary>
+    </member>
+    <member name="T:Microsoft.Owin.Security.Notifications.RedirectToIdentityProviderNotification`2">
+      <typeparam name="TMessage"></typeparam>
+      <typeparam name="TOptions"></typeparam>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Notifications.RedirectToIdentityProviderNotification`2.#ctor(Microsoft.Owin.IOwinContext,`1)"></member>
+    <member name="P:Microsoft.Owin.Security.Notifications.RedirectToIdentityProviderNotification`2.HandledResponse"></member>
+    <member name="M:Microsoft.Owin.Security.Notifications.RedirectToIdentityProviderNotification`2.HandleResponse">
+      <summary>Прекращение всех обработок этого запроса и возврат к клиенту.Вызывающий ответственен за создание полного ответа.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Notifications.RedirectToIdentityProviderNotification`2.ProtocolMessage"></member>
+    <member name="P:Microsoft.Owin.Security.Notifications.RedirectToIdentityProviderNotification`2.State"></member>
+    <member name="T:Microsoft.Owin.Security.Notifications.SecurityTokenReceivedNotification`2">
+      <typeparam name="TMessage"></typeparam>
+      <typeparam name="TOptions"></typeparam>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Notifications.SecurityTokenReceivedNotification`2.#ctor(Microsoft.Owin.IOwinContext,`1)"></member>
+    <member name="P:Microsoft.Owin.Security.Notifications.SecurityTokenReceivedNotification`2.ProtocolMessage"></member>
+    <member name="T:Microsoft.Owin.Security.Notifications.SecurityTokenValidatedNotification`2">
+      <typeparam name="TMessage"></typeparam>
+      <typeparam name="TOptions"></typeparam>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Notifications.SecurityTokenValidatedNotification`2.#ctor(Microsoft.Owin.IOwinContext,`1)"></member>
+    <member name="P:Microsoft.Owin.Security.Notifications.SecurityTokenValidatedNotification`2.AuthenticationTicket">
+      <summary>Получает или задает <see cref="P:Microsoft.Owin.Security.Notifications.SecurityTokenValidatedNotification`2.AuthenticationTicket" /></summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Notifications.SecurityTokenValidatedNotification`2.ProtocolMessage">
+      <summary>Получает или задает сообщение Protocol.</summary>
+    </member>
+    <member name="T:Microsoft.Owin.Security.Provider.BaseContext">
+      <summary>представляет базовый контекст.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Provider.BaseContext.#ctor(Microsoft.Owin.IOwinContext)"></member>
+    <member name="P:Microsoft.Owin.Security.Provider.BaseContext.OwinContext"></member>
+    <member name="P:Microsoft.Owin.Security.Provider.BaseContext.Request"></member>
+    <member name="P:Microsoft.Owin.Security.Provider.BaseContext.Response"></member>
+    <member name="T:Microsoft.Owin.Security.Provider.BaseContext`1">
+      <summary>Базовый класс, используемый для определенных контекстов событий</summary>
+      <typeparam name="TOptions"></typeparam>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Provider.BaseContext`1.#ctor(Microsoft.Owin.IOwinContext,`0)"></member>
+    <member name="P:Microsoft.Owin.Security.Provider.BaseContext`1.Options"></member>
+    <member name="P:Microsoft.Owin.Security.Provider.BaseContext`1.OwinContext"></member>
+    <member name="P:Microsoft.Owin.Security.Provider.BaseContext`1.Request"></member>
+    <member name="P:Microsoft.Owin.Security.Provider.BaseContext`1.Response"></member>
+    <member name="T:Microsoft.Owin.Security.Provider.EndpointContext">
+      <summary>Представляет контекст конечной точки.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Provider.EndpointContext.#ctor(Microsoft.Owin.IOwinContext)"></member>
+    <member name="P:Microsoft.Owin.Security.Provider.EndpointContext.IsRequestCompleted">
+      <summary>Возвращает или задает значение, показывающее, выполнен ли запрос данного контекста.</summary>
+      <returns>Значение true, если запрос данного контекста выполнен; в противном случае — значение false.</returns>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Provider.EndpointContext.RequestCompleted">
+      <summary>Показывает выполненный запрос для контекста.</summary>
+    </member>
+    <member name="T:Microsoft.Owin.Security.Provider.EndpointContext`1">
+      <summary>Базовый класс, используемый для определенных контекстов событий</summary>
+      <typeparam name="TOptions"></typeparam>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Provider.EndpointContext`1.#ctor(Microsoft.Owin.IOwinContext,`0)">
+      <summary>Создает экземпляр данного контекста</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Provider.EndpointContext`1.IsRequestCompleted">
+      <summary>Значение true, если запрос не должен далее обрабатываться другими компонентами.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Provider.EndpointContext`1.RequestCompleted">
+      <summary>Запрещает дальнейшую обработку запроса другими компонентами.После вызова IsRequestCompleted получает значение true.</summary>
+    </member>
+    <member name="T:Microsoft.Owin.Security.Provider.ReturnEndpointContext">
+      <summary>Представляет контекст возвращаемой конечной точки.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Provider.ReturnEndpointContext.#ctor(Microsoft.Owin.IOwinContext,Microsoft.Owin.Security.AuthenticationTicket)"></member>
+    <member name="P:Microsoft.Owin.Security.Provider.ReturnEndpointContext.Identity">
+      <summary>Получает или задает идентификатор этого контекста.</summary>
+      <returns>Идентификатор этого контекста.</returns>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Provider.ReturnEndpointContext.Properties"></member>
+    <member name="P:Microsoft.Owin.Security.Provider.ReturnEndpointContext.RedirectUri">
+      <summary>Получает или задает универсальный код ресурса (URI), который следует использовать при возвращении этого контекста.</summary>
+      <returns>Универсальный код ресурса (URI), который следует использовать при возвращении этого контекста.</returns>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Provider.ReturnEndpointContext.SignInAsAuthenticationType">
+      <summary>Получает или задает контекст, выполняющий вход как тип проверки подлинности.</summary>
+      <returns>Контекст, выполняющий вход как тип проверки подлинности.</returns>
+    </member>
+  </members>
+</doc>

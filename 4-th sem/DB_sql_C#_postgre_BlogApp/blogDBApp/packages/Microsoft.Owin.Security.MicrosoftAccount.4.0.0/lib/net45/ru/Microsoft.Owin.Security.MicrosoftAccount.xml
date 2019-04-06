@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<doc>
+  <assembly>
+    <name>Microsoft.Owin.Security.MicrosoftAccount</name>
+  </assembly>
+  <members>
+    <member name="T:Microsoft.Owin.Security.MicrosoftAccount.IMicrosoftAccountAuthenticationProvider">
+      <summary>Указывает методы обратного вызова, которые вызывает <see cref="T:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticationMiddleware" />, чтобы обеспечить контроль разработчика над процессом проверки подлинности./&amp;amp;gt;</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.MicrosoftAccount.IMicrosoftAccountAuthenticationProvider.ApplyRedirect(Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountApplyRedirectContext)">
+      <summary>Вызывается, когда запросе приводит к перенаправлению в конечную точку проверки подлинности в ПО промежуточного слоя Майкрософт</summary>
+      <param name="context">Содержит универсальный код ресурса (URI) и <see cref="T:Microsoft.Owin.Security.AuthenticationProperties" /> запроса</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.MicrosoftAccount.IMicrosoftAccountAuthenticationProvider.Authenticated(Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticatedContext)">
+      <summary>Вызывается, если пользователь успешно проходит проверку подлинности Майкрософт</summary>
+      <returns>
+        <see cref="T:System.Threading.Tasks.Task" />, представляющий завершенную операцию.</returns>
+      <param name="context">Содержит сведения о сеансе входа и <see cref="T:System.Security.Claims.ClaimsIdentity" /> пользователя.</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.MicrosoftAccount.IMicrosoftAccountAuthenticationProvider.ReturnEndpoint(Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountReturnEndpointContext)">
+      <summary>Вызывает перед тем, как <see cref="T:System.Security.Claims.ClaimsIdentity" /> сохраняется в локальном файле cookie и браузер перенаправляется по исходному запрошенному URL-адресу.</summary>
+      <returns>
+        <see cref="T:System.Threading.Tasks.Task" />, представляющий завершенную операцию.</returns>
+    </member>
+    <member name="T:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountApplyRedirectContext">
+      <summary>Передается контекст, когда запрос приводит к перенаправлению в конечную точку проверки подлинности в ПО промежуточного слоя учетной записи Майкрософт</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountApplyRedirectContext.#ctor(Microsoft.Owin.IOwinContext,Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticationOptions,Microsoft.Owin.Security.AuthenticationProperties,System.String)">
+      <summary>Создает новый контекстный объект.</summary>
+      <param name="context">Контекст запроса OWIN</param>
+      <param name="options">Параметры ПО промежуточного слоя учетной записи Майкрософт</param>
+      <param name="properties">Свойства проверки подлинности запроса</param>
+      <param name="redirectUri">Универсальный код ресурса (URI) первичного перенаправления</param>
+    </member>
+    <member name="P:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountApplyRedirectContext.Properties">
+      <summary>Получает свойства проверки подлинности данного запроса</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountApplyRedirectContext.RedirectUri">
+      <summary>Получает универсальный код ресурса (URI) для перенаправления.</summary>
+    </member>
+    <member name="T:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticatedContext">
+      <summary>Содержит сведения о сеансе входа и <see cref="T:System.Security.Claims.ClaimsIdentity" /> пользователя.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticatedContext.#ctor(Microsoft.Owin.IOwinContext,Newtonsoft.Json.Linq.JObject,System.String,System.String,System.String)">
+      <summary>Инициализирует <see cref="T:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticatedContext" /></summary>
+      <param name="context">Среда OWIN</param>
+      <param name="user">Пользователь, сериализованный в формате JSON</param>
+      <param name="accessToken">Маркер доступа, предоставленный службой проверки подлинности Майкрософт</param>
+      <param name="refreshToken">Токен обновления, предоставленный службой проверки подлинности Майкрософт</param>
+      <param name="expires">Количество секунд до завершения срока действия</param>
+    </member>
+    <member name="P:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticatedContext.AccessToken">
+      <summary>Получает токен доступа, предоставленный службой проверки подлинности Майкрософт</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticatedContext.Email">
+      <summary>Получает адрес электронной почты пользователя</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticatedContext.ExpiresIn">
+      <summary>Получает время завершения действия токена доступа Майкрософт</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticatedContext.FirstName">
+      <summary>Получает имя пользователя</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticatedContext.Id">
+      <summary>Получает идентификатор пользователя учетной записи Майкрософт</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticatedContext.Identity">
+      <summary>Получает <see cref="T:System.Security.Claims.ClaimsIdentity" />, представляющий пользователя</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticatedContext.LastName">
+      <summary>Получает фамилию пользователя</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticatedContext.Name">
+      <summary>Получает имя пользователя</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticatedContext.Properties">
+      <summary>Получает или задает контейнер свойств для общих свойств проверки подлинности</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticatedContext.RefreshToken">
+      <summary>Получает токен обновления, предоставленный службой проверки подлинности Майкрософт</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticatedContext.User">
+      <summary>Получает пользователя, сериализованного в формате JSON</summary>
+    </member>
+    <member name="T:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticationMiddleware">
+      <summary>ПО промежуточного слоя OWIN для проверки подлинности пользователей с помощью службы учетных записей Майкрософт</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticationMiddleware.#ctor(Microsoft.Owin.OwinMiddleware,Owin.IAppBuilder,Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticationOptions)">
+      <summary>Инициализирует <see cref="T:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticationMiddleware" /></summary>
+      <param name="next">Следующее вызываемое ПО промежуточного слоя в конвейере OWIN</param>
+      <param name="app">Приложение OWIN</param>
+      <param name="options">Параметры конфигурации ПО промежуточного слоя</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticationMiddleware.CreateHandler">
+      <summary>Предоставляет объект <see cref="T:Microsoft.Owin.Security.Infrastructure.AuthenticationHandler" /> для обработки запросов, связанных с проверкой подлинности.</summary>
+      <returns>
+        <see cref="T:Microsoft.Owin.Security.Infrastructure.AuthenticationHandler" />, настроенный посредством параметров <see cref="T:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticationOptions" />, переданных в конструктор.</returns>
+    </member>
+    <member name="T:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticationOptions">
+      <summary>Параметры конфигурации для <see cref="T:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticationMiddleware" /></summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticationOptions.#ctor">
+      <summary>Инициализирует новый <see cref="T:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticationOptions" />.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticationOptions.BackchannelCertificateValidator">
+      <summary>Получает или задает проверяющий элемент управления для закрепленных сертификатов, используемый для проверки конечных точек, которые используются в операциях обмена данными через обратный канал, осуществляемых учетной записью Майкрософт.</summary>
+      <returns>Проверяющий элемент управления для закрепленных сертификатов.</returns>
+    </member>
+    <member name="P:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticationOptions.BackchannelHttpHandler">
+      <summary>HttpMessageHandler, используемый для обмена данными с корпорацией Майкрософт.Его нельзя задать одновременно с BackchannelCertificateValidator, если только значение не может быть получено нисходящим приведением WebRequestHandler.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticationOptions.BackchannelTimeout">
+      <summary>Получает или задает значение времени ожидания в миллисекундах для обмена данными с корпорацией Майкрософт через обратный канал.</summary>
+      <returns>Время ожидания обратного канала.</returns>
+    </member>
+    <member name="P:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticationOptions.CallbackPath">
+      <summary>Путь запроса с базовым путем приложения, по которому будет возвращен агент пользователя.ПО промежуточного слоя обработает этот запрос после его поступления.По умолчанию используется значение «/signin-microsoft».</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticationOptions.Caption">
+      <summary>Получает или задает текст, который пользователь может отобразить в пользовательском интерфейсе входа.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticationOptions.ClientId">
+      <summary>Идентификатор клиента приложения, присвоенный службой проверки подлинности Майкрософт.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticationOptions.ClientSecret">
+      <summary>Секрет клиента приложения, присвоенный службой проверки подлинности Майкрософт.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticationOptions.Provider">
+      <summary>Получает или задает <see cref="T:Microsoft.Owin.Security.MicrosoftAccount.IMicrosoftAccountAuthenticationProvider" />, который используется для обработки событий проверки подлинности.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticationOptions.Scope">
+      <summary>Список запрашиваемых разрешений.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticationOptions.SignInAsAuthenticationType">
+      <summary>Получает или задает имя другого ПО промежуточного слоя, осуществляющего проверку подлинности, которое будет отвечать за фактическую выдачу <see cref="T:System.Security.Claims.ClaimsIdentity" /> пользователя.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticationOptions.StateDataFormat">
+      <summary>Получает или задает тип, используемый для защиты данных, обрабатываемых ПО промежуточного слоя.</summary>
+    </member>
+    <member name="T:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticationProvider">
+      <summary>Реализация <see cref="T:Microsoft.Owin.Security.MicrosoftAccount.IMicrosoftAccountAuthenticationProvider" /> по умолчанию.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticationProvider.#ctor">
+      <summary>Инициализирует новый <see cref="T:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticationProvider" /></summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticationProvider.ApplyRedirect(Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountApplyRedirectContext)">
+      <summary>Вызывается, когда запросе приводит к перенаправлению в конечную точку проверки подлинности в ПО промежуточного слоя учетной записи Майкрософт</summary>
+      <param name="context">Содержит универсальный код ресурса (URI) и <see cref="T:Microsoft.Owin.Security.AuthenticationProperties" /> запроса</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticationProvider.Authenticated(Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticatedContext)">
+      <summary>Вызывается, если пользователь успешно проходит проверку подлинности Майкрософт</summary>
+      <returns>
+        <see cref="T:System.Threading.Tasks.Task" />, представляющий завершенную операцию.</returns>
+      <param name="context">Содержит сведения о сеансе входа и <see cref="T:System.Security.Claims.ClaimsIdentity" /> пользователя.</param>
+    </member>
+    <member name="P:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticationProvider.OnApplyRedirect">
+      <summary>Получает или задает делегат, которая вызывается при вызове метода ApplyRedirect.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticationProvider.OnAuthenticated">
+      <summary>Получает или задает функцию, которая вызывается при вызове метода Authenticated.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticationProvider.OnReturnEndpoint">
+      <summary>Получает или задает функцию, которая вызывается при вызове метода ReturnEndpoint.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticationProvider.ReturnEndpoint(Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountReturnEndpointContext)">
+      <summary>Вызывает перед тем, как <see cref="T:System.Security.Claims.ClaimsIdentity" /> сохраняется в локальном файле cookie и браузер перенаправляется по исходному запрошенному URL-адресу.</summary>
+      <returns>
+        <see cref="T:System.Threading.Tasks.Task" />, представляющий завершенную операцию.</returns>
+      <param name="context">Содержит сведения о сеансе входа и <see cref="T:System.Security.Claims.ClaimsIdentity" /> пользователя</param>
+    </member>
+    <member name="T:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountReturnEndpointContext">
+      <summary>Предоставляет сведения о контексте поставщикам ПО промежуточного слоя.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountReturnEndpointContext.#ctor(Microsoft.Owin.IOwinContext,Microsoft.Owin.Security.AuthenticationTicket)">
+      <summary>Инициализирует новый <see cref="T:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountReturnEndpointContext" />.</summary>
+      <param name="context">Среда OWIN</param>
+      <param name="ticket">Билет проверки подлинности</param>
+    </member>
+    <member name="T:Owin.MicrosoftAccountAuthenticationExtensions">
+      <summary>Методы расширения для использования <see cref="T:Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticationMiddleware" /></summary>
+    </member>
+    <member name="M:Owin.MicrosoftAccountAuthenticationExtensions.UseMicrosoftAccountAuthentication(Owin.IAppBuilder,Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticationOptions)">
+      <summary>Проверка подлинности пользователей посредством учетной записи Майкрософт</summary>
+      <returns>Обновленный <see cref="T:Owin.IAppBuilder" /></returns>
+      <param name="app">
+        <see cref="T:Owin.IAppBuilder" />, переданный в метод конфигурации</param>
+      <param name="options">Параметры конфигурации ПО промежуточного слоя</param>
+    </member>
+    <member name="M:Owin.MicrosoftAccountAuthenticationExtensions.UseMicrosoftAccountAuthentication(Owin.IAppBuilder,System.String,System.String)">
+      <summary>Проверка подлинности пользователей посредством учетной записи Майкрософт</summary>
+      <param name="app">
+        <see cref="T:Owin.IAppBuilder" />, переданный в метод конфигурации</param>
+      <param name="clientId">Идентификатор клиента приложения, присвоенный службой проверки подлинности Майкрософт</param>
+      <param name="clientSecret">Секрет клиента приложения, присвоенный службой проверки подлинности Майкрософт</param>
+    </member>
+  </members>
+</doc>

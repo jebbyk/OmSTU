@@ -1,0 +1,359 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<doc>
+  <assembly>
+    <name>Microsoft.Owin.Security.Google</name>
+  </assembly>
+  <members>
+    <member name="T:Microsoft.Owin.Security.Google.GoogleApplyRedirectContext">
+      <summary>Передается контекст, когда запрос приводит к перенаправлению в конечную точку проверки подлинности в ПО промежуточного слоя Google OpenID</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Google.GoogleApplyRedirectContext.#ctor(Microsoft.Owin.IOwinContext,Microsoft.Owin.Security.Google.GoogleAuthenticationOptions,Microsoft.Owin.Security.AuthenticationProperties,System.String)">
+      <summary>Создает новый контекстный объект.</summary>
+      <param name="context">Контекст запроса OWIN</param>
+      <param name="options">Параметры ПО промежуточного слоя Google OpenID</param>
+      <param name="properties">Свойства проверки подлинности запроса</param>
+      <param name="redirectUri">Универсальный код ресурса (URI) первичного перенаправления</param>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleApplyRedirectContext.Properties">
+      <summary>Получает свойства проверки подлинности данного запроса</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleApplyRedirectContext.RedirectUri">
+      <summary>Получает универсальный код ресурса (URI) для перенаправления.</summary>
+    </member>
+    <member name="T:Microsoft.Owin.Security.Google.GoogleAuthenticatedContext">
+      <summary>Содержит сведения о сеансе входа и <see cref="T:System.Security.Claims.ClaimsIdentity" /> пользователя.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Google.GoogleAuthenticatedContext.#ctor(Microsoft.Owin.IOwinContext,System.Security.Claims.ClaimsIdentity,Microsoft.Owin.Security.AuthenticationProperties,System.Xml.Linq.XElement,System.Collections.Generic.IDictionary{System.String,System.String})">
+      <summary>Инициализирует <see cref="T:Microsoft.Owin.Security.Google.GoogleAuthenticatedContext" /></summary>
+      <param name="context">Среда OWIN</param>
+      <param name="identity">
+        <see cref="T:System.Security.Claims.ClaimsIdentity" /> для представления пользователя</param>
+      <param name="properties">Контейнер свойств для общих свойств проверки подлинности</param>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleAuthenticatedContext.AttributeExchangeProperties">
+      <summary>Получает словарь значений и ключей свойств сообщения</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleAuthenticatedContext.Identity">
+      <summary>Получает или задает удостоверение <see cref="T:System.Security.Claims.ClaimsIdentity" />, представляющее пользователя</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleAuthenticatedContext.Properties">
+      <summary>Получает или задает контейнер свойств для общих свойств проверки подлинности</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleAuthenticatedContext.ResponseMessage">
+      <summary>Получает или задает проанализированное сообщение отклика из строки запроса openid</summary>
+    </member>
+    <member name="T:Microsoft.Owin.Security.Google.GoogleAuthenticationMiddleware">
+      <summary>ПО промежуточного слоя OWIN для проверки подлинности пользователей с помощью Google OpenID</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Google.GoogleAuthenticationMiddleware.#ctor(Microsoft.Owin.OwinMiddleware,Owin.IAppBuilder,Microsoft.Owin.Security.Google.GoogleAuthenticationOptions)">
+      <summary>Инициализирует <see cref="T:Microsoft.Owin.Security.Google.GoogleAuthenticationMiddleware" /></summary>
+      <param name="next">Следующее вызываемое ПО промежуточного слоя в конвейере OWIN</param>
+      <param name="app">Приложение OWIN</param>
+      <param name="options">Параметры конфигурации ПО промежуточного слоя</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Google.GoogleAuthenticationMiddleware.CreateHandler">
+      <summary>Предоставляет объект <see cref="T:Microsoft.Owin.Security.Infrastructure.AuthenticationHandler" /> для обработки запросов, связанных с проверкой подлинности.</summary>
+      <returns>
+        <see cref="T:Microsoft.Owin.Security.Infrastructure.AuthenticationHandler" />, настроенный посредством параметров <see cref="T:Microsoft.Owin.Security.Google.GoogleAuthenticationOptions" />, переданных в конструктор.</returns>
+    </member>
+    <member name="T:Microsoft.Owin.Security.Google.GoogleAuthenticationOptions">
+      <summary>Параметры конфигурации для <see cref="T:Microsoft.Owin.Security.Google.GoogleAuthenticationMiddleware" /></summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Google.GoogleAuthenticationOptions.#ctor">
+      <summary>Инициализирует новый <see cref="T:Microsoft.Owin.Security.Google.GoogleAuthenticationOptions" /></summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleAuthenticationOptions.BackchannelCertificateValidator">
+      <summary>Получает или задает проверяющий элемент управления для закрепленных сертификатов, используемый для проверки конечных точек, которые используются в операциях обмена данными через обратный канал, осуществляемых Google.</summary>
+      <returns>Проверяющий элемент управления для закрепленных сертификатов.</returns>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleAuthenticationOptions.BackchannelHttpHandler">
+      <summary>HttpMessageHandler, используемый для обмена данными с Google.Его нельзя задать одновременно с BackchannelCertificateValidator, если только значение не может быть получено нисходящим приведением WebRequestHandler.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleAuthenticationOptions.BackchannelTimeout">
+      <summary>Получает или задает значение времени ожидания в миллисекундах для обмена данными с Google через обратный канал.</summary>
+      <returns>Время ожидания обратного канала.</returns>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleAuthenticationOptions.CallbackPath">
+      <summary>Путь запроса с базовым путем приложения, по которому будет возвращен агент пользователя.ПО промежуточного слоя обработает этот запрос после его поступления.По умолчанию используется значение "/signin-google".</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleAuthenticationOptions.Caption">
+      <summary>Получает или задает текст, который пользователь может отобразить в пользовательском интерфейсе входа.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleAuthenticationOptions.Provider">
+      <summary>Получает или задает <see cref="T:Microsoft.Owin.Security.Google.IGoogleAuthenticationProvider" />, который используется для обработки событий проверки подлинности.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleAuthenticationOptions.SignInAsAuthenticationType">
+      <summary>Получает или задает имя другого ПО промежуточного слоя, осуществляющего проверку подлинности, которое будет отвечать за фактическую выдачу <see cref="T:System.Security.Claims.ClaimsIdentity" /> пользователя.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleAuthenticationOptions.StateDataFormat">
+      <summary>Получает или задает тип, используемый для защиты данных, обрабатываемых ПО промежуточного слоя.</summary>
+    </member>
+    <member name="T:Microsoft.Owin.Security.Google.GoogleAuthenticationProvider">
+      <summary>Реализация <see cref="T:Microsoft.Owin.Security.Google.IGoogleAuthenticationProvider" /> по умолчанию.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Google.GoogleAuthenticationProvider.#ctor">
+      <summary>Инициализирует <see cref="T:Microsoft.Owin.Security.Google.GoogleAuthenticationProvider" /></summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Google.GoogleAuthenticationProvider.ApplyRedirect(Microsoft.Owin.Security.Google.GoogleApplyRedirectContext)">
+      <summary>Вызывается, когда запросе приводит к перенаправлению в конечную точку проверки подлинности в ПО промежуточного слоя Google OpenID</summary>
+      <param name="context">Содержит универсальный код ресурса (URI) и <see cref="T:Microsoft.Owin.Security.AuthenticationProperties" /> запроса</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Google.GoogleAuthenticationProvider.Authenticated(Microsoft.Owin.Security.Google.GoogleAuthenticatedContext)">
+      <summary>Вызывается, если пользователь успешно проходит проверку подлинности Google</summary>
+      <returns>
+        <see cref="T:System.Threading.Tasks.Task" />, представляющий завершенную операцию.</returns>
+      <param name="context">Содержит сведения о сеансе входа и <see cref="T:System.Security.Claims.ClaimsIdentity" /> пользователя.</param>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleAuthenticationProvider.OnApplyRedirect">
+      <summary>Получает или задает делегат, которая вызывается при вызове метода ApplyRedirect.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleAuthenticationProvider.OnAuthenticated">
+      <summary>Получает или задает функцию, которая вызывается при вызове метода Authenticated.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleAuthenticationProvider.OnReturnEndpoint">
+      <summary>Получает или задает функцию, которая вызывается при вызове метода ReturnEndpoint.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Google.GoogleAuthenticationProvider.ReturnEndpoint(Microsoft.Owin.Security.Google.GoogleReturnEndpointContext)">
+      <summary>Вызывает перед тем, как <see cref="T:System.Security.Claims.ClaimsIdentity" /> сохраняется в локальном файле cookie и браузер перенаправляется по исходному запрошенному URL-адресу.</summary>
+      <returns>
+        <see cref="T:System.Threading.Tasks.Task" />, представляющий завершенную операцию.</returns>
+      <param name="context">Содержит сведения о сеансе входа и <see cref="T:System.Security.Claims.ClaimsIdentity" /> пользователя.</param>
+    </member>
+    <member name="T:Microsoft.Owin.Security.Google.GoogleOAuth2ApplyRedirectContext">
+      <summary>Передается контекст, когда запрос приводит к перенаправлению в конечную точку проверки подлинности в ПО промежуточного слоя Google OAuth 2.0</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Google.GoogleOAuth2ApplyRedirectContext.#ctor(Microsoft.Owin.IOwinContext,Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticationOptions,Microsoft.Owin.Security.AuthenticationProperties,System.String)">
+      <summary>Создает новый контекстный объект.</summary>
+      <param name="context">Контекст запроса OWIN</param>
+      <param name="options">Параметры ПО промежуточного слоя Google OAuth 2.0</param>
+      <param name="properties">Свойства проверки подлинности запроса</param>
+      <param name="redirectUri">Универсальный код ресурса (URI) первичного перенаправления</param>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleOAuth2ApplyRedirectContext.Properties">
+      <summary>Получает свойства проверки подлинности данного запроса</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleOAuth2ApplyRedirectContext.RedirectUri">
+      <summary>Получает универсальный код ресурса (URI) для перенаправления.</summary>
+    </member>
+    <member name="T:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticatedContext">
+      <summary>Содержит сведения о сеансе входа и <see cref="T:System.Security.Claims.ClaimsIdentity" /> пользователя.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticatedContext.#ctor(Microsoft.Owin.IOwinContext,Newtonsoft.Json.Linq.JObject,System.String,System.String,System.String)">
+      <summary>Инициализирует <see cref="T:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticatedContext" /></summary>
+      <param name="context">Среда OWIN</param>
+      <param name="user">Сведения о пользователе Google, сериализованные в формате JSON</param>
+      <param name="accessToken">Токен доступа Google OAuth 2.0</param>
+      <param name="refreshToken">Токен обновления Google OAuth 2.0</param>
+      <param name="expires">Количество секунд до завершения срока действия</param>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticatedContext.AccessToken">
+      <summary>Получает токен доступа Google</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticatedContext.Email">
+      <summary>Получает адрес электронной почты пользователя</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticatedContext.ExpiresIn">
+      <summary>Получает время завершения действия токена доступа Google</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticatedContext.FamilyName">
+      <summary>Получает фамилию пользователя</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticatedContext.GivenName">
+      <summary>Получает личное имя пользователя</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticatedContext.Id">
+      <summary>Получает идентификатор пользователя Google</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticatedContext.Identity">
+      <summary>Получает <see cref="T:System.Security.Claims.ClaimsIdentity" />, представляющий пользователя</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticatedContext.Name">
+      <summary>Получает имя пользователя</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticatedContext.Profile">
+      <summary>Получает ссылку на профиль пользователя</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticatedContext.Properties">
+      <summary>Получает или задает контейнер свойств для общих свойств проверки подлинности</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticatedContext.RefreshToken">
+      <summary>Получает токен обновления Google</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticatedContext.User">
+      <summary>Получает пользователя, сериализованного в формате JSON</summary>
+    </member>
+    <member name="T:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticationMiddleware">
+      <summary>ПО промежуточного слоя OWIN для проверки подлинности пользователей с помощью Google OAuth 2.0</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticationMiddleware.#ctor(Microsoft.Owin.OwinMiddleware,Owin.IAppBuilder,Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticationOptions)">
+      <summary>Инициализирует <see cref="T:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticationMiddleware" /></summary>
+      <param name="next">Следующее вызываемое ПО промежуточного слоя в конвейере OWIN</param>
+      <param name="app">Приложение OWIN</param>
+      <param name="options">Параметры конфигурации ПО промежуточного слоя</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticationMiddleware.CreateHandler">
+      <summary>Предоставляет объект <see cref="T:Microsoft.Owin.Security.Infrastructure.AuthenticationHandler" /> для обработки запросов, связанных с проверкой подлинности.</summary>
+      <returns>
+        <see cref="T:Microsoft.Owin.Security.Infrastructure.AuthenticationHandler" />, настроенный посредством параметров <see cref="T:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticationOptions" />, переданных в конструктор.</returns>
+    </member>
+    <member name="T:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticationOptions">
+      <summary>Параметры конфигурации для <see cref="T:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticationMiddleware" /></summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticationOptions.#ctor">
+      <summary>Инициализирует новый <see cref="T:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticationOptions" /></summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticationOptions.AccessType">
+      <summary>access_type.Задает состояние "автономный режим" для запроса токена обновления.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticationOptions.BackchannelCertificateValidator">
+      <summary>Получает или задает проверяющий элемент управления для закрепленных сертификатов, используемый для проверки конечных точек, которые используются в операциях обмена данными через обратный канал, осуществляемых Google.</summary>
+      <returns>Проверяющий элемент управления для закрепленных сертификатов.</returns>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticationOptions.BackchannelHttpHandler">
+      <summary>HttpMessageHandler, используемый для обмена данными с Google.Его нельзя задать одновременно с BackchannelCertificateValidator, если только значение не может быть получено нисходящим приведением WebRequestHandler.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticationOptions.BackchannelTimeout">
+      <summary>Получает или задает значение времени ожидания в миллисекундах для обмена данными с Google через обратный канал.</summary>
+      <returns>Время ожидания обратного канала в миллисекундах.</returns>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticationOptions.CallbackPath">
+      <summary>Путь запроса с базовым путем приложения, по которому будет возвращен агент пользователя.ПО промежуточного слоя обработает этот запрос после его поступления.По умолчанию используется значение "/signin-google".</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticationOptions.Caption">
+      <summary>Получает или задает текст, который пользователь может отобразить в пользовательском интерфейсе входа.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticationOptions.ClientId">
+      <summary>Получает или задает идентификатор клиента, присвоенный Google</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticationOptions.ClientSecret">
+      <summary>Получает или задает секрет клиента, присвоенный Google</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticationOptions.Provider">
+      <summary>Получает или задает <see cref="T:Microsoft.Owin.Security.Google.IGoogleOAuth2AuthenticationProvider" />, который используется для обработки событий проверки подлинности.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticationOptions.Scope">
+      <summary>Список запрашиваемых разрешений.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticationOptions.SignInAsAuthenticationType">
+      <summary>Получает или задает имя другого ПО промежуточного слоя, осуществляющего проверку подлинности, которое будет отвечать за фактическую выдачу <see cref="T:System.Security.Claims.ClaimsIdentity" /> пользователя.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticationOptions.StateDataFormat">
+      <summary>Получает или задает тип, используемый для защиты данных, обрабатываемых ПО промежуточного слоя.</summary>
+    </member>
+    <member name="T:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticationProvider">
+      <summary>Реализация <see cref="T:Microsoft.Owin.Security.Google.IGoogleOAuth2AuthenticationProvider" /> по умолчанию.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticationProvider.#ctor">
+      <summary>Инициализирует <see cref="T:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticationProvider" /></summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticationProvider.ApplyRedirect(Microsoft.Owin.Security.Google.GoogleOAuth2ApplyRedirectContext)">
+      <summary>Вызывается, когда запросе приводит к перенаправлению в конечную точку проверки подлинности в ПО промежуточного слоя Google OAuth 2.0</summary>
+      <param name="context">Содержит универсальный код ресурса (URI) и <see cref="T:Microsoft.Owin.Security.AuthenticationProperties" /> запроса</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticationProvider.Authenticated(Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticatedContext)">
+      <summary>Вызывается, если пользователь успешно проходит проверку подлинности Google</summary>
+      <returns>
+        <see cref="T:System.Threading.Tasks.Task" />, представляющий завершенную операцию.</returns>
+      <param name="context">Содержит сведения о сеансе входа и <see cref="T:System.Security.Claims.ClaimsIdentity" /> пользователя.</param>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticationProvider.OnApplyRedirect">
+      <summary>Получает или задает делегат, которая вызывается при вызове метода ApplyRedirect.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticationProvider.OnAuthenticated">
+      <summary>Получает или задает функцию, которая вызывается при вызове метода Authenticated.</summary>
+    </member>
+    <member name="P:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticationProvider.OnReturnEndpoint">
+      <summary>Получает или задает функцию, которая вызывается при вызове метода ReturnEndpoint.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticationProvider.ReturnEndpoint(Microsoft.Owin.Security.Google.GoogleOAuth2ReturnEndpointContext)">
+      <summary>Вызывает перед тем, как <see cref="T:System.Security.Claims.ClaimsIdentity" /> сохраняется в локальном файле cookie и браузер перенаправляется по исходному запрошенному URL-адресу.</summary>
+      <returns>
+        <see cref="T:System.Threading.Tasks.Task" />, представляющий завершенную операцию.</returns>
+      <param name="context">Содержит контекстные сведения и билет проверки подлинности возвращаемой конечной точки.</param>
+    </member>
+    <member name="T:Microsoft.Owin.Security.Google.GoogleOAuth2ReturnEndpointContext">
+      <summary>Предоставляет сведения о контексте поставщикам ПО промежуточного слоя.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Google.GoogleOAuth2ReturnEndpointContext.#ctor(Microsoft.Owin.IOwinContext,Microsoft.Owin.Security.AuthenticationTicket)">
+      <summary>Инициализация <see cref="T:Microsoft.Owin.Security.Google.GoogleOAuth2ReturnEndpointContext" /></summary>
+      <param name="context">Среда OWIN</param>
+      <param name="ticket">Билет проверки подлинности</param>
+    </member>
+    <member name="T:Microsoft.Owin.Security.Google.GoogleReturnEndpointContext">
+      <summary>Предоставляет сведения о контексте поставщикам ПО промежуточного слоя.</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Google.GoogleReturnEndpointContext.#ctor(Microsoft.Owin.IOwinContext,Microsoft.Owin.Security.AuthenticationTicket)">
+      <param name="context">Среда OWIN</param>
+      <param name="ticket">Билет проверки подлинности</param>
+    </member>
+    <member name="T:Microsoft.Owin.Security.Google.IGoogleAuthenticationProvider">
+      <summary>Указывает методы обратного вызова, которые вызывает <see cref="T:Microsoft.Owin.Security.Google.GoogleAuthenticationMiddleware" />, чтобы обеспечить контроль разработчика над процессом проверки подлинности./&amp;amp;gt;</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Google.IGoogleAuthenticationProvider.ApplyRedirect(Microsoft.Owin.Security.Google.GoogleApplyRedirectContext)">
+      <summary>Вызывается, когда запросе приводит к перенаправлению в конечную точку проверки подлинности в ПО промежуточного слоя Google OpenID</summary>
+      <param name="context">Содержит универсальный код ресурса (URI) и <see cref="T:Microsoft.Owin.Security.AuthenticationProperties" /> запроса</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Google.IGoogleAuthenticationProvider.Authenticated(Microsoft.Owin.Security.Google.GoogleAuthenticatedContext)">
+      <summary>Вызывается, если пользователь успешно проходит проверку подлинности Google</summary>
+      <returns>
+        <see cref="T:System.Threading.Tasks.Task" />, представляющий завершенную операцию.</returns>
+      <param name="context">Содержит сведения о сеансе входа и <see cref="T:System.Security.Claims.ClaimsIdentity" /> пользователя.</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Google.IGoogleAuthenticationProvider.ReturnEndpoint(Microsoft.Owin.Security.Google.GoogleReturnEndpointContext)">
+      <summary>Вызывает перед тем, как <see cref="T:System.Security.Claims.ClaimsIdentity" /> сохраняется в локальном файле cookie и браузер перенаправляется по исходному запрошенному URL-адресу.</summary>
+      <returns>
+        <see cref="T:System.Threading.Tasks.Task" />, представляющий завершенную операцию.</returns>
+      <param name="context">Содержит сведения о сеансе входа и <see cref="T:System.Security.Claims.ClaimsIdentity" /> пользователя.</param>
+    </member>
+    <member name="T:Microsoft.Owin.Security.Google.IGoogleOAuth2AuthenticationProvider">
+      <summary>Указывает методы обратного вызова, которые вызывает <see cref="T:Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticationMiddleware" />, чтобы обеспечить контроль разработчика над процессом проверки подлинности./&amp;amp;gt;</summary>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Google.IGoogleOAuth2AuthenticationProvider.ApplyRedirect(Microsoft.Owin.Security.Google.GoogleOAuth2ApplyRedirectContext)">
+      <summary>Вызывается, когда запросе приводит к перенаправлению в конечную точку проверки подлинности в ПО промежуточного слоя Google OAuth 2.0</summary>
+      <param name="context">Содержит универсальный код ресурса (URI) и <see cref="T:Microsoft.Owin.Security.AuthenticationProperties" /> запроса</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Google.IGoogleOAuth2AuthenticationProvider.Authenticated(Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticatedContext)">
+      <summary>Вызывается, если пользователь успешно проходит проверку подлинности Google</summary>
+      <returns>
+        <see cref="T:System.Threading.Tasks.Task" />, представляющий завершенную операцию.</returns>
+      <param name="context">Содержит сведения о сеансе входа и <see cref="T:System.Security.Claims.ClaimsIdentity" /> пользователя.</param>
+    </member>
+    <member name="M:Microsoft.Owin.Security.Google.IGoogleOAuth2AuthenticationProvider.ReturnEndpoint(Microsoft.Owin.Security.Google.GoogleOAuth2ReturnEndpointContext)">
+      <summary>Вызывает перед тем, как <see cref="T:System.Security.Claims.ClaimsIdentity" /> сохраняется в локальном файле cookie и браузер перенаправляется по исходному запрошенному URL-адресу.</summary>
+      <returns>
+        <see cref="T:System.Threading.Tasks.Task" />, представляющий завершенную операцию.</returns>
+      <param name="context">Содержит контекстные сведения и билет проверки подлинности возвращаемой конечной точки.</param>
+    </member>
+    <member name="T:Owin.GoogleAuthenticationExtensions">
+      <summary>Методы расширения для использования <see cref="T:Microsoft.Owin.Security.Google.GoogleAuthenticationMiddleware" /></summary>
+    </member>
+    <member name="M:Owin.GoogleAuthenticationExtensions.UseGoogleAuthentication(Owin.IAppBuilder)">
+      <summary>Проверка подлинности пользователей с помощью Google OpenId</summary>
+      <returns>Обновленный <see cref="T:Owin.IAppBuilder" /></returns>
+      <param name="app">
+        <see cref="T:Owin.IAppBuilder" />, переданный в метод конфигурации</param>
+    </member>
+    <member name="M:Owin.GoogleAuthenticationExtensions.UseGoogleAuthentication(Owin.IAppBuilder,Microsoft.Owin.Security.Google.GoogleAuthenticationOptions)">
+      <summary>Проверка подлинности пользователей с помощью Google OpenId</summary>
+      <returns>Обновленный <see cref="T:Owin.IAppBuilder" /></returns>
+      <param name="app">
+        <see cref="T:Owin.IAppBuilder" />, переданный в метод конфигурации</param>
+      <param name="options">Параметры конфигурации ПО промежуточного слоя</param>
+    </member>
+    <member name="M:Owin.GoogleAuthenticationExtensions.UseGoogleAuthentication(Owin.IAppBuilder,Microsoft.Owin.Security.Google.GoogleOAuth2AuthenticationOptions)">
+      <summary>Проверка подлинности пользователей с помощью Google OAuth 2.0</summary>
+      <returns>Обновленный <see cref="T:Owin.IAppBuilder" /></returns>
+      <param name="app">
+        <see cref="T:Owin.IAppBuilder" />, переданный в метод конфигурации</param>
+      <param name="options">Параметры конфигурации ПО промежуточного слоя</param>
+    </member>
+    <member name="M:Owin.GoogleAuthenticationExtensions.UseGoogleAuthentication(Owin.IAppBuilder,System.String,System.String)">
+      <summary>Проверка подлинности пользователей с помощью Google OAuth 2.0</summary>
+      <returns>Обновленный <see cref="T:Owin.IAppBuilder" /></returns>
+      <param name="app">
+        <see cref="T:Owin.IAppBuilder" />, переданный в метод конфигурации</param>
+      <param name="clientId">Идентификатор клиента, присвоенный Google</param>
+      <param name="clientSecret">Секрет клиента, присвоенный Google</param>
+    </member>
+  </members>
+</doc>
