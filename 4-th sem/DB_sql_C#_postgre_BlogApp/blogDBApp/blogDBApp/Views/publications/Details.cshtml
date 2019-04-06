@@ -1,0 +1,66 @@
+﻿@model blogDBApp.Models.publications
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>publications</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.text)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.text)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.rating)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.rating)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.themes.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.themes.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.users.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.users.name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

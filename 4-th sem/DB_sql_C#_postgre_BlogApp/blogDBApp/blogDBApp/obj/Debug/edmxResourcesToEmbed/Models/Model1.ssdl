@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Хранилище blogDataBaseModel" Provider="Npgsql" ProviderManifestToken="11.2" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="comments">
+    <Key>
+      <PropertyRef Name=" id" />
+    </Key>
+    <Property Name=" id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="text" Type="varchar" MaxLength="1024" Nullable="false" />
+    <Property Name="rating" Type="int4" Nullable="false" />
+    <Property Name="date" Type="date" Nullable="false" />
+    <Property Name="publication" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="user" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+  </EntityType>
+  <EntityType Name="messages">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="sender" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="receiver" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="varchar" MaxLength="64" Nullable="false" />
+    <Property Name="date" Type="date" Nullable="false" />
+    <Property Name="text" Type="varchar" MaxLength="8192" Nullable="false" />
+  </EntityType>
+  <EntityType Name="publications">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="varchar" MaxLength="32" Nullable="false" />
+    <Property Name="text" Type="varchar" MaxLength="100000" Nullable="false" />
+    <Property Name="rating" Type="int4" Nullable="false" />
+    <Property Name="date" Type="date" Nullable="false" />
+    <Property Name="user" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="theme" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+  </EntityType>
+  <EntityType Name="themes">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="varchar" MaxLength="16" Nullable="false" />
+  </EntityType>
+  <EntityType Name="users">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="varchar" MaxLength="32" Nullable="false" />
+    <Property Name="mail" Type="varchar" MaxLength="32" Nullable="false" />
+    <Property Name="about" Type="varchar" MaxLength="512" Nullable="false" />
+    <Property Name="isModer" Type="bool" Nullable="false" />
+  </EntityType>
+  <Association Name="commentPublicationFK">
+    <End Role="publications" Type="Self.publications" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="comments" Type="Self.comments" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="publications">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="comments">
+        <PropertyRef Name="publication" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="commentUserFK">
+    <End Role="users" Type="Self.users" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="comments" Type="Self.comments" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="comments">
+        <PropertyRef Name="user" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="messageSenderFK">
+    <End Role="users" Type="Self.users" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="messages" Type="Self.messages" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="messages">
+        <PropertyRef Name="sender" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="publicationThemeFK">
+    <End Role="themes" Type="Self.themes" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="publications" Type="Self.publications" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="themes">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="publications">
+        <PropertyRef Name="theme" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="publicationUserFK">
+    <End Role="users" Type="Self.users" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="publications" Type="Self.publications" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="publications">
+        <PropertyRef Name="user" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Хранилище blogDataBaseModelContainer">
+    <EntitySet Name="comments" EntityType="Self.comments" Schema="public" store:Type="Tables" />
+    <EntitySet Name="messages" EntityType="Self.messages" Schema="public" store:Type="Tables" />
+    <EntitySet Name="publications" EntityType="Self.publications" Schema="public" store:Type="Tables" />
+    <EntitySet Name="themes" EntityType="Self.themes" Schema="public" store:Type="Tables" />
+    <EntitySet Name="users" EntityType="Self.users" Schema="public" store:Type="Tables" />
+    <AssociationSet Name="commentPublicationFK" Association="Self.commentPublicationFK">
+      <End Role="publications" EntitySet="publications" />
+      <End Role="comments" EntitySet="comments" />
+    </AssociationSet>
+    <AssociationSet Name="commentUserFK" Association="Self.commentUserFK">
+      <End Role="users" EntitySet="users" />
+      <End Role="comments" EntitySet="comments" />
+    </AssociationSet>
+    <AssociationSet Name="messageSenderFK" Association="Self.messageSenderFK">
+      <End Role="users" EntitySet="users" />
+      <End Role="messages" EntitySet="messages" />
+    </AssociationSet>
+    <AssociationSet Name="publicationThemeFK" Association="Self.publicationThemeFK">
+      <End Role="themes" EntitySet="themes" />
+      <End Role="publications" EntitySet="publications" />
+    </AssociationSet>
+    <AssociationSet Name="publicationUserFK" Association="Self.publicationUserFK">
+      <End Role="users" EntitySet="users" />
+      <End Role="publications" EntitySet="publications" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

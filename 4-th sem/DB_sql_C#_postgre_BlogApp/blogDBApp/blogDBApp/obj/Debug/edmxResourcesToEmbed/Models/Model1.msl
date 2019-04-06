@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="Хранилище blogDataBaseModelContainer" CdmEntityContainer="blogDataBaseEntities">
+    <EntitySetMapping Name="comments">
+      <EntityTypeMapping TypeName="blogDataBaseModel.comments">
+        <MappingFragment StoreEntitySet="comments">
+          <ScalarProperty Name="C_id" ColumnName=" id" />
+          <ScalarProperty Name="text" ColumnName="text" />
+          <ScalarProperty Name="rating" ColumnName="rating" />
+          <ScalarProperty Name="date" ColumnName="date" />
+          <ScalarProperty Name="publication" ColumnName="publication" />
+          <ScalarProperty Name="user" ColumnName="user" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="messages">
+      <EntityTypeMapping TypeName="blogDataBaseModel.messages">
+        <MappingFragment StoreEntitySet="messages">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="sender" ColumnName="sender" />
+          <ScalarProperty Name="receiver" ColumnName="receiver" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="date" ColumnName="date" />
+          <ScalarProperty Name="text" ColumnName="text" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="publications">
+      <EntityTypeMapping TypeName="blogDataBaseModel.publications">
+        <MappingFragment StoreEntitySet="publications">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="text" ColumnName="text" />
+          <ScalarProperty Name="rating" ColumnName="rating" />
+          <ScalarProperty Name="date" ColumnName="date" />
+          <ScalarProperty Name="user" ColumnName="user" />
+          <ScalarProperty Name="theme" ColumnName="theme" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="themes">
+      <EntityTypeMapping TypeName="blogDataBaseModel.themes">
+        <MappingFragment StoreEntitySet="themes">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="users">
+      <EntityTypeMapping TypeName="blogDataBaseModel.users">
+        <MappingFragment StoreEntitySet="users">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="mail" ColumnName="mail" />
+          <ScalarProperty Name="about" ColumnName="about" />
+          <ScalarProperty Name="isModer" ColumnName="isModer" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
