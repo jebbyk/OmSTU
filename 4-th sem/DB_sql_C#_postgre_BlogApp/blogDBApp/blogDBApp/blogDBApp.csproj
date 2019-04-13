@@ -219,9 +219,9 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\messagesController.cs" />
-    <Compile Include="Controllers\myController.cs" />
     <Compile Include="Controllers\publicationsController.cs" />
     <Compile Include="Controllers\themesController.cs" />
+    <Compile Include="Controllers\themesListController.cs" />
     <Compile Include="Controllers\usersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -360,7 +360,8 @@
     <Content Include="Views\comments\Details.cshtml" />
     <Content Include="Views\comments\Edit.cshtml" />
     <Content Include="Views\comments\Index.cshtml" />
-    <Content Include="Views\my\Index.cshtml" />
+    <Content Include="Views\themesList\themesList.cshtml" />
+    <Content Include="Views\themesList\themePublications.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
