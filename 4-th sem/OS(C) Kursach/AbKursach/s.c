@@ -2,32 +2,29 @@
 #include <stdio.h>
 #include <math.h>
 
-HANDLE hstdout;
-DWORD actlen;
-CRITICAL_SECTION csec;
+HANDLE hstdout;//хендл стандартного вывода
 
-HINSTANCE hInstance;
-STARTUPINFO si;
+HINSTANCE hInstance;//для создания окна
+STARTUPINFO si;//информация о старте окна
 int nCmdShow;
-HWND hwnd;
-HDC hdc;
-MSG msg;
-WNDCLASS wc;
-char passChisloC[4] = "";
-int passChislo = 1;
-int curDigit = 0;
-int isRunning = 1;
+HWND hwnd;//дескриптор окна
+HDC hdc;//дескриптор для рисования
+MSG msg;//сообщение передаваемое окном
+WNDCLASS wc;//для создания окна
+char passChisloC[4] = "";//строка куда вводится число пассажиров
+int passChislo = 1;//число в котором преобразуется число пасиков из строки в цифру
+int curDigit = 0;//для вода числа пасиков тукущий вводимый разряд числа)
 
-HBRUSH brushGreen;
+HBRUSH brushGreen;//кисти для заливки разными цветами
 HBRUSH brushGray;
 HBRUSH brushBlue;
 HBRUSH brushBlack;
 HBRUSH brushLightBlue;
 HBRUSH brushWhite;
 
-HPEN pen;
+HPEN pen;//карандаш для рисования линий
 
-POINT samoletForma[] = {
+POINT samoletForma[] = {//координаты точек по которым строится форма самолета
     {0,24},
     {2, 22},
     {4, 5},
@@ -42,30 +39,29 @@ POINT samoletForma[] = {
     {-4, 5},
     {-2, 22}
 };
-POINT samoletPosRis;
-float samoletPosX;
+POINT samoletPosRis;//позиция самолета для рисования
+float samoletPosX;//уточненная позиция самолета(нужно для нормлаьного перемещения)
 float samoletPosY;
 
-POINT samoletReis;
-BOOL samoletStop;
-BOOL samoletPolet;
-int samoletPass;
-float samoletUgol;
-int samoletGorodTekush = 0;
-int samoletSon = 0;
-float samoletScorost = 0;
+POINT samoletReis;//позиция куда самолету надо лететь
+BOOL samoletStop;//стоит ли самолет на стоянке
+BOOL samoletPolet;//или же летит
+int samoletPass;//число пасиков в самолете
+int samoletGorodTekush = 0;//текущий город в котром находится самолет
+int samoletSon = 0;//сон самолета(для ожидания)
+float samoletScorost = 0;//скорость самолета
 
-int tScorost  = 30;
+int tScorost  = 30;//скорость и плавность анимации
 
 char text[12] = "";
 
 
-POINT gorod1Pos = { 128, 128};
+POINT gorod1Pos = { 128, 128};//позиции городов 
 POINT gorod2Pos = { 620, 200};
 POINT gorod3Pos = { 500, 600};
 POINT gorod4Pos = { 200, 580};
 
-POINT oblast1Forma[] = {
+POINT oblast1Forma[] = {//координаты с формами для зеленых и серых областей
     {-100, 0},
     {-80, -20},
     {-30, -25},
@@ -248,7 +244,7 @@ POINT gorod4Forma[] = {
 
 
 
-HRGN oblast1;
+HRGN oblast1;//переменные которые буду хранить неподсредственно фигуру областей
 HRGN gorod1;
 HRGN oblast2;
 HRGN gorod2;
@@ -261,98 +257,98 @@ HANDLE hmtx;
 
 
 
-typedef struct {
-    float fx;
+typedef struct {//структура с данными об отдельном пассажире
+    float fx;//точные координаты (тоже для перемещения)
     float fy;
-    int x;
+    int x;//целочисленные координаты для риосвания
     int y;
     int cx;
     int cy;
-    BOOL walkAeroport;
-    BOOL walkGorod;
-    BOOL samolet;
-    BOOL ojidanie;
-    BOOL son;
-    int sonDlinna;
-    int gorodTekush;
+    BOOL walkAeroport;//к аеропорту
+    BOOL walkGorod;//к гоороду
+    BOOL samolet;//в самолете
+    BOOL ojidanie;// ждет самолета
+    BOOL son;//спит в городе
+    int sonDlinna;//число сколько еще спать
+    int gorodTekush;//городо в котором пассажир находится
 }passajir;
 
-passajir passajiry[1024];
+passajir passajiry[1024];//массив с пассажирами
 
-void passajirFunction(void *arg)
+void passajirFunction(void *arg)//функция пассажира (с ней тред запускается)
 {
     srand(arg);
-    int i = (int)arg;
-    passajiry[i].cx = gorod1Pos.x;
+    int i = (int)arg;//передаем аргумент, по которому определяем какой именно элемент массива модифицеровать
+    passajiry[i].cx = gorod1Pos.x;//указываем начальные целевые координаты
     passajiry[i].cy = gorod1Pos.y;
-    passajiry[i].gorodTekush = 0;
-    passajiry[i].walkAeroport = TRUE;
+    passajiry[i].gorodTekush = 0;//город
+    passajiry[i].walkAeroport = TRUE;//и начальное состояние, что он идет в аеропорт
 
 
     while(TRUE)
     {
-        if(passajiry[i].walkAeroport == TRUE)
+        if(passajiry[i].walkAeroport == TRUE)//если пассажир сейчас идет в аеропрт
         {
             float dx;
             float dy;
-            dx = passajiry[i].cx - passajiry[i].fx;
+            dx = passajiry[i].cx - passajiry[i].fx;//берем вектор по направлению к целевой точке
             dy = passajiry[i].cy - passajiry[i].fy;
             
-            float l = sqrt(dx*dx + dy*dy);
+            float l = sqrt(dx*dx + dy*dy);// узнаем рассатояние
             if(l > 1.0f)
             {
-                dx /= l;
+                dx /= l;//нормализуем вектор
                 dy /= l;
             }
 
-            passajiry[i].fx += dx;
+            passajiry[i].fx += dx;//перемещаем человека
             passajiry[i].fy += dy;
             passajiry[i].x = passajiry[i].fx;
             passajiry[i].y = passajiry[i].fy;
 
             if(passajiry[i].fx > passajiry[i].cx -1 && passajiry[i].fx < passajiry[i].cx + 1 &&        passajiry[i].fy > passajiry[i].cy -1 && passajiry[i].fy < passajiry[i].cy + 1)
             {
-                passajiry[i].walkAeroport = FALSE;
+                passajiry[i].walkAeroport = FALSE;//меняем его состояние на ожидание, если он очень близко к целевой точке
                 passajiry[i].ojidanie = TRUE;
             }
 
         }
-        if(passajiry[i].ojidanie == TRUE)
+        if(passajiry[i].ojidanie == TRUE)//если сейчас ожидание
         {
             float dx;
             float dy;
             dx = samoletPosX - passajiry[i].fx;
             dy = samoletPosY - passajiry[i].fy;
-            float l = sqrt(dx*dx + dy*dy);
+            float l = sqrt(dx*dx + dy*dy);//так же беерм вектор до самолета и узнаем расстояние
             WaitForSingleObject(hmtx, INFINITE);
-            if(l < 4.0f && samoletPass < 4 && samoletStop == TRUE)
+            if(l < 4.0f && samoletPass < 4 && samoletStop == TRUE)//если оно очень маленькое то пытаемся сесть в самолет обязательно блокируя всем остальным людям доступ к самолету
             {
                 
                 passajiry[i].ojidanie = FALSE;
                 passajiry[i].samolet = TRUE;
                 samoletPass++;
-                passajiry[i].sonDlinna = 200;
+                passajiry[i].sonDlinna = 200;//счетчик чтоб человек не спрыгивал с самолета когда не надо
                 
             }
-            ReleaseMutex(hmtx);
+            ReleaseMutex(hmtx);//потом отпускаем мьютекс
         }
-        if(passajiry[i].samolet == TRUE)
+        if(passajiry[i].samolet == TRUE)//если пассажир в самолете
         {
             passajiry[i].sonDlinna--;
-            passajiry[i].fx = samoletPosX;
+            passajiry[i].fx = samoletPosX;//перемещаем человека вместе с самолетом
             passajiry[i].fy = samoletPosY;
             passajiry[i].x = passajiry[i].fx;
             passajiry[i].y = passajiry[i].fy;
-            if(samoletStop == TRUE)
+            if(samoletStop == TRUE)//если самолет остановился
             {
-                if(passajiry[i].sonDlinna <=0)
+                if(passajiry[i].sonDlinna <=0)// и уже можно слазить
                 {
-                    passajiry[i].samolet = FALSE;
+                    passajiry[i].samolet = FALSE;//слазием с самолета
                     passajiry[i].gorodTekush = samoletGorodTekush;
                     passajiry[i].walkGorod = TRUE;
                     
                    
-                    if(passajiry[i].gorodTekush == 0)
+                    if(passajiry[i].gorodTekush == 0)//берем рандомную позицию по координатам города
                     {
                         passajiry[i].cx = (rand() % 100) + gorod1Pos.x - 50;
                         passajiry[i].cy = (rand() % 100) + gorod1Pos.y - 50;
@@ -375,11 +371,11 @@ void passajirFunction(void *arg)
                 }
             }
         }
-        if(passajiry[i].walkGorod == TRUE)
+        if(passajiry[i].walkGorod == TRUE)//если идем в город
         {
             float dx;
             float dy;
-            dx = passajiry[i].cx - passajiry[i].fx;
+            dx = passajiry[i].cx - passajiry[i].fx;//такое же перемещение по вектору до точки
             dy = passajiry[i].cy - passajiry[i].fy;
             
             float l = sqrt(dx*dx + dy*dy);
@@ -396,12 +392,12 @@ void passajirFunction(void *arg)
 
             if(passajiry[i].fx > passajiry[i].cx -1 && passajiry[i].fx < passajiry[i].cx + 1 &&        passajiry[i].fy > passajiry[i].cy -1 && passajiry[i].fy < passajiry[i].cy + 1)
             {
-                passajiry[i].walkGorod = FALSE;
+                passajiry[i].walkGorod = FALSE;//и если дошли, то засыпаем на долго
                 passajiry[i].son = TRUE;
                 passajiry[i].sonDlinna = rand() % 30000 + 30000;
                 Sleep(passajiry[i].sonDlinna);
                 passajiry[i].son = FALSE;
-                passajiry[i].walkAeroport = TRUE;
+                passajiry[i].walkAeroport = TRUE;//после того как проснулись, снова идем к аеропроту
                 
                 if(passajiry[i].gorodTekush == 0)
                 {
@@ -426,17 +422,17 @@ void passajirFunction(void *arg)
             }
         }
       
-        Sleep(1000/tScorost);
+        Sleep(1000/tScorost);//задержка между отедльными кадрами анимации
     }
 }
 
 
-void paintFunction()
+void paintFunction()//фнукция рисования
 {
-    Rectangle(hdc, 0,0,800,800);
+    Rectangle(hdc, 0,0,800,800);//монотонная заливка всего экрана
 
     
-    FillRgn(hdc, oblast1, brushGreen);
+    FillRgn(hdc, oblast1, brushGreen);//отрисоовка городов
     FillRgn(hdc, gorod1, brushGray);
 
     FillRgn(hdc, oblast2, brushGreen);
@@ -448,20 +444,20 @@ void paintFunction()
     FillRgn(hdc, oblast4, brushGreen);
     FillRgn(hdc, gorod4, brushGray);
 
-    POINT _samoletForma[sizeof(samoletForma)/8];
+    POINT _samoletForma[sizeof(samoletForma)/8];//берем форму самолета
     
-    for(int i = 0; i < sizeof(_samoletForma)/8; i++)
+    for(int i = 0; i < sizeof(_samoletForma)/8; i++)+//потом перемещаем ее в нужную позицию
     {
         _samoletForma[i].x = samoletForma[i].x + samoletPosRis.x;
         _samoletForma[i].y = samoletForma[i].y + samoletPosRis.y;
     }
-    HRGN samolet = CreatePolygonRgn(_samoletForma, sizeof(samoletForma)/8,WINDING );
+    HRGN samolet = CreatePolygonRgn(_samoletForma, sizeof(samoletForma)/8,WINDING );//и заливаем
     FillRgn(hdc, samolet, brushWhite);
 
     
     for(int i = 0; i < passChislo; i++)
     {
-        Rectangle(hdc, passajiry[i].x-1, passajiry[i].y-1, passajiry[i].x+1, passajiry[i].y+1);
+        Rectangle(hdc, passajiry[i].x-1, passajiry[i].y-1, passajiry[i].x+1, passajiry[i].y+1);//рисуем маленьких человечков
     }
 }
 
@@ -471,8 +467,8 @@ void paintFunction()
 
 void main()
 {
-    hmtx = CreateMutex(NULL, FALSE, NULL);
-    LRESULT WINAPI WinProc(HWND hwnd, UINT tmsg, WPARAM wParam, LPARAM lParam)
+    hmtx = CreateMutex(NULL, FALSE, NULL);//главный и единственный мьютекс
+    LRESULT WINAPI WinProc(HWND hwnd, UINT tmsg, WPARAM wParam, LPARAM lParam)//создание окна и считывание его событий
     {
        switch(tmsg)
         {
@@ -522,9 +518,9 @@ void main()
     if(!RegisterClass(&wc)) return;
     hwnd = CreateWindow("MyClass", "OurWindow", WS_OVERLAPPEDWINDOW, 0, 0, 800, 800, 0, 0, hInstance, NULL);
     hdc = GetDC(hwnd);
-    ShowWindow(hwnd, nCmdShow);
+    ShowWindow(hwnd, nCmdShow);//тут заканчивается создание окна
 
-    brushGreen = CreateSolidBrush(RGB(64,128, 32));
+    brushGreen = CreateSolidBrush(RGB(64,128, 32));//создаем кисточки
     brushBlue = CreateSolidBrush(RGB(32,128,255));
     brushGray = CreateSolidBrush(RGB(128,128,128));
     brushWhite = CreateSolidBrush(RGB(200,200,200));
@@ -533,7 +529,7 @@ void main()
     
 
 
-    char text1[] = "Vvedite chislo passajirov";
+    char text1[] = "Vvedite chislo passajirov";//ввод числа человечков
     TextOut(hdc, 32, 32, text1, sizeof(text1));
 
     while(GetMessage(&msg, 0, 0, 0) && curDigit > -1)
@@ -541,11 +537,11 @@ void main()
         DispatchMessage(&msg);
     }
 
-    sscanf(passChisloC, "%d", &passChislo);
+    sscanf(passChisloC, "%d", &passChislo);//преобразование полученной строки в цифру
 
 
   
-    for(int i = 0; i < sizeof(oblast1Forma)/8; i++)
+    for(int i = 0; i < sizeof(oblast1Forma)/8; i++)//расположение городов в нужных позициях
     {
         oblast1Forma[i].x += gorod1Pos.x;
         oblast1Forma[i].y += gorod1Pos.y;
@@ -586,7 +582,7 @@ void main()
         gorod4Forma[i].y += gorod4Pos.y;
     }
 
-    oblast1 = CreatePolygonRgn(oblast1Forma, sizeof(oblast1Forma)/8, WINDING);
+    oblast1 = CreatePolygonRgn(oblast1Forma, sizeof(oblast1Forma)/8, WINDING);//создания самих фигур для них
     gorod1 = CreatePolygonRgn(gorod1Forma, sizeof(gorod1Forma)/8, WINDING);
     oblast2 = CreatePolygonRgn(oblast2Forma, sizeof(oblast2Forma)/8, WINDING);
     gorod2 = CreatePolygonRgn(gorod2Forma, sizeof(gorod2Forma)/8, WINDING);
@@ -597,25 +593,25 @@ void main()
 
 
 
-    for(int i = 0; i < passChislo; i++)
+    for(int i = 0; i < passChislo; i++)//создание потоков с человечками
     {
-        passajir pas1;
+        passajir pas1;//создаем пассажира, настраиваем его параметры
         pas1.fx = rand() % 100 + gorod1Pos.x - 50;
         pas1.fy = rand() % 100 + gorod1Pos.y - 50;
         pas1.x = pas1.fx;
         pas1.y = pas1.fy;
         pas1.sonDlinna = rand()%30000 + 30000;
-        passajiry[i] = pas1;
+        passajiry[i] = pas1;//ложим его  в масссива
         HANDLE hthr;
-        hthr = (HANDLE)_beginthread(passajirFunction, 0,(void*)i);
+        hthr = (HANDLE)_beginthread(passajirFunction, 0,(void*)i);//непосредественнно запуск потока и передаем номер ячейки (i) массива с этим пассажиром
     }
     
     samoletReis.x = gorod4Pos.x;
     samoletReis.y = gorod4Pos.y;
     samoletPolet = TRUE;
-    samoletGorodTekush = 3;
+    samoletGorodTekush = 3;//создание первоначального самолета с его состоянием
 
-    while(TRUE)
+    while(TRUE)//в данном цикле описан алгоритм работы самолета
     {
         if(samoletPolet == TRUE)
         {
@@ -626,17 +622,17 @@ void main()
             
             float l = sqrt(dx*dx + dy*dy);
             dx /= l;
-            dy /= l;
+            dy /= l;//перемещение по вектору
 
             if(samoletScorost < l/10)
             {
-                samoletScorost++;
+                samoletScorost++;//ускорение до опр предела
             }else{
                 samoletScorost = l/10;
             }
             if(samoletScorost > 10)
             {
-                samoletScorost = 10;
+                samoletScorost = 10;//торможение если близко к цели
             }
             
 
@@ -648,23 +644,23 @@ void main()
 
             if(samoletPosX > samoletReis.x - 1 && samoletPosX < samoletReis.x + 1 &&     samoletPosY > samoletReis.y - 1 && samoletPosY < samoletReis.y + 1)    
             {
-                samoletPolet = FALSE;
+                samoletPolet = FALSE;//елси очень очень близко к цели, то самолет на идет на стоянку
                 samoletPass = 0;
-                samoletSon = 60;
+                samoletSon = 60;//ждет
                 samoletStop = TRUE;
             }
         }
 
-        if(samoletSon > 0)
+        if(samoletSon > 0)//пока самолет на стоянке
         {
             samoletSon--;
         }else{
-            if(samoletGorodTekush == 0 && samoletPolet == FALSE) 
+            if(samoletGorodTekush == 0 && samoletPolet == FALSE) //елси уже закончилось время ожидания
             {
-                samoletGorodTekush = 1;
-                samoletReis.x = gorod2Pos.x;
+                samoletGorodTekush = 1;//выбирает следующий город
+                samoletReis.x = gorod2Pos.x;//координаты
                 samoletReis.y = gorod2Pos.y;
-                samoletPolet = TRUE;
+                samoletPolet = TRUE;//и летит
                 samoletStop = FALSE;
             }
             if(samoletGorodTekush == 1 && samoletPolet == FALSE) 
@@ -693,13 +689,13 @@ void main()
             }   
         }
 
-        if(PeekMessage(&msg, hwnd,  0, 0, PM_REMOVE))
+        if(PeekMessage(&msg, hwnd,  0, 0, PM_REMOVE))//мониторим события окна
         {
             DispatchMessage(&msg);
         }
 
-        paintFunction();
+        paintFunction();//рисуем все
 
-        Sleep(1000/tScorost);
+        Sleep(1000/tScorost);//задержка между кадрами
     }
 }
