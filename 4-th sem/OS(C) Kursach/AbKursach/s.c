@@ -1,5 +1,6 @@
 #include <windows.h>
 #include <stdio.h>
+#include <math.h>
 
 HANDLE hstdout;
 DWORD actlen;
@@ -41,20 +42,28 @@ POINT samoletForma[] = {
     {-4, 5},
     {-2, 22}
 };
-POINT samoletPos;
+POINT samoletPosRis;
+float samoletPosX;
+float samoletPosY;
+
 POINT samoletReis;
-float samoletSpeed = 0.5;
 BOOL samoletStop;
-BOOL samoletMove;
+BOOL samoletPolet;
 int samoletPass;
 float samoletUgol;
+int samoletGorodTekush = 0;
+int samoletSon = 0;
+float samoletScorost = 0;
 
+int tScorost  = 30;
+
+char text[12] = "";
 
 
 POINT gorod1Pos = { 128, 128};
-POINT gorod2Pos = { 1000, 200};
-POINT gorod3Pos = { 256, 600};
-POINT gorod4Pos = { 900, 580};
+POINT gorod2Pos = { 620, 200};
+POINT gorod3Pos = { 500, 600};
+POINT gorod4Pos = { 200, 580};
 
 POINT oblast1Forma[] = {
     {-100, 0},
@@ -237,9 +246,24 @@ POINT gorod4Forma[] = {
         {-44, 34}
     };
 
-HANDLE hmtxShow;
+
+
+HRGN oblast1;
+HRGN gorod1;
+HRGN oblast2;
+HRGN gorod2;
+HRGN oblast3;
+HRGN gorod3;
+HRGN oblast4;
+HRGN gorod4;
+    
+HANDLE hmtx;
+
+
 
 typedef struct {
+    float fx;
+    float fy;
     int x;
     int y;
     int cx;
@@ -247,76 +271,197 @@ typedef struct {
     BOOL walkAeroport;
     BOOL walkGorod;
     BOOL samolet;
+    BOOL ojidanie;
     BOOL son;
     int sonDlinna;
+    int gorodTekush;
 }passajir;
 
-passajir passajiry[8192];
+passajir passajiry[1024];
 
 void passajirFunction(void *arg)
 {
+    srand(arg);
     int i = (int)arg;
-    if(passajiry[i].walkAeroport == TRUE)
+    passajiry[i].cx = gorod1Pos.x;
+    passajiry[i].cy = gorod1Pos.y;
+    passajiry[i].gorodTekush = 0;
+    passajiry[i].walkAeroport = TRUE;
+
+
+    while(TRUE)
     {
-        
-    }
-
-    int i = (int)arg;
-    while(1)
-    {
-        passajiry[i].x++;
-        passajiry[i].y++;
-
-
-        WaitForSingleObject(hmtxShow, INFINITE);
-        Rectangle(hdc, passajiry[i].x-4, passajiry[i].y-4, passajiry[i].x+4, passajiry[i].y+4);
-        ReleaseMutex(hmtxShow);
-
-        /*int s,h = 1024;
-        for(int n = 1; n < h; n++)
+        if(passajiry[i].walkAeroport == TRUE)
         {
-            for(int m = 1; m < h; m++ )
+            float dx;
+            float dy;
+            dx = passajiry[i].cx - passajiry[i].fx;
+            dy = passajiry[i].cy - passajiry[i].fy;
+            
+            float l = sqrt(dx*dx + dy*dy);
+            if(l > 1.0f)
             {
-                s = m*n + n*m - n%m * n/m;
+                dx /= l;
+                dy /= l;
             }
-        }*/
 
-        Sleep(25);
+            passajiry[i].fx += dx;
+            passajiry[i].fy += dy;
+            passajiry[i].x = passajiry[i].fx;
+            passajiry[i].y = passajiry[i].fy;
+
+            if(passajiry[i].fx > passajiry[i].cx -1 && passajiry[i].fx < passajiry[i].cx + 1 &&        passajiry[i].fy > passajiry[i].cy -1 && passajiry[i].fy < passajiry[i].cy + 1)
+            {
+                passajiry[i].walkAeroport = FALSE;
+                passajiry[i].ojidanie = TRUE;
+            }
+
+        }
+        if(passajiry[i].ojidanie == TRUE)
+        {
+            float dx;
+            float dy;
+            dx = samoletPosX - passajiry[i].fx;
+            dy = samoletPosY - passajiry[i].fy;
+            float l = sqrt(dx*dx + dy*dy);
+            WaitForSingleObject(hmtx, INFINITE);
+            if(l < 4.0f && samoletPass < 4 && samoletStop == TRUE)
+            {
+                
+                passajiry[i].ojidanie = FALSE;
+                passajiry[i].samolet = TRUE;
+                samoletPass++;
+                passajiry[i].sonDlinna = 200;
+                
+            }
+            ReleaseMutex(hmtx);
+        }
+        if(passajiry[i].samolet == TRUE)
+        {
+            passajiry[i].sonDlinna--;
+            passajiry[i].fx = samoletPosX;
+            passajiry[i].fy = samoletPosY;
+            passajiry[i].x = passajiry[i].fx;
+            passajiry[i].y = passajiry[i].fy;
+            if(samoletStop == TRUE)
+            {
+                if(passajiry[i].sonDlinna <=0)
+                {
+                    passajiry[i].samolet = FALSE;
+                    passajiry[i].gorodTekush = samoletGorodTekush;
+                    passajiry[i].walkGorod = TRUE;
+                    
+                   
+                    if(passajiry[i].gorodTekush == 0)
+                    {
+                        passajiry[i].cx = (rand() % 100) + gorod1Pos.x - 50;
+                        passajiry[i].cy = (rand() % 100) + gorod1Pos.y - 50;
+                    }
+                    if(passajiry[i].gorodTekush == 1)
+                    {
+                        passajiry[i].cx = (rand() % 100) + gorod2Pos.x - 50;
+                        passajiry[i].cy = (rand() % 100) + gorod2Pos.y - 50;
+                    }
+                    if(passajiry[i].gorodTekush == 2)
+                    {
+                        passajiry[i].cx = (rand() % 100) + gorod3Pos.x - 50;
+                        passajiry[i].cy = (rand() % 100) + gorod3Pos.y - 50;
+                    }
+                    if(passajiry[i].gorodTekush == 3)
+                    {
+                        passajiry[i].cx = (rand() % 100) + gorod4Pos.x - 50;
+                        passajiry[i].cy = (rand() % 100) + gorod4Pos.y - 50;
+                    }
+                }
+            }
+        }
+        if(passajiry[i].walkGorod == TRUE)
+        {
+            float dx;
+            float dy;
+            dx = passajiry[i].cx - passajiry[i].fx;
+            dy = passajiry[i].cy - passajiry[i].fy;
+            
+            float l = sqrt(dx*dx + dy*dy);
+            if(l > 1.0f)
+            {
+                dx /= l;
+                dy /= l;
+            }
+
+            passajiry[i].fx += dx;
+            passajiry[i].fy += dy;
+            passajiry[i].x = passajiry[i].fx;
+            passajiry[i].y = passajiry[i].fy;
+
+            if(passajiry[i].fx > passajiry[i].cx -1 && passajiry[i].fx < passajiry[i].cx + 1 &&        passajiry[i].fy > passajiry[i].cy -1 && passajiry[i].fy < passajiry[i].cy + 1)
+            {
+                passajiry[i].walkGorod = FALSE;
+                passajiry[i].son = TRUE;
+                passajiry[i].sonDlinna = rand() % 30000 + 30000;
+                Sleep(passajiry[i].sonDlinna);
+                passajiry[i].son = FALSE;
+                passajiry[i].walkAeroport = TRUE;
+                
+                if(passajiry[i].gorodTekush == 0)
+                {
+                    passajiry[i].cx = gorod1Pos.x;
+                    passajiry[i].cy = gorod1Pos.y;
+                }
+                if(passajiry[i].gorodTekush == 1)
+                {
+                    passajiry[i].cx = gorod2Pos.x;
+                    passajiry[i].cy = gorod2Pos.y;
+                }
+                if(passajiry[i].gorodTekush == 2)
+                {
+                    passajiry[i].cx = gorod3Pos.x;
+                    passajiry[i].cy = gorod3Pos.y;
+                }
+                if(passajiry[i].gorodTekush == 3)
+                {
+                    passajiry[i].cx = gorod4Pos.x;
+                    passajiry[i].cy = gorod4Pos.y;
+                }
+            }
+        }
+      
+        Sleep(1000/tScorost);
     }
 }
 
 
 void paintFunction()
 {
-    Rectangle(hdc, 0,0,1280,720);
+    Rectangle(hdc, 0,0,800,800);
 
-    HRGN oblast1 = CreatePolygonRgn(oblast1Forma, sizeof(oblast1Forma)/8, WINDING);
+    
     FillRgn(hdc, oblast1, brushGreen);
-    HRGN gorod1 = CreatePolygonRgn(gorod1Forma, sizeof(gorod1Forma)/8, WINDING);
     FillRgn(hdc, gorod1, brushGray);
 
-    HRGN oblast2 = CreatePolygonRgn(oblast2Forma, sizeof(oblast2Forma)/8, WINDING);
     FillRgn(hdc, oblast2, brushGreen);
-    HRGN gorod2 = CreatePolygonRgn(gorod2Forma, sizeof(gorod2Forma)/8, WINDING);
     FillRgn(hdc, gorod2, brushGray);
 
-    HRGN oblast3 = CreatePolygonRgn(oblast3Forma, sizeof(oblast3Forma)/8, WINDING);
     FillRgn(hdc, oblast3, brushGreen);
-    HRGN gorod3 = CreatePolygonRgn(gorod3Forma, sizeof(gorod3Forma)/8, WINDING);
     FillRgn(hdc, gorod3, brushGray);
 
-    HRGN oblast4 = CreatePolygonRgn(oblast4Forma, sizeof(oblast4Forma)/8, WINDING);
     FillRgn(hdc, oblast4, brushGreen);
-    HRGN gorod4 = CreatePolygonRgn(gorod4Forma, sizeof(gorod4Forma)/8, WINDING);
     FillRgn(hdc, gorod4, brushGray);
 
-    HRGN samolet = CreatePolygonRgn(samoletForma, sizeof(samoletForma)/8,WINDING );
+    POINT _samoletForma[sizeof(samoletForma)/8];
+    
+    for(int i = 0; i < sizeof(_samoletForma)/8; i++)
+    {
+        _samoletForma[i].x = samoletForma[i].x + samoletPosRis.x;
+        _samoletForma[i].y = samoletForma[i].y + samoletPosRis.y;
+    }
+    HRGN samolet = CreatePolygonRgn(_samoletForma, sizeof(samoletForma)/8,WINDING );
     FillRgn(hdc, samolet, brushWhite);
 
     
     for(int i = 0; i < passChislo; i++)
     {
-        Rectangle(hdc, passajiry[i].x-4, passajiry[i].y-4, passajiry[i].x+4, passajiry[i].y+4);
+        Rectangle(hdc, passajiry[i].x-1, passajiry[i].y-1, passajiry[i].x+1, passajiry[i].y+1);
     }
 }
 
@@ -326,7 +471,7 @@ void paintFunction()
 
 void main()
 {
-    hmtxShow = CreateMutex(NULL, FALSE, NULL);
+    hmtx = CreateMutex(NULL, FALSE, NULL);
     LRESULT WINAPI WinProc(HWND hwnd, UINT tmsg, WPARAM wParam, LPARAM lParam)
     {
        switch(tmsg)
@@ -375,7 +520,7 @@ void main()
     wc.hInstance = hInstance;
    
     if(!RegisterClass(&wc)) return;
-    hwnd = CreateWindow("MyClass", "OurWindow", WS_OVERLAPPEDWINDOW, 0, 0, 1280, 720, 0, 0, hInstance, NULL);
+    hwnd = CreateWindow("MyClass", "OurWindow", WS_OVERLAPPEDWINDOW, 0, 0, 800, 800, 0, 0, hInstance, NULL);
     hdc = GetDC(hwnd);
     ShowWindow(hwnd, nCmdShow);
 
@@ -384,6 +529,8 @@ void main()
     brushGray = CreateSolidBrush(RGB(128,128,128));
     brushWhite = CreateSolidBrush(RGB(200,200,200));
     pen = CreatePen(PS_SOLID, 1, RGB(0,0,0)); 
+
+    
 
 
     char text1[] = "Vvedite chislo passajirov";
@@ -439,28 +586,113 @@ void main()
         gorod4Forma[i].y += gorod4Pos.y;
     }
 
-    for(int i = 0; i < sizeof(samoletForma)/8; i++)
-    {
-        samoletForma[i].x += 650;
-        samoletForma[i].y += 320;
-    }
+    oblast1 = CreatePolygonRgn(oblast1Forma, sizeof(oblast1Forma)/8, WINDING);
+    gorod1 = CreatePolygonRgn(gorod1Forma, sizeof(gorod1Forma)/8, WINDING);
+    oblast2 = CreatePolygonRgn(oblast2Forma, sizeof(oblast2Forma)/8, WINDING);
+    gorod2 = CreatePolygonRgn(gorod2Forma, sizeof(gorod2Forma)/8, WINDING);
+    oblast3 = CreatePolygonRgn(oblast3Forma, sizeof(oblast3Forma)/8, WINDING);
+    gorod3 = CreatePolygonRgn(gorod3Forma, sizeof(gorod3Forma)/8, WINDING);
+    oblast4 = CreatePolygonRgn(oblast4Forma, sizeof(oblast4Forma)/8, WINDING);
+    gorod4 = CreatePolygonRgn(gorod4Forma, sizeof(gorod4Forma)/8, WINDING);
 
 
 
     for(int i = 0; i < passChislo; i++)
     {
         passajir pas1;
-        pas1.x = 1000/passChislo * i ;
-        pas1.y = 0;
+        pas1.fx = rand() % 100 + gorod1Pos.x - 50;
+        pas1.fy = rand() % 100 + gorod1Pos.y - 50;
+        pas1.x = pas1.fx;
+        pas1.y = pas1.fy;
+        pas1.sonDlinna = rand()%30000 + 30000;
         passajiry[i] = pas1;
         HANDLE hthr;
-        unsigned long lthr;
         hthr = (HANDLE)_beginthread(passajirFunction, 0,(void*)i);
     }
     
+    samoletReis.x = gorod4Pos.x;
+    samoletReis.y = gorod4Pos.y;
+    samoletPolet = TRUE;
+    samoletGorodTekush = 3;
 
-    while(1)
+    while(TRUE)
     {
+        if(samoletPolet == TRUE)
+        {
+            float dx;
+            float dy;
+            dx = (double)samoletReis.x - samoletPosX;
+            dy = (double)samoletReis.y - samoletPosY;
+            
+            float l = sqrt(dx*dx + dy*dy);
+            dx /= l;
+            dy /= l;
+
+            if(samoletScorost < l/10)
+            {
+                samoletScorost++;
+            }else{
+                samoletScorost = l/10;
+            }
+            if(samoletScorost > 10)
+            {
+                samoletScorost = 10;
+            }
+            
+
+
+            samoletPosX += dx*samoletScorost;
+            samoletPosY += dy*samoletScorost;
+            samoletPosRis.x = samoletPosX;
+            samoletPosRis.y = samoletPosY;
+
+            if(samoletPosX > samoletReis.x - 1 && samoletPosX < samoletReis.x + 1 &&     samoletPosY > samoletReis.y - 1 && samoletPosY < samoletReis.y + 1)    
+            {
+                samoletPolet = FALSE;
+                samoletPass = 0;
+                samoletSon = 60;
+                samoletStop = TRUE;
+            }
+        }
+
+        if(samoletSon > 0)
+        {
+            samoletSon--;
+        }else{
+            if(samoletGorodTekush == 0 && samoletPolet == FALSE) 
+            {
+                samoletGorodTekush = 1;
+                samoletReis.x = gorod2Pos.x;
+                samoletReis.y = gorod2Pos.y;
+                samoletPolet = TRUE;
+                samoletStop = FALSE;
+            }
+            if(samoletGorodTekush == 1 && samoletPolet == FALSE) 
+            {
+                samoletGorodTekush = 2;
+                samoletReis.x = gorod3Pos.x;
+                samoletReis.y = gorod3Pos.y;
+                samoletPolet = TRUE;
+                samoletStop = FALSE;
+            }
+            if(samoletGorodTekush == 2 && samoletPolet == FALSE) 
+            {
+                samoletGorodTekush = 3;
+                samoletReis.x = gorod4Pos.x;
+                samoletReis.y = gorod4Pos.y;
+                samoletPolet = TRUE;
+                samoletStop = FALSE;
+            }
+            if(samoletGorodTekush == 3 && samoletPolet == FALSE)
+            {
+                samoletGorodTekush = 0;
+                samoletReis.x = gorod1Pos.x;
+                samoletReis.y = gorod1Pos.y;
+                samoletPolet = TRUE;
+                samoletStop = FALSE;
+            }   
+        }
+
         if(PeekMessage(&msg, hwnd,  0, 0, PM_REMOVE))
         {
             DispatchMessage(&msg);
@@ -468,8 +700,6 @@ void main()
 
         paintFunction();
 
-        Sleep(50);
+        Sleep(1000/tScorost);
     }
-   
-
 }
