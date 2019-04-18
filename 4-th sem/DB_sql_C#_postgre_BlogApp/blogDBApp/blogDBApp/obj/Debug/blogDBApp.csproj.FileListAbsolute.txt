@@ -123,7 +123,6 @@ C:\Users\Jebbyk\Documents\GitHub\OmSTU\4-th sem\DB_sql_C#_postgre_BlogApp\blogDB
 C:\Users\Jebbyk\Documents\GitHub\OmSTU\4-th sem\DB_sql_C#_postgre_BlogApp\blogDBApp\blogDBApp\bin\ru\Microsoft.AspNet.Identity.Core.resources.dll
 C:\Users\Jebbyk\Documents\GitHub\OmSTU\4-th sem\DB_sql_C#_postgre_BlogApp\blogDBApp\blogDBApp\bin\ru\Microsoft.AspNet.Identity.Owin.resources.dll
 C:\Users\Jebbyk\Documents\GitHub\OmSTU\4-th sem\DB_sql_C#_postgre_BlogApp\blogDBApp\blogDBApp\bin\ru\Microsoft.AspNet.Identity.EntityFramework.resources.dll
-C:\Users\Jebbyk\Documents\GitHub\OmSTU\4-th sem\DB_sql_C#_postgre_BlogApp\blogDBApp\blogDBApp\obj\Debug\blogDBApp.csprojAssemblyReference.cache
 C:\Users\Jebbyk\Documents\GitHub\OmSTU\4-th sem\DB_sql_C#_postgre_BlogApp\blogDBApp\blogDBApp\obj\Debug\blogDBApp.csproj.CoreCompileInputs.cache
 C:\Users\Jebbyk\Documents\GitHub\OmSTU\4-th sem\DB_sql_C#_postgre_BlogApp\blogDBApp\blogDBApp\obj\Debug\blogDBApp.csproj.CopyComplete
 C:\Users\Jebbyk\Documents\GitHub\OmSTU\4-th sem\DB_sql_C#_postgre_BlogApp\blogDBApp\blogDBApp\obj\Debug\blogDBApp.dll
@@ -157,3 +156,4 @@ C:\Users\Jebbyk\Documents\GitHub\OmSTU\4-th sem\DB_sql_C#_postgre_BlogApp\blogDB
 C:\Users\Jebbyk\Documents\GitHub\OmSTU\4-th sem\DB_sql_C#_postgre_BlogApp\blogDBApp\blogDBApp\bin\System.Runtime.CompilerServices.Unsafe.xml
 C:\Users\Jebbyk\Documents\GitHub\OmSTU\4-th sem\DB_sql_C#_postgre_BlogApp\blogDBApp\blogDBApp\bin\System.Threading.Tasks.Extensions.xml
 C:\Users\Jebbyk\Documents\GitHub\OmSTU\4-th sem\DB_sql_C#_postgre_BlogApp\blogDBApp\blogDBApp\bin\System.ValueTuple.xml
+C:\Users\Jebbyk\Documents\GitHub\OmSTU\4-th sem\DB_sql_C#_postgre_BlogApp\blogDBApp\blogDBApp\obj\Debug\blogDBApp.csprojAssemblyReference.cache

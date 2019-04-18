@@ -1,7 +1,31 @@
-﻿@model blogDBApp.Models.publications
+﻿
+<h1>@Html.Raw((string)ViewBag.theme)</h1>
 
-@{
-    ViewBag.Title = @Html.DisplayFor(model => model.name);
-}
 
-<h2>@Html.DisplayFor(model => model.name)</h2>
+<table class="table">
+    <tr>
+        <td>
+            <h4>Name</h4>
+        </td>
+        <td>
+            <h4>Date</h4>
+        </td>
+        <td>
+            <h4>Rating</h4>
+        </td>
+    </tr>
+    @foreach (var item in ViewBag.publications)
+    {
+        <tr>
+            <td>
+                @Html.ActionLink((string)item.name, "publicationComments", "themesList", new { id = item.id }, null)
+            </td>
+            <td>
+                @Html.Raw((DateTime)item.date)
+            </td>
+            <td>
+                @Html.Raw((int)item.rating)
+            </td>
+        </tr>
+    }
+</table>

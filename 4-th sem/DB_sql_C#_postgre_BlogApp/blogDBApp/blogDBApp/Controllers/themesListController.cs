@@ -22,29 +22,29 @@ namespace blogDBApp.Controllers
             return View(db.themes.ToList());
         }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
+        
         public ActionResult themePublications(int? id)
         {
-           //const string Query = "SELECT * FROM pubications WHERE publications.id = @id ";
+            ViewBag.publications = db.publications.
+                Include(p => p.themes).
+                Where(p => p.theme == id).
+                ToList();
+            ViewBag.theme = "Theme: " + db.themes.Find(id).name;
+            return View(ViewBag);
+        }
 
-           // TempData["result"] = db.Database.SqlQuery<publications>(Query, new NpgsqlParameter("@id", "%" + id + "%")).ToList();
+        public ActionResult publicationComments(int? id)
+        {
+            ViewBag.comments = db.comments.
+                Include(c => c.publications).
+                Where(c => c.publication == id).
+                ToList();
+            ViewBag.publicationName = db.publications.Find(id).name;
+            ViewBag.publicationText = db.publications.Find(id).text;
+            ViewBag.publicationRating = db.publications.Find(id).rating;
+            ViewBag.publicationDate = db.publications.Find(id).date;
 
-
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            themes theme = db.themes.Find(id);
-            if (theme == null)
-            {
-                return HttpNotFound();
-            }
-
-            var result = db.publications.ToList();
-
-            return View(result);
-            
+            return View(ViewBag);
         }
     }
 }

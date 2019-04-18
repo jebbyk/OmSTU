@@ -362,6 +362,7 @@
     <Content Include="Views\comments\Index.cshtml" />
     <Content Include="Views\themesList\themesList.cshtml" />
     <Content Include="Views\themesList\themePublications.cshtml" />
+    <Content Include="Views\themesList\publicationComments.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

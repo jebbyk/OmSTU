@@ -1,25 +1,19 @@
 ﻿@model IEnumerable<blogDBApp.Models.themes>
 
 @{
-    ViewBag.Title = "List";
+    ViewBag.Title = "Themes";
 }
 
 <h4>Themes</h4>
 
 <table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.name)
-        </th>
-    </tr>
-
-
+   
     @foreach (var item in Model)
     {
-        <tr>
-            <td>
-                @Html.ActionLink(item.name, "themePublications", "themesList", new { id = item.id }, null)
-            </td>
-        </tr>
+    <tr>
+        <td>
+           @Html.ActionLink(item.name, "themePublications", "themesList", new { id = item.id }, null)
+        </td>
+    </tr>
     }
 </table>
