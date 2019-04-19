@@ -446,7 +446,7 @@ void paintFunction()//фнукция рисования
 
     POINT _samoletForma[sizeof(samoletForma)/8];//берем форму самолета
     
-    for(int i = 0; i < sizeof(_samoletForma)/8; i++)+//потом перемещаем ее в нужную позицию
+    for(int i = 0; i < sizeof(_samoletForma)/8; i++)//потом перемещаем ее в нужную позицию
     {
         _samoletForma[i].x = samoletForma[i].x + samoletPosRis.x;
         _samoletForma[i].y = samoletForma[i].y + samoletPosRis.y;
