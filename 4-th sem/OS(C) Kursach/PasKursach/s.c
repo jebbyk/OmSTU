@@ -12,20 +12,14 @@ HDC hdc;//дескриптор для рисования
 MSG msg;//сообщение передаваемое окном
 WNDCLASS wc;//для создания окна
 char voditeliChisloC[4] = "";//строка куда вводится число пассажиров
-int voditeliChislo = 1;//число в котором преобразуется число пасиков из строки в цифру
-int curDigit = 0;//для вода числа пасиков тукущий вводимый разряд числа)
+int voditeliChislo = 1;//число в котором преобразуется число водятлов из строки в цифру
+int curDigit = 0;//для вода числа водятлов (тукущий вводимый разряд числа)
 
-HBRUSH brushGreen;//кисти для заливки разными цветами
-HBRUSH brushGray;
-HBRUSH brushBlue;
-HBRUSH brushBlack;
-HBRUSH brushLightBlue;
-HBRUSH brushWhite;
 
 HPEN pen;//карандаш для рисования линий
 
 
-int tScorost  = 30;//скорость и плавность анимации
+int tScorost  = 60;//скорость и плавность анимации (если мигает - делать ниже)
 
 char text[12] = "";
 
@@ -37,27 +31,24 @@ int kolonka2;
 int kolonka3;
 POINT kassaPos = {512,256};
 int kassaLudi = 0;
-
     
 HANDLE hmtx;
-
-
 
 typedef struct {//структура с данными об отдельном водителе
     float x;//точные координаты (тоже для перемещения)
     float y;
-    float mx;
+    float mx;//координаты машины
     float my;
-    int cx;
+    int cx;//целевая координата
     int cy;
     int walkKassa;//к кассе
     int walkMachina;//к машине
-    int machina;//в машине
+    int machina;//в машине (уезжает с колонки)
     int ojidanie;// ждет 
     int son;//спит
-    int driveKolonka;//городо в котором пассажир находится
+    int driveKolonka;//к колонке
     float skorost;
-    int curKolonka;
+    int curKolonka;//текущая колонка (к которой едем и у которой стоим и тд.)
 }voditel;
 
 voditel voditeli[1024];//массив с пассажирами
@@ -74,73 +65,78 @@ void voditelFunction(void *arg)//функция пассажира (с ней т
     }
     if(voditeli[i].curKolonka==1)
     {
-        voditeli[i].cx = kolonka1Pos.x; //указываем начальные целевые координаты
-        voditeli[i].cy = kolonka1Pos.y;
+        voditeli[i].cx = kolonka2Pos.x; //указываем начальные целевые координаты
+        voditeli[i].cy = kolonka2Pos.y;
     }
     if(voditeli[i].curKolonka==2)
     {
-        voditeli[i].cx = kolonka1Pos.x; //указываем начальные целевые координаты
-        voditeli[i].cy = kolonka1Pos.y;
+        voditeli[i].cx = kolonka3Pos.x; //указываем начальные целевые координаты
+        voditeli[i].cy = kolonka3Pos.y;
     }
-    voditeli[i].x = voditeli[i].cx;
+    voditeli[i].x = voditeli[i].cx;//устанавливаем водителя с его машиной в определенную позицию
     voditeli[i].y = 800 + rand()%800;
-    voditeli[i].driveKolonka = 1;//город
+    voditeli[i].driveKolonka = 1;//едем к колонке
 
 
     while(1)
     {
         if(voditeli[i].driveKolonka == 1)
-        {
-            int loop = 0;
-            if(voditeli[i].curKolonka == 0 && kolonka1 == 0) loop = 1;
-            if(voditeli[i].curKolonka == 1 && kolonka2 == 0) loop = 1;
-            if(voditeli[i].curKolonka == 2 && kolonka3  == 0) loop = 1;
-            if(loop == 1)
+        { 
+            float dx;
+            float dy;
+            dx = voditeli[i].cx - voditeli[i].x;
+            dy = voditeli[i].cy - voditeli[i].y;
+            
+            float l = sqrt(dx*dx + dy*dy);
+            dx /= l;
+            dy /= l;//перемещение по вектору
+
+            if(voditeli[i].skorost < l/10)
             {
-                float dx;
-                float dy;
-                dx = voditeli[i].cx - voditeli[i].x;
-                dy = voditeli[i].cy - voditeli[i].y;
-                
-                float l = sqrt(dx*dx + dy*dy);
-                dx /= l;
-                dy /= l;//перемещение по вектору
-
-                if(voditeli[i].skorost < l/10)
-                {
-                    voditeli[i].skorost++;//ускорение до опр предела
-                }else{
-                    voditeli[i].skorost = l/10;
-                }
-                if(voditeli[i].skorost > 10)
-                {
-                    voditeli[i].skorost = 10;//торможение если близко к цели
-                }
-                
-
-
-                voditeli[i].x += dx*voditeli[i].skorost;
-                voditeli[i].y += dy*voditeli[i].skorost;
-                voditeli[i].mx = voditeli[i].x;
-                voditeli[i].my = voditeli[i].y;
-
-
-                if(voditeli[i].x > voditeli[i].cx -1 && voditeli[i].x < voditeli[i].cx + 1 &&        voditeli[i].y > voditeli[i].cy -1 && voditeli[i].y < voditeli[i].cy + 1)
-                {
-                    WaitForSingleObject(hmtx,INFINITE);
-                    kassaLudi++;
-                    voditeli[i].cx = kassaPos.x;
-                    voditeli[i].cy = kassaPos.y + 4 + kassaLudi * 4;
-                    voditeli[i].walkKassa = 1;//меняем его состояние на ожидание, если он очень близко к целевой точке
-                
-                    voditeli[i].driveKolonka = 0;
-                    voditeli[i].skorost = 0;
-                    ReleaseMutex(hmtx);
-                }
+                voditeli[i].skorost+=0.1;//ускорение до опр предела
+            }else{
+                voditeli[i].skorost = l/10;
+            }
+            if(voditeli[i].skorost > 5)
+            {
+                voditeli[i].skorost = 5;//торможение если близко к цели
             }
 
+            for(int n = 0; n < voditeliChislo; n++)
+            {
+                float dy;
+                dy = voditeli[i].y - voditeli[n].y;
+                if(n!=i && dy <= 64 && dy > 0 && voditeli[i].curKolonka == voditeli[n].curKolonka)
+                {
+                    voditeli[i].skorost = ((dy-42)/10)-0.1;
+                }
+            }
+            
+
+            voditeli[i].x += dx*voditeli[i].skorost;
+            voditeli[i].y += dy*voditeli[i].skorost;
+            voditeli[i].mx = voditeli[i].x;
+            voditeli[i].my = voditeli[i].y;
+
+
+            if(voditeli[i].x > voditeli[i].cx -4 && voditeli[i].x < voditeli[i].cx + 4 &&        voditeli[i].y > voditeli[i].cy -4 && voditeli[i].y < voditeli[i].cy + 4)
+            {
+                WaitForSingleObject(hmtx,INFINITE);
+                if(voditeli[i].curKolonka == 0 ) kolonka1 = 1;
+                if(voditeli[i].curKolonka == 1 ) kolonka2 = 1;
+                if(voditeli[i].curKolonka == 2 ) kolonka3 = 1;
+
+                kassaLudi++;
+                voditeli[i].cx = kassaPos.x;
+                voditeli[i].cy = kassaPos.y + 4 + kassaLudi * 4;
+                voditeli[i].walkKassa = 1;//меняем его состояние на ожидание, если он очень близко к целевой точке
+            
+                voditeli[i].driveKolonka = 0;
+                voditeli[i].skorost = 0;
+                ReleaseMutex(hmtx);
+            }
         }
-        if(voditeli[i].walkKassa == 1)//если пассажир сейчас идет в аеропрт
+        if(voditeli[i].walkKassa == 1)//если пассажир сейчас идет в касу
         {
             float dx;
             float dy;
@@ -168,31 +164,50 @@ void voditelFunction(void *arg)//функция пассажира (с ней т
         {
             float dx;
             float dy;
+           
+            dx = voditeli[i].cx - voditeli[i].x;//берем вектор по направлению к целевой точке
+            dy = voditeli[i].cy - voditeli[i].y;
+            
+            float l = sqrt(dx*dx + dy*dy);// узнаем рассатояние
+            if(l > 1.0f)
+            {
+                dx /= l;//нормализуем вектор
+                dy /= l;
+            }
+
+            voditeli[i].x += dx;//перемещаем человека
+            voditeli[i].y += dy;
+
             dx = kassaPos.x - voditeli[i].x;
             dy = kassaPos.y - voditeli[i].y;
-            float l = sqrt(dx*dx + dy*dy);//так же беерм вектор до самолета и узнаем расстояние
-            if(l < 6.0f )//если оно очень маленькое то пытаемся сесть в самолет обязательно блокируя всем остальным людям доступ к самолету
+            l = sqrt(dx*dx + dy*dy);//так же беерм вектор до касы узнаем расстояние
+            if(l < 10 )//если оно очень маленькое то "типа платим в кассу в течении 2 секунд"
             {
                 voditeli[i].ojidanie = 0;
                 voditeli[i].son = 1;
                 Sleep(2000);
+                WaitForSingleObject(hmtx,INFINITE);
                 for(int n = 0; n < voditeliChislo; n++)
                 {
                     if(voditeli[n].ojidanie == 1)
                     {
-                        voditeli[n].y -= 4;
+                        voditeli[n].cy -= 4;
+                    }
+                    if(voditeli[n].walkKassa == 1)
+                    {
+                        voditeli[n].cy -= 4;
                     }
                 }
-                WaitForSingleObject(hmtx, INFINITE);
+                
                 kassaLudi--;
-                ReleaseMutex(hmtx);
                 voditeli[i].son = 0;
                 voditeli[i].walkMachina = 1;
                 voditeli[i].cx = voditeli[i].mx;
                 voditeli[i].cx = voditeli[i].mx;
+                ReleaseMutex(hmtx);
             }
         }
-        if(voditeli[i].walkMachina == 1)//если идем в город
+        if(voditeli[i].walkMachina == 1)//если идем к машине
         {
             float dx;
             float dy;
@@ -211,13 +226,16 @@ void voditelFunction(void *arg)//функция пассажира (с ней т
 
             if(voditeli[i].x > voditeli[i].cx -1 && voditeli[i].x < voditeli[i].cx + 1 &&        voditeli[i].y > voditeli[i].cy -1 && voditeli[i].y < voditeli[i].cy + 1)
             {
+                if(voditeli[i].curKolonka == 0 ) kolonka1 = 0;
+                if(voditeli[i].curKolonka == 1 ) kolonka2 = 0;
+                if(voditeli[i].curKolonka == 2 ) kolonka3 = 0;
                 voditeli[i].walkMachina = 0;
                 voditeli[i].machina = 1;
                 voditeli[i].cx = voditeli[i].x;
                 voditeli[i].cy = -100;
             }
         }
-        if(voditeli[i].machina == 1)//если пассажир в самолете
+        if(voditeli[i].machina == 1)//если уезжаем с колонки
         {
             float dx;
             float dy;
@@ -230,13 +248,13 @@ void voditelFunction(void *arg)//функция пассажира (с ней т
 
             if(voditeli[i].skorost < l/10)
             {
-                voditeli[i].skorost++;//ускорение до опр предела
+                voditeli[i].skorost+=0.1;//ускорение до опр предела
             }else{
                 voditeli[i].skorost = l/10;
             }
-            if(voditeli[i].skorost > 10)
+            if(voditeli[i].skorost > 5)
             {
-                voditeli[i].skorost = 10;//торможение если близко к цели
+                voditeli[i].skorost = 5;//торможение если близко к цели
             }
             
             voditeli[i].x += dx*voditeli[i].skorost;
@@ -248,7 +266,6 @@ void voditelFunction(void *arg)//функция пассажира (с ней т
             if(voditeli[i].x > voditeli[i].cx -1 && voditeli[i].x < voditeli[i].cx + 1 &&        voditeli[i].y > voditeli[i].cy -1 && voditeli[i].y < voditeli[i].cy + 1)
             {
                 Sleep(2000);
-                voditeli[i].driveKolonka = 1;
                 voditeli[i].curKolonka = rand()%3;
                 if(voditeli[i].curKolonka==0)
                 {
@@ -257,17 +274,18 @@ void voditelFunction(void *arg)//функция пассажира (с ней т
                 }
                 if(voditeli[i].curKolonka==1)
                 {
-                    voditeli[i].cx = kolonka1Pos.x; //указываем начальные целевые координаты
-                    voditeli[i].cy = kolonka1Pos.y;
+                    voditeli[i].cx = kolonka2Pos.x; //указываем начальные целевые координаты
+                    voditeli[i].cy = kolonka2Pos.y;
                 }
                 if(voditeli[i].curKolonka==2)
                 {
-                    voditeli[i].cx = kolonka1Pos.x; //указываем начальные целевые координаты
-                    voditeli[i].cy = kolonka1Pos.y;
+                    voditeli[i].cx = kolonka3Pos.x; //указываем начальные целевые координаты
+                    voditeli[i].cy = kolonka3Pos.y;
                 }
                 voditeli[i].machina = 0;
-                voditeli[i].cx = voditeli[i].x;
-                voditeli[i].cy = -100;
+                voditeli[i].driveKolonka = 1;
+                voditeli[i].x = voditeli[i].cx;
+                voditeli[i].y = 800 + rand()%800;
             }
 
         }
@@ -284,18 +302,15 @@ void paintFunction()//фнукция рисования
     Rectangle(hdc, kolonka2Pos.x + 16, kolonka2Pos.y - 8, kolonka2Pos.x  + 32, kolonka2Pos.y + 8 );
     Rectangle(hdc, kolonka3Pos.x + 16, kolonka3Pos.y - 8, kolonka3Pos.x  + 32, kolonka3Pos.y + 8 );
 
-    Rectangle(hdc, kassaPos.x + 16, kassaPos.y - 8, kassaPos.x  + 32, kassaPos.y + 8 );
+    Rectangle(hdc, kassaPos.x + 8, kassaPos.y - 64, kassaPos.x  + 64, kassaPos.y + 64 );
     
     
     for(int i = 0; i < voditeliChislo; i++)
     {
-        Rectangle(hdc, voditeli[i].mx-8, voditeli[i].my-16, voditeli[i].mx+8, voditeli[i].my+16);//рисуем маленьких человечков
+        Rectangle(hdc, voditeli[i].mx-8, voditeli[i].my-16, voditeli[i].mx+8, voditeli[i].my+16);//рисуем машины
         Rectangle(hdc, voditeli[i].x-2, voditeli[i].y-2, voditeli[i].x+2, voditeli[i].y+2);//рисуем маленьких человечков
     }
 }
-
-
-
 
 
 void main()
@@ -353,15 +368,10 @@ void main()
     hdc = GetDC(hwnd);
     ShowWindow(hwnd, nCmdShow);//тут заканчивается создание окна
 
-    brushGreen = CreateSolidBrush(RGB(64,128, 32));//создаем кисточки
-    brushBlue = CreateSolidBrush(RGB(32,128,255));
-    brushGray = CreateSolidBrush(RGB(128,128,128));
-    brushWhite = CreateSolidBrush(RGB(200,200,200));
+
     pen = CreatePen(PS_SOLID, 1, RGB(0,0,0)); 
 
     
-
-
     char text1[] = "Vvedite chislo voditelov";//ввод числа человечков
     TextOut(hdc, 32, 32, text1, sizeof(text1));
 
@@ -373,16 +383,15 @@ void main()
     sscanf(voditeliChisloC, "%d", &voditeliChislo);//преобразование полученной строки в цифру
 
 
-
     for(int i = 0; i < voditeliChislo; i++)//создание потоков с человечками
     {
-        voditel vod1;//создаем пассажира, настраиваем его параметры
+        voditel vod1;//создаем водятла, настраиваем его параметры
         voditeli[i] = vod1;//ложим его  в масссива
         HANDLE hthr;
-        hthr = (HANDLE)_beginthread(voditelFunction, 0,(void*)i);//непосредественнно запуск потока и передаем номер ячейки (i) массива с этим пассажиром
+        hthr = (HANDLE)_beginthread(voditelFunction, 0,(void*)i);//непосредественнно запуск потока и передаем номер ячейки (i) массива с этим водитлом
     }
 
-    while(1)//в данном цикле описан алгоритм работы самолета
+    while(1)
     {
         if(PeekMessage(&msg, hwnd,  0, 0, PM_REMOVE))//мониторим события окна
         {
