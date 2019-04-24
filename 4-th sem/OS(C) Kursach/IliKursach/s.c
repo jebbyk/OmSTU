@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <pthread.h>
 #include <unistd.h>
@@ -16,373 +15,290 @@ XEvent event;
 KeySym ks;
 GC gc;
 
-int roadTickness = 16;
+
 
 pthread_mutex_t hmtx;
 
-int passengersCount = 0;
-
-
-
-int citySize = 256;
-int vPadding = 32;// distances from top of the window to the city edge
-int hPadding = 64;//
-int vDistance = 256+128;//distances between cities
-int hDistance = 512+256 + 128;
-int rThickness = 32;//thickness of roads
-
-struct city{
+int roadT = 32;
+typedef struct{
     int x, y;
-    int stopFx, stopFy;
-    int stopBx, stopBy;
-    char name[5];
-};
+    short dirs[4];
+    short empty;
+} cross;
 
-struct city cityList[4];
 
-struct bus{
-int dir4;//world dirrection
-int dir2;//dirrection on route
+
+cross crosses[2];
+
+typedef struct{//структура с информацией о машинах
+short dir;
 int x, y;
-int tx, ty;//target coordinates
-int passengers;//count
-int speed;
-int waitingTime;
-int waitingFlag;
-} b_bus;
+int tx, ty;
+short driveTo;
+short driveOn;
+short driveOut;
+short wait;
+short curCross;
+} car;
 
+car cars[8192];
+int carsCount;
+char carsCountC[2];
 
-int bussesCount = 2;//must bee the same
-struct bus bussesList[2];//SAAAAAAMEEEEE!!!!
-
-void ProcBus(void *_arg)
+void ProcCar(void *_arg)
 {
-    int arg  = (int)_arg;
-    struct bus b = bussesList[arg];
+    int i  = (int)_arg;
     while(1)
     {
-        if(b.x < b.tx) b.x += b.speed; //movement
-        if(b.y < b.ty) b.y += b.speed; 
-        if(b.x > b.tx) b.x -= b.speed; 
-        if(b.y > b.ty) b.y -= b.speed; 
-        if(b.y == b.ty && b.x == b.tx) 
+        if(cars[i].driveTo == 1)//если едет к перекрестку
         {
-            b.waitingFlag = 1;
-            pthread_mutex_lock(&hmtx);
-            bussesList[arg] = b;
-            pthread_mutex_unlock(&hmtx);
-
-            usleep(b.waitingTime);//waits near the busStop
-
-            pthread_mutex_lock(&hmtx);
-            b = bussesList[arg];
-            pthread_mutex_unlock(&hmtx);
-            b.waitingFlag = 0;
-            if(b.dir2 == 0) //forward or backwrd direction
-            { 
-                if(b.dir4 != 3) b.dir4++;//clockwise
-                else b.dir4 = 0;
-                switch(b.dir4)//world dirrection
-                {
-                    case 0:
-                    {
-                        b.tx = cityList[1].x - rThickness/4;//setting target points depending on direction
-                        b.ty = cityList[1].y + rThickness/4;
-                        break;
-                    }
-                    case 1:
-                    {
-                        b.tx = cityList[2].x - rThickness/4;
-                        b.ty = cityList[2].y - rThickness/4;
-                        break;
-                    }
-                    case 2:
-                    {
-                        b.tx = cityList[3].x + rThickness/4;
-                        b.ty = cityList[3].y - rThickness/4;
-                        break;
-                    }
-                    case 3:
-                    {
-                        b.tx = cityList[0].x + rThickness/4;
-                        b.ty = cityList[0].y + rThickness/4;
-                        break;
-                    }
-                }
-            }else{
-                if(b.dir4 != 0) b.dir4--;//counter-clockwise
-                else b.dir4 = 3;
-                switch(b.dir4)
-                {
-                    case 0:
-                    {
-                        b.tx = cityList[2].x + rThickness/4;
-                        b.ty = cityList[2].y + rThickness/4;
-                        break;
-                    }
-                    case 1:
-                    {
-                        b.tx = cityList[3].x - rThickness/4;
-                        b.ty = cityList[3].y + rThickness/4;
-                        break;
-                    }
-                    case 2:
-                    {
-                        b.tx = cityList[0].x - rThickness/4;
-                        b.ty = cityList[0].y - rThickness/4;
-                        break;
-                    }
-                    case 3:
-                    {
-                        b.tx = cityList[1].x + rThickness/4;
-                        b.ty = cityList[1].y - rThickness/4;
-                        break;
-                    }
-                }
-            }
-        }
-        pthread_mutex_lock(&hmtx);
-        bussesList[arg] = b;//update bus info
-        pthread_mutex_unlock(&hmtx);
-        usleep(1000000/50);// do it 50 times in second
-    }
-}
-
-
-
-struct passenger{
-    //coordinates of passengers and some flags about passenger satate (what they doing)
-    int x, y, tx, ty, sleep, maxSleepTime, sleepTime, wait, drive, toStop, toCity, toBus, curCity, curDir, canLeave;
-    float fx,fy,fSpeed;
-};
-
-struct passenger passengersList[512];
-
-void ProcPassenger(void *_arg)
-{
-    int i = (int)_arg;
-    struct passenger p;
-    p = passengersList[i];
-
-    /*int iSpeed = 40 + rand()%60;
-    p.fSpeed = (float)iSpeed/100.0f;*/
-    p.fSpeed = 1;
-
-    int rS = rand()%4;//selecting random city
-    p.curCity = rS;
-    p.x = cityList[rS].x - citySize/2  + rand()%citySize;//setting random start position 
-    p.y = cityList[rS].y - citySize/2  + rand()%citySize;
-    p.fx = p.x;
-    p.fy = p.y;
-
-
-    int rD = rand()%2;//selecting random route direction
-    p.curDir = rD;
-    if(p.curDir == 0)
-    {
-        p.tx = cityList[p.curCity].stopFx - 8 + rand()%16;//setting random point on needed stop
-        p.ty = cityList[p.curCity].stopFy - 8 + rand()%16;//depending on selected dirrection
-    }else{
-        p.tx = cityList[p.curCity].stopBx - 8 + rand()%16;
-        p.ty = cityList[p.curCity].stopBy - 8 + rand()%16;
-    }
-
-
-    p.sleepTime = p.maxSleepTime/2 + rand()%p.maxSleepTime/2;//setting random sleepInCity time
-    p.sleepTime = p.sleepTime * 1000;// rand generates not bigger then ~32000, so its just a mult to get bigger number
-    while(1)
-    {
-        struct bus b;
-        b = bussesList[p.curDir];
-
-
-        if(p.toStop == 1)
-        {
-            float vx = p.tx - p.fx;//setting moveing vector
-            float vy = p.ty - p.fy;
-            float vl = sqrt(vx*vx + vy*vy);
-            if(vl > 1)
+            if(crosses[cars[i].curCross].dirs[cars[i].dir] == 1)//првоерка того, что направление в котором движетсчя авто свободно
             {
-                vx /= vl;
-                vy /= vl;
-            }
-
-            p.fx += vx * p.fSpeed;//replacing passenger;
-            p.fy += vy * p.fSpeed;
-            p.x = p.fx;
-            p.y = p.fy;
-
-            if(p.x == p.tx && p.y == p.ty){// if comes to stop then wait
-                p.toStop = 0;
-                p.wait = 1;
-            }
-        }
-
-        if(p.wait)
-        {
-            if(abs(p.x - b.x) < 64 && abs(p.y - b.y) < 64 && b.waitingFlag == 1 && bussesList[p.curDir].passengers < 5)//if bus is close and it's waits
-            {
-                p.tx = b.x; p.ty = b.y;//start moving to bus
-                p.wait = 0;
-                p.toBus  = 1;
-            }
-        }
-
-        if(p.toBus == 1)
-        {
-            if(b.waitingFlag == 1)//if buss waits
-            {
-                if(bussesList[p.curDir].passengers < 5)
+                if(cars[i].dir == 0)
                 {
-                    float vx = p.tx - p.fx;//setting moveing vector
-                    float vy = p.ty - p.fy;
-                    float vl = sqrt(vx*vx + vy*vy);
-                    if(vl > 1)
+                    if(cars[i].x < crosses[cars[i].curCross].x - roadT) 
                     {
-                        vx /= vl;
-                        vy /= vl;
-                    }
-                    p.fx += vx * p.fSpeed;//replacing passenger;
-                    p.fy += vy * p.fSpeed;
-                    p.x = p.fx;
-                    p.y = p.fy;
-                }else{
-                    if(p.curDir == 0)//returns to needed stop
-                    {
-                        p.tx = cityList[p.curCity].stopFx - 8 + rand()%16;//random position on busstop
-                        p.ty = cityList[p.curCity].stopFy - 8 + rand()%16;
-                    }else{
-                        p.tx = cityList[p.curCity].stopBx - 8 + rand()%16;
-                        p.ty = cityList[p.curCity].stopBy - 8 + rand()%16;
-                    }
-                    p.toStop = 1;
-                    p.toBus = 0;
-                }
-
-                if(p.x == p.tx && p.y == p.ty){//if comes to bus 
-                    if(bussesList[p.curDir].passengers < 5)
-                    {
-                        p.drive = 1;//then drive and can't leave in the same city
-                        pthread_mutex_lock(&hmtx);
-                        bussesList[p.curDir].passengers++;
-                        pthread_mutex_unlock(&hmtx);
-                        p.canLeave = 0;
-                        p.toBus = 0;
-                    }else{
-                        if(p.curDir == 0)//returns to needed stop
+                        short l = 1;
+                        for(int j = 0; j < carsCount; j++)
                         {
-                            p.tx = cityList[p.curCity].stopFx - 8 + rand()%16;//random position on busstop
-                            p.ty = cityList[p.curCity].stopFy - 8 + rand()%16;
-                        }else{
-                            p.tx = cityList[p.curCity].stopBx - 8 + rand()%16;
-                            p.ty = cityList[p.curCity].stopBy - 8 + rand()%16;
+                            if(j != i && cars[j].x > cars[i].x && cars[j].x - 16 < cars[i].x && cars[i].dir == cars[j].dir) //для того чтобы машины не наезжали друг на друга
+                            { l = 0; break;}
                         }
-                        p.toStop = 1;
-                        p.toBus = 0;
+                        if(l == 1)
+                        {
+                            cars[i].x++;
+                        }
+                    }
+                    else{
+                        pthread_mutex_lock(&hmtx);//синхронизация
+                        crosses[cars[i].curCross].empty = 0;
+                        crosses[cars[i].curCross].dirs[1] = 1;
+                        crosses[cars[i].curCross].dirs[2] = 0;
+                        crosses[cars[i].curCross].dirs[3] = 0;
+                        cars[i].driveOn = 1;
+                        cars[i].driveTo = 0;
                     }
                 }
-            }else{//if bus not waiting
-                if(p.curDir == 0)//returns to needed stop
+                if(cars[i].dir == 1)
                 {
-                    p.tx = cityList[p.curCity].stopFx - 8 + rand()%16;//random position on busstop
-                    p.ty = cityList[p.curCity].stopFy - 8 + rand()%16;
-                }else{
-                    p.tx = cityList[p.curCity].stopBx - 8 + rand()%16;
-                    p.ty = cityList[p.curCity].stopBy - 8 + rand()%16;
+                    if(cars[i].x > crosses[cars[i].curCross].x + roadT)
+                    {
+                         short l = 1;
+                        for(int j = 0; j < carsCount; j++)
+                        {
+                            if(j != i && cars[j].x < cars[i].x && cars[j].x + 16 > cars[i].x && cars[i].dir == cars[j].dir) 
+                            { l = 0; break;}
+                        }
+                        if(l == 1)
+                        {
+                            cars[i].x--;
+                        }
+                    }
+                    else{
+                        pthread_mutex_lock(&hmtx);
+                        crosses[cars[i].curCross].empty = 0;//когда заехал на перекресток обновляет ыинформацию о себе и о перекрестке
+                        crosses[cars[i].curCross].dirs[0] = 1;
+                        crosses[cars[i].curCross].dirs[2] = 0;
+                        crosses[cars[i].curCross].dirs[3] = 0;
+                        cars[i].driveOn = 1;
+                        cars[i].driveTo = 0;
+                    }
                 }
-                p.toStop = 1;
-                p.toBus = 0;
+
+                if(cars[i].dir == 2)//тоже самое для другого направления
+                {
+                    if(cars[i].y < crosses[cars[i].curCross].y - roadT) 
+                    {
+                         short l = 1;
+                        for(int j = 0; j < carsCount; j++)
+                        {
+                            if(j != i && cars[j].y > cars[i].y && cars[j].y - 16 < cars[i].y && cars[i].dir == cars[j].dir) 
+                            { l = 0; break;}
+                        }
+                        if(l == 1)
+                        {
+                            cars[i].y++;
+                        }
+                    }
+                    else{
+                        pthread_mutex_lock(&hmtx);
+                        crosses[cars[i].curCross].empty = 0;
+                        crosses[cars[i].curCross].dirs[0] = 0;
+                        crosses[cars[i].curCross].dirs[1] = 0;
+                        crosses[cars[i].curCross].dirs[3] = 1;
+                        cars[i].driveOn = 1;
+                        cars[i].driveTo = 0;
+                    }
+                }
+
+                if(cars[i].dir == 3)
+                {
+                    if(cars[i].y > crosses[cars[i].curCross].y + roadT)
+                    { 
+                     short l = 1;
+                        for(int j = 0; j < carsCount; j++)
+                        {
+                            if(j != i && cars[j].y < cars[i].y && cars[j].y + 16 > cars[i].y && cars[i].dir == cars[j].dir) 
+                            { l = 0; break;}
+                        }
+                        if(l == 1)
+                        {
+                            cars[i].y--;
+                        }
+                    }
+                    else{
+                        pthread_mutex_lock(&hmtx);
+                        crosses[cars[i].curCross].empty = 0;
+                        crosses[cars[i].curCross].dirs[0] = 0;
+                        crosses[cars[i].curCross].dirs[2] = 1;
+                        crosses[cars[i].curCross].dirs[1] = 0;
+                        cars[i].driveOn = 1;
+                        cars[i].driveTo = 0;
+                    }
+                }
             }
         }
 
-        if(p.drive == 1)
+        if(cars[i].driveOn == 1)//если едет по перекрестку
         {
-            p.x = b.x;//pos = bus pos
-            p.y = b.y;
-            p.fx = p.x;
-            p.fy = p.y;
-            if(b.waitingFlag == 0) p.canLeave = 1;//if bus not waits then can leave 
-            if(b.waitingFlag == 1 && p.canLeave ==1)//(will leave only when bus stops
+            if(cars[i].dir == 0)
             {
-                p.drive = 0;
-                p.toCity = 1;
-                if(bussesList[p.curDir].passengers > 0)
+                if(cars[i].curCross == 0)
                 {
-                    pthread_mutex_lock(&hmtx);
-                    bussesList[p.curDir].passengers--;
+                    if(cars[i].x < crosses[cars[i].curCross].x + roadT) cars[i].x++;
+                    else{
+                        crosses[cars[i].curCross].empty = 1;
+                        for(int j = 0; j < 4; j++)
+                        {
+                            crosses[0].dirs[j] = 1;
+                        }
+                        pthread_mutex_unlock(&hmtx);//когда проехал его, то разлочит доступ кнему 
+                        cars[i].driveOn = 0;
+                        cars[i].driveTo = 1;
+                        cars[i].curCross = 1;
+                    }
+                }else{
+                    if(cars[i].x < crosses[cars[i].curCross].x + roadT) cars[i].x++;
+                    else{
+                        crosses[cars[i].curCross].empty = 1;
+                        for(int j = 0; j < 4; j++)
+                        {
+                            crosses[1].dirs[j] = 1;
+                        }
+                        pthread_mutex_unlock(&hmtx);
+                        cars[i].driveOn = 0;
+                        cars[i].driveOut = 1;
+                    }
+                }
+            }
+            if(cars[i].dir == 1)//соже самое для остаьныъ направлений движения
+            {
+                if(cars[i].curCross == 1)
+                {
+                    if(cars[i].x  > crosses[cars[i].curCross].x - roadT) cars[i].x--;
+                    else{
+                        crosses[cars[i].curCross].empty = 1;
+                        for(int j = 0; j < 4; j++)
+                        {
+                            crosses[1].dirs[j] = 1;
+                        }
+                        pthread_mutex_unlock(&hmtx);
+                        cars[i].driveOn = 0;
+                        cars[i].driveTo = 1;
+                        cars[i].curCross = 0;
+                    }
+                }else{
+                    if(cars[i].x > crosses[cars[i].curCross].x - roadT) cars[i].x--;
+                    else{
+                        crosses[cars[i].curCross].empty = 1;
+                        for(int j = 0; j < 4; j++)
+                        {
+                            crosses[0].dirs[j] = 1;
+                        }
+                        pthread_mutex_unlock(&hmtx);
+                        cars[i].driveOn = 0;
+                        cars[i].driveOut = 1;
+                    }
+                }
+            }
+
+            if(cars[i].dir == 2)
+            {
+                if(cars[i].y < crosses[cars[i].curCross].y + roadT) cars[i].y++;
+                else{
+                    crosses[cars[i].curCross].empty = 1;
+                    for(int j = 0; j < 4; j++)
+                        {
+                            crosses[cars[i].curCross].dirs[j] = 1;
+                        }
                     pthread_mutex_unlock(&hmtx);
+                    cars[i].driveOn = 0;
+                    cars[i].driveOut = 1;
                 }
-                if(p.curDir == 0)//update info about curent city depending on curentDirrection
-                {
-                    if(p.curCity != 3) p.curCity++;
-                    else p.curCity = 0;
-                }else{
-                    if(p.curCity != 0) p.curCity--;
-                    else p.curCity = 3;
-                }
-                p.tx = cityList[p.curCity].x - citySize/2  + rand()%citySize;//selecting random target point in curent city
-                p.ty = cityList[p.curCity].y - citySize/2  + rand()%citySize;
             }
-        }
 
-        if(p.toCity)
-        {
-            float vx = p.tx - p.fx;//setting moveing vector
-            float vy = p.ty - p.fy;
-            float vl = sqrt(vx*vx + vy*vy);
-            if(vl > 1)
+            if(cars[i].dir == 3)
             {
-                vx /= vl;
-                vy /= vl;
-            }
-
-            p.fx += vx * p.fSpeed;//replacing passenger;
-            p.fy += vy * p.fSpeed;
-            p.x = p.fx;
-            p.y = p.fy;
-
-            if(p.x == p.tx && p.y == p.ty){//if comes to target point then sleep some seconds
-                p.sleep = 1;
-                passengersList[i] = p;
-
-                usleep(p.sleepTime);
-
-                p.sleep = 0;
-
-                p.toCity = 0;
-                p.toStop = 1;
-                p.wait = 0;
-
-                rD = rand()%2;//select random direction (backwards or forwards)
-                p.curDir = rD;
-                if(p.curDir == 0)
-                {
-                    p.tx = cityList[p.curCity].stopFx - 8 + rand()%16;//and selcting target point on stop
-                    p.ty = cityList[p.curCity].stopFy - 8 + rand()%16;
-                }else{
-                    p.tx = cityList[p.curCity].stopBx - 8 + rand()%16;
-                    p.ty = cityList[p.curCity].stopBy - 8 + rand()%16;
+                if(cars[i].y > crosses[cars[i].curCross].y - roadT) cars[i].y--;
+                else{
+                    crosses[cars[i].curCross].empty = 1;
+                    for(int j = 0; j < 4; j++)
+                        {
+                            crosses[cars[i].curCross].dirs[j] = 1;
+                        }
+                    pthread_mutex_unlock(&hmtx);
+                    cars[i].driveOn = 0;
+                    cars[i].driveOut = 1;
                 }
             }
         }
 
-        
-
-        passengersList[i] = p;
-        usleep(1000000/50);
-
-        /*int calcHardness = 1024;/////////////////////////////////MEGACALCULATION\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-        int res = 0;
-        for(int i = 1; i < calcHardness; i++)
+         if(cars[i].driveOut == 1)//если едет от перекрестка
         {
-            for(int j = 1; j < calcHardness; j++)
+            if(cars[i].dir == 0)
             {
-                res = i + j - i%j + j%i + i/j - j/i * 7;
+                if(cars[i].x < 800) cars[i].x++;
+                else{
+                    cars[i].x = -32 - rand()%800;
+                    cars[i].driveOut = 0;
+                    cars[i].driveTo = 1;
+                    cars[i].curCross = 0;
+                }
             }
-        }*///     \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\whill make your processor very very hot!!///////////////////////////////////
+            if(cars[i].dir == 1)
+            {
+                if(cars[i].x > 0) cars[i].x--;
+                else{
+                    cars[i].x = 800 + rand()%800;
+                    cars[i].driveOut = 0;
+                    cars[i].driveTo = 1;
+                    cars[i].curCross = 1;
+                }
+            }
+
+            if(cars[i].dir == 2)
+            {
+                if(cars[i].y < 800) cars[i].y++;
+                else{
+                    cars[i].y = -32 - rand()%800;
+                    cars[i].driveOut = 0;
+                    cars[i].driveTo = 1;
+                }
+            }
+
+            if(cars[i].dir == 3)
+            {
+                if(cars[i].y > 0) cars[i].y--;
+                else{
+                    cars[i].y = 800 + rand()%800;
+                    cars[i].driveOut = 0;
+                    cars[i].driveTo = 1;
+                }
+            }
+        }
+
+        usleep(100000/20);
     }
-
-    
 }
 
 
@@ -391,119 +307,48 @@ void Draw(int sleepTime)
 {
     XClearWindow(dspl, hwnd);
     
-    
-    char pc[3];
-    sprintf(pc, "%d", passengersCount);//draws passenger coutn
-    XDrawString(dspl,hwnd, gc, 20, 20, pc, 3);
+    cross c = crosses[0];
+    XDrawRectangle(dspl, hwnd, gc, c.x - roadT/2, 0, roadT, 800);//рисование дорог
+    c = crosses[1];
+    XDrawRectangle(dspl, hwnd, gc, c.x - roadT/2, 0, roadT, 800);
+    XDrawRectangle(dspl, hwnd, gc, 0, c.y - roadT/2, 800, roadT);
 
-    for(int i = 0; i < 4; i++)//draws cities
+
+
+    for(int i = 0; i < carsCount; i++)//рисование машин
     {
-        struct city c = cityList[i];
-        XDrawRectangle(dspl, hwnd, gc, c.x - citySize/2, c.y - citySize/2, citySize, citySize);
-        
-        char d[1];
-        d[0] = 'f';
-        XDrawRectangle(dspl, hwnd, gc, c.stopFx - 8, c.stopFy - 8, 16, 16);
-        XDrawString(dspl,hwnd, gc, c.stopFx, c.stopFy-8, d, 1);
-        
-        d[0] = 'b';
-        XDrawRectangle(dspl, hwnd, gc, c.stopBx - 8, c.stopBy - 8, 16, 16);
-        XDrawString(dspl,hwnd, gc, c.stopBx, c.stopBy-8, d, 1);
-
-        
-        XDrawString(dspl,hwnd, gc, c.x+citySize/4, c.y - citySize/4, c.name, sizeof(c.name));
-    }
-//draw roads
-    XDrawRectangle(dspl, hwnd, gc, hPadding + citySize/2 - rThickness/2, vPadding + citySize/2 - rThickness/2, hDistance + rThickness, rThickness);
-    XDrawRectangle(dspl, hwnd, gc, hPadding + citySize/2 - rThickness/2, vPadding + citySize/2 - rThickness/2, rThickness, vDistance + rThickness);
-    XDrawRectangle(dspl, hwnd, gc, hPadding + citySize/2 - rThickness/2, vPadding + citySize/2 + vDistance - rThickness/2, hDistance + rThickness, rThickness);
-    XDrawRectangle(dspl, hwnd, gc, hPadding + citySize/2 - rThickness/2 + hDistance, vPadding + citySize/2 - rThickness/2, rThickness, vDistance + rThickness);
-
-
-    for(int i = 0; i < bussesCount; i++)//draw each bus
-    {
-        struct bus b = bussesList[i];
-        if(b.dir4 == 0 || b.dir4 == 2)//depending on it's direction 
+        car b = cars[i];
+        if(b.dir == 0 || b.dir == 1)//depending on it's direction 
         {
             XDrawRectangle(dspl, hwnd, gc, b.x - 8, b.y -  4, 16, 8);//draw vertycal or horizontal
         }else
         {
             XDrawRectangle(dspl, hwnd, gc, b.x - 4, b.y - 8, 8, 16);
         } 
-        char cn[1];
-        sprintf(cn, "%d", b.passengers);
-        XDrawString(dspl,hwnd, gc, b.x-2, b.y+4, cn, 1);
     }
 
-    for(int i = 0; i < passengersCount; i++)//draw each passanger
-    {
-        struct passenger p = passengersList[i];
-        if(p.sleep == 0 && p.drive  == 0)  XDrawRectangle(dspl, hwnd, gc, p.x-2, p.y-2, 4,4);
-    }
     XFlush(dspl);
-    usleep(1000000/50);
+    usleep(1000000/20);//20 раз в секунду
 }
 
 
 void main()
 {
-    struct city c1;//setting cityes positions 
-    c1.x = hPadding + citySize/2;
-    c1.y = vPadding + citySize/2;
-    c1.stopFx = c1.x + rThickness;
-    c1.stopFy = c1.y + rThickness;
-    c1.stopBx = c1.x;
-    c1.stopBy = c1.y - rThickness;
-    strcpy(c1.name, "Dijon");
-
-    struct city c2;
-    c2.x = hPadding + hDistance + citySize/2;
-    c2.y = vPadding + citySize/2;
-    c2.stopFx = c2.x - rThickness;
-    c2.stopFy = c2.y + rThickness;
-    c2.stopBx = c2.x + rThickness ;
-    c2.stopBy = c2.y;
-    strcpy(c2.name, "Ruan");
-
-    struct city c3;
-    c3.x = hPadding + hDistance + citySize/2;
-    c3.y = vPadding + vDistance + citySize/2;
-    c3.stopFx = c3.x - rThickness;
-    c3.stopFy = c3.y - rThickness;
-    c3.stopBx = c3.x;
-    c3.stopBy = c3.y + rThickness;
-    strcpy(c3.name, "Paris");
-
-    struct city c4;
-    c4.x = hPadding + citySize/2;
-    c4.y = vPadding + vDistance + citySize/2;
-    c4.stopFx = c4.x + rThickness;
-    c4.stopFy = c4.y - rThickness;
-    c4.stopBx = c4.x - rThickness;
-    c4.stopBy = c4.y;
-    strcpy(c4.name, "Lion");
-
-    cityList[0] = c1;
-    cityList[1] = c2;
-    cityList[2] = c3;
-    cityList[3] = c4;
-
-
 
     dspl = XOpenDisplay(NULL);//setting up new window
     gc = XDefaultGC(dspl,0);
     if(dspl == 0) {printf("Error XOpenDisplay\n"); exit(1);}
     screen = XDefaultScreen(dspl);
-    hwnd = XCreateSimpleWindow(dspl, RootWindow(dspl, screen), 100,50,1280,720,3, BlackPixel(dspl,screen), WhitePixel(dspl,screen));
+    hwnd = XCreateSimpleWindow(dspl, RootWindow(dspl, screen), 100,50,800,600,3, BlackPixel(dspl,screen), WhitePixel(dspl,screen));
     if(hwnd == 0) {printf("Error XCreateSimpleWindow\n"); exit(1);}
     XSelectInput(dspl, hwnd, ExposureMask | KeyPressMask );//input mask
     XMapWindow(dspl, hwnd);
 
     
-    while(passengersCount == 0)//inputs char from keyboard while it more then -1 and less then 10
+    while(carsCount == 0)//inputs char from keyboard while it more then -1 and less then 10
     {
-        char buf[]= "Enter number of passangers!";
-        XDrawString(dspl, hwnd, gc, 10, 10, buf, 27);
+        char buf[]= "Enter number of cars!";
+        XDrawString(dspl, hwnd, gc, 10, 10, buf, 23);
         XNextEvent(dspl, &event);
         if(event.type == KeyPress)
         {
@@ -518,72 +363,74 @@ void main()
                 int r = 1;
                 for(int c = 0; c < i; c++ )
                 {
-                    r*=2;//makes 2^inputedNumber to create more passangers
+                    r*=2;//makes 2^inputedNumber to create more cars
                 }
-                passengersCount = r;
+                carsCount = r;
             }
             
         }
     }
 
+    cross cr1;
+    cross cr2;
+    crosses[0] = cr1;
+    crosses[1] = cr2;
 
-    struct bus busF;//creating two busses
-    busF.x = hPadding + citySize/2;
-    busF.y = vPadding + citySize/2 + rThickness/4;
-    busF.tx = hPadding + citySize/2 + hDistance - rThickness/4;
-    busF.ty = vPadding + citySize/2 + rThickness/4;
-    busF.speed = 4;
-    busF.dir2 = 0;
-    busF.passengers = 0;
-    busF.dir4 = 0;
-    busF.waitingTime = 2000000;
-    busF.waitingFlag = 0;
-    int rc;
-    bussesList[0] = busF;
-    pthread_t busFthread;
-    pthread_create(&busFthread, NULL, (void*)ProcBus, (void*)0);//starts thread with selected bus
-
-
-    struct bus busB;
-    busB.x = hPadding + citySize/2 - rThickness/4;
-    busB.y = vPadding + citySize/2;
-    busB.tx = hPadding + citySize/2 - rThickness/4;
-    busB.ty = vPadding + citySize/2 + vDistance + rThickness/4;
-    busB.dir2 = 1;
-    busB.speed = 2;
-    busB.passengers = 0;
-    busB.dir4 = 1;
-    busB.waitingTime = 4000000;
-    busB.waitingFlag = 0;
-    bussesList[1] = busB;
-    pthread_t busBthread;
-    pthread_create(&busBthread, NULL, (void*)ProcBus, (void*)1);
-
-
-    for(int i = 0; i < passengersCount; i++)//creats needed count of passengers
+    for(int i = 0; i < 2; i++)
     {
-        struct passenger p;
-        p.x=0;
-        p.y =0;
-        p.tx = 0;
-        p.ty = 0;
-        p.curCity = 0;
-        p.drive = 0;
-        p.sleep = 0;
-        p.maxSleepTime = 64000;
-        p.sleepTime = 0;
-        p.toCity = 0;
-        p.toStop = 1;
-        p.wait = 0;
+        for(int j = 0; j < 4; j++)
+        {
+            crosses[i].dirs[j] = 1;
+        }
+    }
+
+    crosses[0].x = 256;
+    crosses[0].y = 256;
+    crosses[1].x = 512;
+    crosses[1].y = 256;
+
+
+
+    for(int i = 0; i < carsCount; i++)//создаем нужное количество машин
+    {
+        car c;
+        c.dir = rand()%4;
+        if(c.dir == 0) 
+        {
+            c.curCross = 0;
+            c.x = 0 - rand()%800;
+            c.y = crosses[0].y + roadT/4;
+        }
+
+        if(c.dir == 1) 
+        {
+            c.curCross = 1;
+            c.x = 800 + rand()%800;
+            c.y = crosses[0].y  - roadT/4;
+        }
+        if(c.dir == 2) 
+        {
+            c.curCross = rand()%2;
+            c.x = crosses[c.curCross].x - roadT/4;
+            c.y = 0 - rand()%800;
+        }
+        if(c.dir == 3) 
+        {
+            c.curCross = rand()%2;
+            c.x = crosses[c.curCross].x + roadT/4;
+            c.y = 800 + rand()%800;
+        }
+        c.driveTo = 1;
+        
       
-        passengersList[i] = p;
+        cars[i] = c;
         pthread_t p1Thread;
-        pthread_create(&p1Thread, NULL, (void*)ProcPassenger, (void*)i);//starts thread with passenger
+        pthread_create(&p1Thread, NULL, (void*)ProcCar, (void*)i);//starts thread with passenger
     }
 
     while(1)
     {
-        Draw(1000000/50);//bigger number - lower FPS
+        Draw(1000000/60);//bigger number - lower FPS
     }
 
     getchar(); printf("\033[0m");
