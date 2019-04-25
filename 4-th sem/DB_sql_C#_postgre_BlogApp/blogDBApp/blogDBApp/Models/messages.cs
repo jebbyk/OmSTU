@@ -22,5 +22,6 @@ namespace blogDBApp.Models
         public string text { get; set; }
     
         public virtual users users { get; set; }
+        public virtual users users1 { get; set; }
     }
 }

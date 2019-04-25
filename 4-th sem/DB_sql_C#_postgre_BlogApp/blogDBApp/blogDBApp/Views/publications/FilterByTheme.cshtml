@@ -5,7 +5,7 @@
 <table class="table">
     <tr>
         <td>
-            <h4>Publication name</h4>
+            <h4>Publication title</h4>
         </td>
         <td>
             <h4>Date</h4>
@@ -21,7 +21,7 @@
     {
         <tr>
             <td>
-                @Html.ActionLink((string)item.name, "publicationComments", "themesList", new { id = item.id }, null)
+                @Html.ActionLink((string)item.name, "FilterByPublication", "comments", new { id = item.id }, null)
             </td>
             <td>
                 @Html.Raw((DateTime)item.date)

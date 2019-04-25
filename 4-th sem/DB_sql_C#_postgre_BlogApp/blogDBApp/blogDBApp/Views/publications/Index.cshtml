@@ -47,10 +47,10 @@
             @Html.DisplayFor(modelItem => item.date)
         </td>
         <td>
-            @Html.ActionLink(item.themes.name, "Details", "Themes", new { id = item.themes.id}, null)
+            @Html.DisplayFor(modelItem => item.themes.name)
         </td>
         <td>
-            @Html.ActionLink(item.users.name, "Details", "Users", new { id = item.users.id}, null)
+            @Html.DisplayFor(modelItem => item.users.name)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.id }) |

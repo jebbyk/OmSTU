@@ -12,13 +12,31 @@ namespace blogDBApp.Controllers
 {
     public class commentsController : Controller
     {
-        private blogDataBaseEntities db = new blogDataBaseEntities();
+        private blogDataBaseEntities2 db = new blogDataBaseEntities2();
 
         // GET: comments
         public ActionResult Index()
         {
             var comments = db.comments.Include(c => c.publications).Include(c => c.users);
             return View(comments.ToList());
+        }
+
+        public ActionResult FilterByPublication(int? id)
+        {
+            ViewBag.comments = db.comments.
+                Include(c => c.users).
+                Where(c => c.publication == id).
+                ToList();
+
+            var p = db.publications.Find(id);
+            ViewBag.publicationName = p.name;
+            ViewBag.publicationText = p.text;
+            ViewBag.publicationRating = p.rating;
+            ViewBag.publicationDate = p.date;
+            int pUserID = db.publications.Find(id).user;
+            ViewBag.publicationUser = db.users.Find(pUserID).name;
+
+            return View();
         }
 
         // GET: comments/Details/5

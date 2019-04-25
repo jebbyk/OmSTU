@@ -19,6 +19,7 @@ namespace blogDBApp.Models
         {
             this.comments = new HashSet<comments>();
             this.messages = new HashSet<messages>();
+            this.messages1 = new HashSet<messages>();
             this.publications = new HashSet<publications>();
         }
     
@@ -32,6 +33,8 @@ namespace blogDBApp.Models
         public virtual ICollection<comments> comments { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<messages> messages { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<messages> messages1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<publications> publications { get; set; }
     }

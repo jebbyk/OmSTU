@@ -14,7 +14,7 @@ namespace blogDBApp.Controllers
     public class themesListController : Controller
     {
 
-        private blogDataBaseEntities db = new blogDataBaseEntities();
+        private blogDataBaseEntities2 db = new blogDataBaseEntities2();
 
         // GET: thmesList
         public ActionResult themesList()

@@ -8,16 +8,16 @@
     <Property Name="text" Type="varchar" MaxLength="1024" Nullable="false" />
     <Property Name="rating" Type="int4" Nullable="false" />
     <Property Name="date" Type="date" Nullable="false" />
-    <Property Name="publication" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="user" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="publication" Type="int4" Nullable="false" />
+    <Property Name="user" Type="int4" Nullable="false" />
   </EntityType>
   <EntityType Name="messages">
     <Key>
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="sender" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="receiver" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="sender" Type="int4" Nullable="false" />
+    <Property Name="receiver" Type="int4" Nullable="false" />
     <Property Name="name" Type="varchar" MaxLength="64" Nullable="false" />
     <Property Name="date" Type="date" Nullable="false" />
     <Property Name="text" Type="varchar" MaxLength="8192" Nullable="false" />
@@ -31,8 +31,8 @@
     <Property Name="text" Type="varchar" MaxLength="100000" Nullable="false" />
     <Property Name="rating" Type="int4" Nullable="false" />
     <Property Name="date" Type="date" Nullable="false" />
-    <Property Name="user" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="theme" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="user" Type="int4" Nullable="false" />
+    <Property Name="theme" Type="int4" Nullable="false" />
   </EntityType>
   <EntityType Name="themes">
     <Key>
@@ -76,6 +76,20 @@
       </Principal>
       <Dependent Role="comments">
         <PropertyRef Name="user" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="messages_receiver_fkey">
+    <End Role="users" Type="Self.users" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="messages" Type="Self.messages" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="messages">
+        <PropertyRef Name="receiver" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -134,6 +148,10 @@
     <AssociationSet Name="commentUserFK" Association="Self.commentUserFK">
       <End Role="users" EntitySet="users" />
       <End Role="comments" EntitySet="comments" />
+    </AssociationSet>
+    <AssociationSet Name="messages_receiver_fkey" Association="Self.messages_receiver_fkey">
+      <End Role="users" EntitySet="users" />
+      <End Role="messages" EntitySet="messages" />
     </AssociationSet>
     <AssociationSet Name="messageSenderFK" Association="Self.messageSenderFK">
       <End Role="users" EntitySet="users" />

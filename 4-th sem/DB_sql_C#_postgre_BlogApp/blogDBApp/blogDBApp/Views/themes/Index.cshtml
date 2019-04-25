@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<blogDBApp.Models.themes>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Themes";
 }
 
-<h2>Index</h2>
+<h1>Themes</h1>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -12,15 +12,17 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.name)
+            <h4>Theme title</h4>
         </th>
-        <th></th>
+        <th>
+            <h4>CRUD functionality</h4>
+        </th>
     </tr>
 
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.name)
+            @Html.ActionLink((string)item.name,"FilterByTheme", "publications", new { id = item.id }, null)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.id }) |

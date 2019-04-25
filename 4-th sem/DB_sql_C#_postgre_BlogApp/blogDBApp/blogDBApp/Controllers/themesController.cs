@@ -12,26 +12,17 @@ namespace blogDBApp.Controllers
 {
     public class themesController : Controller
     {
-        private blogDataBaseEntities db = new blogDataBaseEntities();
+        private blogDataBaseEntities2 db = new blogDataBaseEntities2();
 
         // GET: themes
         public ActionResult Index()
         {
             return View(db.themes.ToList());
         }
-
         // GET: themes/Details/5
         public ActionResult Details(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             themes themes = db.themes.Find(id);
-            if (themes == null)
-            {
-                return HttpNotFound();
-            }
             return View(themes);
         }
 

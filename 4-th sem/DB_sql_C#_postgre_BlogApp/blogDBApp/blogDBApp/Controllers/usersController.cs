@@ -12,7 +12,7 @@ namespace blogDBApp.Controllers
 {
     public class usersController : Controller
     {
-        private blogDataBaseEntities db = new blogDataBaseEntities();
+        private blogDataBaseEntities2 db = new blogDataBaseEntities2();
 
         // GET: users
         public ActionResult Index()

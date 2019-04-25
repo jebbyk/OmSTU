@@ -12,13 +12,23 @@ namespace blogDBApp.Controllers
 {
     public class publicationsController : Controller
     {
-        private blogDataBaseEntities db = new blogDataBaseEntities();
+        private blogDataBaseEntities2 db = new blogDataBaseEntities2();
 
         // GET: publications
         public ActionResult Index()
         {
             var publications = db.publications.Include(p => p.themes).Include(p => p.users);
             return View(publications.ToList());
+        }
+
+        public ActionResult FilterByTheme(int? id)
+        {
+            ViewBag.publications = db.publications.
+              Include(p => p.themes).
+              Where(p => p.theme == id).
+              ToList();
+            ViewBag.theme = "Theme: " + db.themes.Find(id).name;
+            return View(ViewBag);
         }
 
         // GET: publications/Details/5

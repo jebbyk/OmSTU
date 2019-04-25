@@ -11,14 +11,6 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.receiver)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.receiver)
-        </dd>
-
-        <dt>
             @Html.DisplayNameFor(model => model.name)
         </dt>
 
@@ -50,9 +42,13 @@
             @Html.DisplayFor(model => model.users.name)
         </dd>
 
+        <dt>
+            @Html.DisplayNameFor(model => model.users1.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.users1.name)
+        </dd>
+
     </dl>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>

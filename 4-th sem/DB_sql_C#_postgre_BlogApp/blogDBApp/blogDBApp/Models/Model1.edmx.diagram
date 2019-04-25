@@ -4,14 +4,15 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="bcb484e8e65546ac9ad3c1472eef65e4" Name="Diagram1">
-        <EntityTypeShape EntityType="blogDataBaseModel.comments" Width="1.5" PointX="4.625" PointY="1.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="blogDataBaseModel.messages" Width="1.5" PointX="1.5" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="blogDataBaseModel.publications" Width="1.5" PointX="5.5" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="blogDataBaseModel.themes" Width="1.5" PointX="7.5" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="blogDataBaseModel.users" Width="1.5" PointX="3.5" PointY="4.75" IsExpanded="true" />
+      <Diagram DiagramId="1368f61396874bb48b2a118729be2e3c" Name="Diagram1" ZoomLevel="95">
+        <EntityTypeShape EntityType="blogDataBaseModel.comments" Width="1.5" PointX="7.5" PointY="2.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="blogDataBaseModel.messages" Width="1.5" PointX="3.375" PointY="3.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="blogDataBaseModel.publications" Width="1.5" PointX="9.625" PointY="3.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="blogDataBaseModel.themes" Width="1.5" PointX="11.625" PointY="3.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="blogDataBaseModel.users" Width="1.5" PointX="5.375" PointY="3.25" IsExpanded="true" />
         <AssociationConnector Association="blogDataBaseModel.commentPublicationFK" ManuallyRouted="false" />
         <AssociationConnector Association="blogDataBaseModel.commentUserFK" ManuallyRouted="false" />
+        <AssociationConnector Association="blogDataBaseModel.messages_receiver_fkey" ManuallyRouted="false" />
         <AssociationConnector Association="blogDataBaseModel.messageSenderFK" ManuallyRouted="false" />
         <AssociationConnector Association="blogDataBaseModel.publicationThemeFK" ManuallyRouted="false" />
         <AssociationConnector Association="blogDataBaseModel.publicationUserFK" ManuallyRouted="false" />

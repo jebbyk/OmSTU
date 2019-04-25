@@ -12,12 +12,12 @@ namespace blogDBApp.Controllers
 {
     public class messagesController : Controller
     {
-        private blogDataBaseEntities db = new blogDataBaseEntities();
+        private blogDataBaseEntities2 db = new blogDataBaseEntities2();
 
         // GET: messages
         public ActionResult Index()
         {
-            var messages = db.messages.Include(m => m.users);
+            var messages = db.messages.Include(m => m.users).Include(m => m.users1);
             return View(messages.ToList());
         }
 
@@ -39,6 +39,7 @@ namespace blogDBApp.Controllers
         // GET: messages/Create
         public ActionResult Create()
         {
+            ViewBag.receiver = new SelectList(db.users, "id", "name");
             ViewBag.sender = new SelectList(db.users, "id", "name");
             return View();
         }
@@ -57,6 +58,7 @@ namespace blogDBApp.Controllers
                 return RedirectToAction("Index");
             }
 
+            ViewBag.receiver = new SelectList(db.users, "id", "name", messages.receiver);
             ViewBag.sender = new SelectList(db.users, "id", "name", messages.sender);
             return View(messages);
         }
@@ -73,6 +75,7 @@ namespace blogDBApp.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.receiver = new SelectList(db.users, "id", "name", messages.receiver);
             ViewBag.sender = new SelectList(db.users, "id", "name", messages.sender);
             return View(messages);
         }
@@ -90,6 +93,7 @@ namespace blogDBApp.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            ViewBag.receiver = new SelectList(db.users, "id", "name", messages.receiver);
             ViewBag.sender = new SelectList(db.users, "id", "name", messages.sender);
             return View(messages);
         }

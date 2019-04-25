@@ -8,8 +8,8 @@
     <Property Name="text" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="rating" Type="Int32" Nullable="false" />
     <Property Name="date" Type="DateTime" Precision="0" Nullable="false" />
-    <Property Name="publication" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="user" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="publication" Type="Int32" Nullable="false" />
+    <Property Name="user" Type="Int32" Nullable="false" />
     <NavigationProperty Name="publications" Relationship="Self.commentPublicationFK" FromRole="comments" ToRole="publications" />
     <NavigationProperty Name="users" Relationship="Self.commentUserFK" FromRole="comments" ToRole="users" />
   </EntityType>
@@ -18,12 +18,13 @@
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="sender" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="receiver" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="sender" Type="Int32" Nullable="false" />
+    <Property Name="receiver" Type="Int32" Nullable="false" />
     <Property Name="name" Type="String" MaxLength="64" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="date" Type="DateTime" Precision="0" Nullable="false" />
     <Property Name="text" Type="String" MaxLength="8192" FixedLength="false" Unicode="true" Nullable="false" />
-    <NavigationProperty Name="users" Relationship="Self.messageSenderFK" FromRole="messages" ToRole="users" />
+    <NavigationProperty Name="users" Relationship="Self.messages_receiver_fkey" FromRole="messages" ToRole="users" />
+    <NavigationProperty Name="users1" Relationship="Self.messageSenderFK" FromRole="messages" ToRole="users" />
   </EntityType>
   <EntityType Name="publications">
     <Key>
@@ -34,8 +35,8 @@
     <Property Name="text" Type="String" MaxLength="100000" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="rating" Type="Int32" Nullable="false" />
     <Property Name="date" Type="DateTime" Precision="0" Nullable="false" />
-    <Property Name="user" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="theme" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="user" Type="Int32" Nullable="false" />
+    <Property Name="theme" Type="Int32" Nullable="false" />
     <NavigationProperty Name="comments" Relationship="Self.commentPublicationFK" FromRole="publications" ToRole="comments" />
     <NavigationProperty Name="themes" Relationship="Self.publicationThemeFK" FromRole="publications" ToRole="themes" />
     <NavigationProperty Name="users" Relationship="Self.publicationUserFK" FromRole="publications" ToRole="users" />
@@ -58,7 +59,8 @@
     <Property Name="about" Type="String" MaxLength="512" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="isModer" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="comments" Relationship="Self.commentUserFK" FromRole="users" ToRole="comments" />
-    <NavigationProperty Name="messages" Relationship="Self.messageSenderFK" FromRole="users" ToRole="messages" />
+    <NavigationProperty Name="messages" Relationship="Self.messages_receiver_fkey" FromRole="users" ToRole="messages" />
+    <NavigationProperty Name="messages1" Relationship="Self.messageSenderFK" FromRole="users" ToRole="messages" />
     <NavigationProperty Name="publications" Relationship="Self.publicationUserFK" FromRole="users" ToRole="publications" />
   </EntityType>
   <Association Name="commentPublicationFK">
@@ -86,6 +88,20 @@
       </Principal>
       <Dependent Role="comments">
         <PropertyRef Name="user" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="messages_receiver_fkey">
+    <End Role="users" Type="Self.users" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="messages" Type="Self.messages" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="messages">
+        <PropertyRef Name="receiver" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -131,7 +147,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityContainer Name="blogDataBaseEntities" annotation:LazyLoadingEnabled="true">
+  <EntityContainer Name="blogDataBaseEntities2" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="comments" EntityType="Self.comments" />
     <EntitySet Name="messages" EntityType="Self.messages" />
     <EntitySet Name="publications" EntityType="Self.publications" />
@@ -144,6 +160,10 @@
     <AssociationSet Name="commentUserFK" Association="Self.commentUserFK">
       <End Role="users" EntitySet="users" />
       <End Role="comments" EntitySet="comments" />
+    </AssociationSet>
+    <AssociationSet Name="messages_receiver_fkey" Association="Self.messages_receiver_fkey">
+      <End Role="users" EntitySet="users" />
+      <End Role="messages" EntitySet="messages" />
     </AssociationSet>
     <AssociationSet Name="messageSenderFK" Association="Self.messageSenderFK">
       <End Role="users" EntitySet="users" />

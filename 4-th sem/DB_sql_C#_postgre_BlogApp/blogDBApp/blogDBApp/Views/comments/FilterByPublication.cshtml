@@ -1,0 +1,23 @@
+﻿<table class="table1">
+    <h1>@Html.Raw((string)ViewBag.publicationUser + ": " + (string)ViewBag.publicationName)</h1>
+    <h4>@Html.Raw((DateTime)ViewBag.publicationDate)</h4>
+    <h4>@Html.Raw((string)ViewBag.publicationText)</h4>
+    <h4>@Html.Raw("Rating: " + (int)ViewBag.publicationRating)</h4>
+
+    <table class="table">
+        <tr></tr>
+        @foreach (var item in ViewBag.comments)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink((string)item.users.name, "Details", "users", new { id = item.users.id }, null)
+                </td>
+                <td>
+                    @Html.Raw((string)item.text)
+                </td>
+                <td>
+                    @Html.Raw("Rating: " + (int)item.rating)
+                </td>
+            </tr>
+        }
+    </table>

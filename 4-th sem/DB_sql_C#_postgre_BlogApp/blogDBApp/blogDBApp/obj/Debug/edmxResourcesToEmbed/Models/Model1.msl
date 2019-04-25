@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-  <EntityContainerMapping StorageEntityContainer="Хранилище blogDataBaseModelContainer" CdmEntityContainer="blogDataBaseEntities">
+  <EntityContainerMapping StorageEntityContainer="Хранилище blogDataBaseModelContainer" CdmEntityContainer="blogDataBaseEntities2">
     <EntitySetMapping Name="comments">
       <EntityTypeMapping TypeName="blogDataBaseModel.comments">
         <MappingFragment StoreEntitySet="comments">
