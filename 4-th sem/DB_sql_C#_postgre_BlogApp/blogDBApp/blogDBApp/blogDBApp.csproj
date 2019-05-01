@@ -365,6 +365,13 @@
     <Content Include="Views\messages\Index.cshtml" />
     <Content Include="Views\publications\FilterByTheme.cshtml" />
     <Content Include="Views\comments\FilterByPublication.cshtml" />
+    <Content Include="Views\Home\SearchSelect.cshtml" />
+    <Content Include="Views\publications\Search.cshtml" />
+    <Content Include="Views\users\Search.cshtml" />
+    <Content Include="Views\comments\Search.cshtml" />
+    <Content Include="Views\publications\SearchResult.cshtml" />
+    <Content Include="Views\users\SearchResult.cshtml" />
+    <Content Include="Views\comments\SearchResult.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

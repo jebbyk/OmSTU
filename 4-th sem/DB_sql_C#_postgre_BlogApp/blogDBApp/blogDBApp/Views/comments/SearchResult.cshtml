@@ -1,0 +1,23 @@
+﻿
+<table class="table">
+
+    @foreach (var item in ViewBag.comments)
+    {
+        <tr>
+            <th>
+                @Html.ActionLink((string)item.users.name, "Details", "users", new { id = item.users.id }, null)
+            </th>
+            <td>
+                @Html.Raw((int)item.rating)
+            </td>
+            <td>
+                @Html.Raw((DateTime)item.date)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.Raw((string)item.text)
+            </td> 
+        </tr>
+    }
+</table>

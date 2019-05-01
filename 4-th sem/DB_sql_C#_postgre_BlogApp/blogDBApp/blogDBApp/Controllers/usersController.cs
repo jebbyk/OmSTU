@@ -14,6 +14,20 @@ namespace blogDBApp.Controllers
     {
         private blogDataBaseEntities2 db = new blogDataBaseEntities2();
 
+        public ActionResult Search()
+        {
+            return View();
+        }
+
+        public ActionResult SearchResult(string search)
+        {
+            ViewBag.users = db.users.
+             Where(p => p.name.ToLower().Contains(search.ToLower())).
+             ToList();
+            return View(ViewBag);
+
+        }
+
         // GET: users
         public ActionResult Index()
         {

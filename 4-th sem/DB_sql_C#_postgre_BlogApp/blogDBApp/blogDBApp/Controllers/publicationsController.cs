@@ -31,6 +31,21 @@ namespace blogDBApp.Controllers
             return View(ViewBag);
         }
 
+        public ActionResult Search()
+        {
+            return View();
+        }
+
+        public ActionResult SearchResult(string search)
+        {
+            ViewBag.publications = db.publications.
+             Where(p => p.name.ToLower().Contains(search.ToLower())).
+             ToList();
+            return View(ViewBag);
+
+        }
+
+
         // GET: publications/Details/5
         public ActionResult Details(int? id)
         {

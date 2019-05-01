@@ -13,6 +13,11 @@ namespace blogDBApp.Controllers
             return View();
         }
         
+        public ActionResult SearchSelect()
+        {
+            return View();
+        }
+
         public ActionResult Contact()
         {
             ViewBag.Message = "Zaitsev Vladimir Alexandrovich";

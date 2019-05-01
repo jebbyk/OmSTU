@@ -1,0 +1,22 @@
+﻿
+<table class="table">
+    <tr>
+        <td>
+            <h4>User name</h4>
+        </td>
+        <td>
+            <h4>Mail</h4>
+        </td>
+    </tr>
+    @foreach (var item in ViewBag.users)
+    {
+        <tr>
+            <td>
+                @Html.ActionLink((string)item.name, "Details", "users", new { id = item.id }, null)
+            </td>
+            <td>
+                @Html.Raw((string)item.mail)
+            </td>
+        </tr>
+    }
+</table>
