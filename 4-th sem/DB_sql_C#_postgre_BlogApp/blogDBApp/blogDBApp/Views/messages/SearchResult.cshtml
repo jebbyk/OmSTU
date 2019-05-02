@@ -1,0 +1,42 @@
+﻿
+<table class="table">
+    <tr>
+        <td>
+            <h4>Message title</h4>
+        </td>
+        <td>
+            <h4>Sender</h4>
+        </td>
+        <td>
+            <h4>Reciever</h4>
+        </td>
+        <td>
+            <h4>Date</h4>
+        </td>
+        <td>
+            <h4>
+                Message text
+            </h4>
+        </td>
+    </tr>
+    @foreach (var item in ViewBag.messages)
+    {
+        <tr>
+            <td>
+                @Html.ActionLink((string)item.name, "Details", "messages", new { id = item.id }, null)
+            </td>
+            <td>
+                @Html.ActionLink((string)item.users.name, "Details", "users", new { id = item.users.id}, null)
+            </td>
+            <td>
+                @Html.ActionLink((string)item.users1.name, "Details", "users", new { id = item.users1.id }, null)
+            </td>
+            <td>
+                @item.date
+            </td>
+            <td>
+                @item.text
+            </td>
+        </tr>
+    }
+</table>

@@ -7,6 +7,12 @@
         <td>
             <h4>Mail</h4>
         </td>
+        <td>
+            <h4>About</h4>
+        </td>
+        <td>
+            <h4>Status</h4>
+        </td>
     </tr>
     @foreach (var item in ViewBag.users)
     {
@@ -15,7 +21,13 @@
                 @Html.ActionLink((string)item.name, "Details", "users", new { id = item.id }, null)
             </td>
             <td>
-                @Html.Raw((string)item.mail)
+                @item.mail
+            </td>
+            <td>
+                @item.about
+            </td>
+            <td>
+                @item.isModer
             </td>
         </tr>
     }

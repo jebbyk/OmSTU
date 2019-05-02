@@ -29,7 +29,7 @@
                 @Html.Raw((DateTime)item.date)
             </td>
             <td>
-                @Html.Raw("userName")
+                @Html.ActionLink((string)item.users.name,"Details", "users", new { id = item.users.id}, null)
             </td>
             <td>
                 @Html.Raw((int)item.rating)

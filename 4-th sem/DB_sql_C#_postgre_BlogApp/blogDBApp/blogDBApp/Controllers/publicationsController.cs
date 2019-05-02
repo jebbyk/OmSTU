@@ -36,11 +36,16 @@ namespace blogDBApp.Controllers
             return View();
         }
 
-        public ActionResult SearchResult(string search)
+        public ActionResult SearchResult(string title, string theme, string text, string user, DateTime? minDate, DateTime? maxDate, int? minRating)
         {
             ViewBag.publications = db.publications.
-             Where(p => p.name.ToLower().Contains(search.ToLower())).
-             ToList();
+                Where(p => p.users.name.ToLower().Contains(user.ToLower())).
+                Where(p => p.name.ToLower().Contains(title.ToLower())).
+                Where(p => p.text.ToLower().Contains(text.ToLower())).
+                Where(p => p.rating >= minRating).
+                Where(p => p.themes.name.ToLower().Contains(theme.ToLower())).
+                Where(p => p.date >= minDate && p.date <= maxDate).
+                ToList();
             return View(ViewBag);
 
         }

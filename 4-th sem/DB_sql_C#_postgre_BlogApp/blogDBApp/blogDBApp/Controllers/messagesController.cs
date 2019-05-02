@@ -21,6 +21,23 @@ namespace blogDBApp.Controllers
             return View(messages.ToList());
         }
 
+        public ActionResult Search()
+        {
+            return View();
+        }
+
+        public ActionResult SearchResult(string senderName, string recName, string title, DateTime? minDate, DateTime? maxDate, string text)
+        {
+            ViewBag.messages = db.messages.
+                Where(m => m.users.name.ToLower().Contains(senderName.ToLower())).
+                Where(m => m.users1.name.ToLower().Contains(recName.ToLower())).
+                Where(m => m.name.ToLower().Contains(title.ToLower())).
+                Where(m => m.date >= minDate && m.date <= maxDate).
+                Where(m => m.text.ToLower().Contains(text.ToLower())).
+                ToList();
+            return View();
+        }
+
         // GET: messages/Details/5
         public ActionResult Details(int? id)
         {

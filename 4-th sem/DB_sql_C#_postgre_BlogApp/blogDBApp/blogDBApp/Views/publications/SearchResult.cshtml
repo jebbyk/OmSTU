@@ -13,22 +13,30 @@
         <td>
             <h4>Rating</h4>
         </td>
+        <td>
+            <h4>
+                Theme
+            </h4>
+        </td>
     </tr>
     @foreach (var item in ViewBag.publications)
     {
-        <tr>
-            <td>
-                @Html.ActionLink((string)item.name, "FilterByPublication", "comments", new { id = item.id }, null)
-            </td>
-            <td>
-                @Html.Raw((DateTime)item.date)
-            </td>
-            <td>
-                @Html.Raw("userName")
-            </td>
-            <td>
-                @Html.Raw((int)item.rating)
-            </td>
-        </tr>
+    <tr>
+        <td>
+            @Html.ActionLink((string)item.name, "FilterByPublication", "comments", new { id = item.id }, null)
+        </td>
+        <td>
+            @Html.Raw((DateTime)item.date)
+        </td>
+        <td>
+            @Html.ActionLink((string)item.users.name, "Details", "users", new { id = item.id }, null)
+        </td>
+        <td>
+            @item.rating
+        </td>
+        <td>
+            @item.themes.name
+        </td>
+    </tr>
     }
 </table>

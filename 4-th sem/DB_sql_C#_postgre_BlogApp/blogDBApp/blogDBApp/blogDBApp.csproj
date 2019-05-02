@@ -372,6 +372,10 @@
     <Content Include="Views\publications\SearchResult.cshtml" />
     <Content Include="Views\users\SearchResult.cshtml" />
     <Content Include="Views\comments\SearchResult.cshtml" />
+    <Content Include="Views\themes\Search.cshtml" />
+    <Content Include="Views\themes\SearchResult.cshtml" />
+    <Content Include="Views\messages\Search.cshtml" />
+    <Content Include="Views\messages\SearchResult.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

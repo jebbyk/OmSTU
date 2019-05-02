@@ -19,11 +19,15 @@ namespace blogDBApp.Controllers
             return View();
         }
 
-        public ActionResult SearchResult(string search)
+        public ActionResult SearchResult(string text, string user, string publication, int? rating, DateTime? dateMin, DateTime? dateMax)
         {
             ViewBag.comments = db.comments.
-             Where(p => p.text.ToLower().Contains(search.ToLower())).
-             ToList();
+                 Where(p => p.text.ToLower().Contains(text.ToLower())).
+                 Where(p => p.users.name.ToLower().Contains(user.ToLower())).
+                 Where(p => p.publications.name.ToLower().Contains(publication.ToLower())).
+                 Where(p => p.rating >= rating).
+                 Where(p => p.date >= dateMin && p.date <= dateMax).
+                 ToList();
             return View(ViewBag);
 
         }

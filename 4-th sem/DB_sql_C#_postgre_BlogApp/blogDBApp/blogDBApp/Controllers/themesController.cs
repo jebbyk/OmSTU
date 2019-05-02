@@ -19,6 +19,20 @@ namespace blogDBApp.Controllers
         {
             return View(db.themes.ToList());
         }
+
+        public ActionResult Search()
+        {
+            return View();
+        }
+
+        public ActionResult SearchResult(string name)
+        {
+            ViewBag.themes = db.themes.
+                Where(t => t.name.ToLower().Contains(name.ToLower())).
+                ToList();
+            return View();
+        }
+
         // GET: themes/Details/5
         public ActionResult Details(int? id)
         {

@@ -1,23 +1,43 @@
 ﻿
 <table class="table">
 
+    <tr>
+        <th>
+            User
+        </th>
+        <th>
+            Publication
+        </th>
+        <th>
+            Rating
+        </th>
+        <th>
+            Date
+        </th>
+        <th>
+            Text
+        </th>
+    </tr>
+
     @foreach (var item in ViewBag.comments)
     {
         <tr>
-            <th>
+            <td>
                 @Html.ActionLink((string)item.users.name, "Details", "users", new { id = item.users.id }, null)
-            </th>
-            <td>
-                @Html.Raw((int)item.rating)
             </td>
             <td>
-                @Html.Raw((DateTime)item.date)
+                @Html.ActionLink((string)item.publications.name, "FilterByPublication", "comments", new { id = item.publications.id }, null)
             </td>
-        </tr>
-        <tr>
             <td>
-                @Html.Raw((string)item.text)
+                @item.rating
+            </td>
+            <td>
+                @item.date        
+            </td>
+            <td>
+                @item.text
             </td> 
         </tr>
+            
     }
 </table>

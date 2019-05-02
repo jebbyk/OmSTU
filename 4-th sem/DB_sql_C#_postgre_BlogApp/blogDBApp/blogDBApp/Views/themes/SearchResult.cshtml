@@ -1,0 +1,16 @@
+﻿
+<table class="table">
+    <tr>
+        <td>
+            <h4>Theme title</h4>
+        </td>
+    </tr>
+    @foreach (var item in ViewBag.themes)
+    {
+        <tr>
+            <td>
+                @Html.ActionLink((string)item.name, "FilterByTheme", "publications", new { id = item.id }, null)
+            </td>
+        </tr>
+    }
+</table>
