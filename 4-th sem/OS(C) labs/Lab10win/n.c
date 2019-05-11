@@ -9,12 +9,11 @@ void main()
     int k;
     HANDLE hmtx;
     hmtx = OpenMutex(SYNCHRONIZE, TRUE,"myMutex");
-    
 
    if(hmtx != NULL )
    {
         hmem=OpenFileMapping(FILE_MAP_READ, FALSE, "SHAREMEM_MYY");
-        WaitForSingleObject(hmtx, INFINITE);
+        
         if (hmem==0)
         {
             printf("Error OpenSharedMem with RC=%ld\n", GetLastError());
@@ -22,6 +21,7 @@ void main()
             exit(0);
         }
         pb=MapViewOfFile(hmem, FILE_MAP_READ,0,0,0);
+        printf("Mem addr %p\n", pb);
         if (pb==NULL)
         {
             printf("Error Mapping SharedMem with RC=%ld\n", GetLastError());
@@ -30,12 +30,15 @@ void main()
         }
         for (k=0;k<10;k++ )
         {
+            WaitForSingleObject(hmtx, INFINITE);
             strncpy(st, pb, 20); 
             st[19]='\0'; 
-            printf("%s\n", st); 
+            printf("reading from file mapping: %s\n", st); 
+            ReleaseMutex(hmtx);
             Sleep(2000);
+
         }
         UnmapViewOfFile(pb); CloseHandle(hmem);
-        ReleaseMutex(hmtx);
+        
    }
 }
