@@ -41,6 +41,7 @@ namespace blogDBApp.Controllers
         }
 
         // GET: themes/Create
+        [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
             return View();
@@ -51,6 +52,7 @@ namespace blogDBApp.Controllers
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult Create([Bind(Include = "id,name")] themes themes)
         {
             if (ModelState.IsValid)
@@ -64,6 +66,7 @@ namespace blogDBApp.Controllers
         }
 
         // GET: themes/Edit/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -83,6 +86,7 @@ namespace blogDBApp.Controllers
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit([Bind(Include = "id,name")] themes themes)
         {
             if (ModelState.IsValid)
@@ -95,6 +99,7 @@ namespace blogDBApp.Controllers
         }
 
         // GET: themes/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -112,6 +117,7 @@ namespace blogDBApp.Controllers
         // POST: themes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult DeleteConfirmed(int id)
         {
             themes themes = db.themes.Find(id);

@@ -73,6 +73,7 @@ namespace blogDBApp.Controllers
         }
 
         // GET: comments/Create
+        [Authorize]
         public ActionResult Create()
         {
             ViewBag.publication = new SelectList(db.publications, "id", "name");
@@ -85,6 +86,7 @@ namespace blogDBApp.Controllers
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Create([Bind(Include = "C_id,text,rating,date,publication,user")] comments comments)
         {
             if (ModelState.IsValid)
@@ -100,6 +102,7 @@ namespace blogDBApp.Controllers
         }
 
         // GET: comments/Edit/5
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -121,6 +124,7 @@ namespace blogDBApp.Controllers
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit([Bind(Include = "C_id,text,rating,date,publication,user")] comments comments)
         {
             if (ModelState.IsValid)
@@ -135,6 +139,7 @@ namespace blogDBApp.Controllers
         }
 
         // GET: comments/Delete/5
+        [Authorize]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -152,6 +157,7 @@ namespace blogDBApp.Controllers
         // POST: comments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult DeleteConfirmed(int id)
         {
             comments comments = db.comments.Find(id);

@@ -7,6 +7,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using blogDBApp.Models;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 
 namespace blogDBApp.Controllers
 {
@@ -28,7 +30,8 @@ namespace blogDBApp.Controllers
               Where(p => p.theme == id).
               ToList();
             ViewBag.theme = "Theme: " + db.themes.Find(id).name;
-            return View(ViewBag);
+            ViewBag.themeId = id;
+            return View();
         }
 
         public ActionResult Search()
@@ -46,7 +49,7 @@ namespace blogDBApp.Controllers
                 Where(p => p.themes.name.ToLower().Contains(theme.ToLower())).
                 Where(p => p.date >= minDate && p.date <= maxDate).
                 ToList();
-            return View(ViewBag);
+            return View();
 
         }
 
@@ -67,10 +70,19 @@ namespace blogDBApp.Controllers
         }
 
         // GET: publications/Create
+        [Authorize]
         public ActionResult Create()
         {
             ViewBag.theme = new SelectList(db.themes, "id", "name");
             ViewBag.user = new SelectList(db.users, "id", "name");
+            return View();
+        }
+
+        [Authorize]
+        public ActionResult AddNew(int? id)
+        {
+            ViewBag.theme = id;
+            ViewBag.user = db.users.Where(u => u.name == HttpContext.User.Identity.Name).ToList()[0].id;
             return View();
         }
 
@@ -79,6 +91,7 @@ namespace blogDBApp.Controllers
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Create([Bind(Include = "id,name,text,rating,date,user,theme")] publications publications)
         {
             if (ModelState.IsValid)
@@ -93,7 +106,25 @@ namespace blogDBApp.Controllers
             return View(publications);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public ActionResult AddNew([Bind(Include = "id,name,text,rating,date,user,theme")] publications publications, int? id)
+        {
+            if (ModelState.IsValid)
+            {
+                db.publications.Add(publications);
+                db.SaveChanges();
+                return RedirectToAction("Index","themes");
+            }
+
+            ViewBag.theme = id;
+            ViewBag.user = db.users.Where(u => u.name == HttpContext.User.Identity.Name).ToList()[0].id;
+            return View(publications);
+        }
+
         // GET: publications/Edit/5
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -115,6 +146,7 @@ namespace blogDBApp.Controllers
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit([Bind(Include = "id,name,text,rating,date,user,theme")] publications publications)
         {
             if (ModelState.IsValid)
@@ -129,6 +161,7 @@ namespace blogDBApp.Controllers
         }
 
         // GET: publications/Delete/5
+        [Authorize]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -146,6 +179,7 @@ namespace blogDBApp.Controllers
         // POST: publications/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult DeleteConfirmed(int id)
         {
             publications publications = db.publications.Find(id);

@@ -376,6 +376,9 @@
     <Content Include="Views\themes\SearchResult.cshtml" />
     <Content Include="Views\messages\Search.cshtml" />
     <Content Include="Views\messages\SearchResult.cshtml" />
+    <Content Include="Views\messages\FilterByUser.cshtml" />
+    <Content Include="Views\messages\Send.cshtml" />
+    <Content Include="Views\publications\AddNew.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

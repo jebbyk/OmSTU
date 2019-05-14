@@ -47,7 +47,7 @@ namespace blogDBApp
             manager.UserValidator = new UserValidator<ApplicationUser>(manager)
             {
                 AllowOnlyAlphanumericUserNames = false,
-                RequireUniqueEmail = true
+                RequireUniqueEmail = true,
             };
 
             // Настройка логики проверки паролей

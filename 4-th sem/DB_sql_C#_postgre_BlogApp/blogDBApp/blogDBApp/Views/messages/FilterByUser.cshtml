@@ -1,0 +1,59 @@
+﻿
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Send", "Send")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            <h3>Message Title</h3>
+        </th>
+        <th>
+            <h3>Date</h3>
+        </th>
+        <th>
+            <h3>Message Text</h3>
+        </th>
+        <th>
+            <h3>Reciever</h3>
+        </th>
+        <th>
+            <h3>Sender</h3>
+        </th>
+        <th><h3>CRUD</h3></th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in ViewBag.messages)
+    {
+        <tr>
+            <td>
+                @item.name
+            </td>
+            <td>
+                @item.date
+            </td>
+            <td>
+                @item.text
+            </td>
+            <td>
+                @item.users.name
+            </td>
+            <td>
+                @item.users1.name
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.id })
+            </td>
+        </tr>
+    }
+
+</table>

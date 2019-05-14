@@ -75,7 +75,14 @@ namespace blogDBApp.Controllers
 
             // Сбои при входе не приводят к блокированию учетной записи
             // Чтобы ошибки при вводе пароля инициировали блокирование учетной записи, замените на shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+
+            
+            
+
+            var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: false);
+
+
+
             switch (result)
             {
                 case SignInStatus.Success:
@@ -144,6 +151,7 @@ namespace blogDBApp.Controllers
 
         //
         // POST: /Account/Register
+        private blogDataBaseEntities2 db = new blogDataBaseEntities2();
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -151,11 +159,20 @@ namespace blogDBApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
+                
+
                 var result = await UserManager.CreateAsync(user, model.Password);
+
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+
+                    users newUser = new users{ name = user.UserName, about = "about", isModer = false, mail = user.Email};
+                    
+
+                    db.users.Add(newUser);
+                    db.SaveChanges();
                     
                     // Дополнительные сведения о включении подтверждения учетной записи и сброса пароля см. на странице https://go.microsoft.com/fwlink/?LinkID=320771.
                     // Отправка сообщения электронной почты с этой ссылкой
