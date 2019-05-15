@@ -379,6 +379,7 @@
     <Content Include="Views\messages\FilterByUser.cshtml" />
     <Content Include="Views\messages\Send.cshtml" />
     <Content Include="Views\publications\AddNew.cshtml" />
+    <Content Include="Views\comments\AddNew.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

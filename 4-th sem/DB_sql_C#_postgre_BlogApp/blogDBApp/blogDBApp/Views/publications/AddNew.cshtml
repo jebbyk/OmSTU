@@ -31,13 +31,6 @@
         </div>
     </div>
 
-    <!-- <div class="form-group">
-          Html.LabelFor(model => model.rating, htmlAttributes: new { class = "control-label col-md-2" })
-          <div class="col-md-10">
-              Html.EditorFor(model => model.rating, new { htmlAttributes = new { class = "form-control" } })
-              Html.ValidationMessageFor(model => model.rating, "", new { class = "text-danger" })
-          </div>
-      </div> -->
 
     <input type="hidden" value="0" name="rating" />
 
@@ -49,23 +42,8 @@
         </div>
     </div>
 
-    <!--<div class="form-group">
-        Html.LabelFor(model => model.user, "user", htmlAttributes: new { class = "control-label col-md-2" })
-        <div class="col-md-10">
-            Html.DropDownList("user", null, htmlAttributes: new { class = "form-control" })
-            Html.ValidationMessageFor(model => model.user, "", new { class = "text-danger" })
-        </div>
-    </div>-->
     <input type="hidden" value="@ViewBag.user" name="user" />
 
-    <!--<div class="form-group">
-        Html.LabelFor(model => model.theme, "theme", htmlAttributes: new { class = "control-label col-md-2" })
-        <div class="col-md-10">
-            Html.DropDownList("theme", null, htmlAttributes: new { class = "form-control" })
-            Html.ValidationMessageFor(model => model.theme, "", new { class = "text-danger" })
-        </div>
-    </div>-->
-    >
     <input type="hidden" value="@ViewBag.theme" name="theme" />
 
     <div class="form-group">
@@ -77,7 +55,7 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to publications", "FilterByTheme", new { id = ViewBag.theme },null)
 </div>
 
 @section Scripts {

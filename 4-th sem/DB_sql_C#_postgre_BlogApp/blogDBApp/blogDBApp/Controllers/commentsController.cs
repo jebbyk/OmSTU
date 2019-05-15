@@ -33,6 +33,7 @@ namespace blogDBApp.Controllers
         }
 
         // GET: comments
+        [Authorize(Roles = "Admin")]
         public ActionResult Index()
         {
             var comments = db.comments.Include(c => c.publications).Include(c => c.users);
@@ -53,6 +54,7 @@ namespace blogDBApp.Controllers
             ViewBag.publicationDate = p.date;
             int pUserID = db.publications.Find(id).user;
             ViewBag.publicationUser = db.users.Find(pUserID).name;
+            ViewBag.publicationID = id;
 
             return View();
         }
@@ -81,6 +83,16 @@ namespace blogDBApp.Controllers
             return View();
         }
 
+
+
+        [Authorize]
+        public ActionResult AddNew(int? id)
+        {
+            ViewBag.publication = id;
+            ViewBag.user =db.users.Where(u => u.name == HttpContext.User.Identity.Name).ToList()[0].id;
+            return View();
+        }
+
         // POST: comments/Create
         // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -100,6 +112,28 @@ namespace blogDBApp.Controllers
             ViewBag.user = new SelectList(db.users, "id", "name", comments.user);
             return View(comments);
         }
+
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public ActionResult AddNew([Bind(Include = "C_id,text,rating,date,publication,user")] comments comments, int? id)
+        {
+            if (ModelState.IsValid)
+            {
+                db.comments.Add(comments);
+                db.SaveChanges();
+                return RedirectToAction("Index","themes");
+            }
+
+            ViewBag.publication = id;
+            ViewBag.user = db.users.Where(u => u.name == HttpContext.User.Identity.Name).ToList()[0].id;
+            return View(comments);
+        }
+
+
 
         // GET: comments/Edit/5
         [Authorize]

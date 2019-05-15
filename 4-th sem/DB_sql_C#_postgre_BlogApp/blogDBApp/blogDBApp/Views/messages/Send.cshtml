@@ -58,7 +58,7 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to Message box", "FilterByUser", "messages", new { id = ViewBag.sender }, null)
 </div>
 
 @section Scripts {
