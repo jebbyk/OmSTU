@@ -1,0 +1,133 @@
+﻿<div>
+
+
+    @using (Html.BeginForm("Request1", "home", FormMethod.Post))
+    {
+        <div class="form-group">
+            <div class="col-md-10">
+                <label for="name">
+                    <h4>Show comments with not 0 rating of user: </h4>
+                    <input type="text" name="name" class="form-control" />
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <input type="submit" value="Request1" class="btn btn-default" />
+            </div>
+        </div>
+    }
+
+    <hr />
+
+    @using (Html.BeginForm("Request2", "home", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+            <div class="col-md-10">
+                <label for="request2">Show all comments added after latest post</label>
+                <input type="submit" value="Request2" name="request2" class="btn btn-default" />
+            </div>
+        </div>
+    }
+
+    <hr />
+
+    @using (Html.BeginForm("Request3", "home", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+            <div class="col-md-10">
+                <label for="request3">Show count of comments for each publication</label>
+                <input type="submit" value="Request3" name="request3" class="btn btn-default" />
+            </div>
+        </div>
+    }
+
+    <hr />
+
+    @using (Html.BeginForm("Request4", "home", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+            <div class="col-md-10">
+                <label for="theme">
+                    <h4>Show users who create publications on theme:</h4>
+                    <input type="text" name="theme" class="form-control" />
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <input type="submit" value="Request4" class="btn btn-default" />
+            </div>
+        </div>
+    }
+
+    <hr />
+
+    @using (Html.BeginForm("Request5", "home", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+            <div class="col-md-10">
+                <label for="query">
+                    <h4>Show users who create publications on theme1:</h4>
+                    <input type="text" name="theme1" class="form-control" />
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <label for="query">
+                    <h4>theme2:</h4>
+                    <input type="text" name="theme2" class="form-control" />
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <input type="submit" value="Request5" class="btn btn-default" />
+            </div>
+        </div>
+    }
+
+    <hr />
+
+    @using (Html.BeginForm("Request6", "home", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+            <div class="col-md-10">
+                <label for="query">
+                    <h4>Show users who create publications on theme1:</h4>
+                    <input type="text" name="theme1" class="form-control" />
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <label for="query">
+                    <h4>theme2:</h4>
+                    <input type="text" name="theme2" class="form-control" />
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <label for="query">
+                    <h4>and it's rating not lower then:</h4>
+                    <input type="number" name="rating" class="form-control" />
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <input type="submit" value="Request6" class="btn btn-default" />
+            </div>
+        </div>
+    }
+
+</div>
+
+

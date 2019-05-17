@@ -1,0 +1,34 @@
+﻿
+<table>
+    <tr>
+        <td>
+            <h3>authror</h3>
+        </td>
+        <td>
+            <h3>
+                rating
+            </h3>
+        </td>
+        <td>
+            <h3>
+                text
+            </h3>
+        </td>
+    </tr>
+
+    @foreach (var item in ViewBag.result)
+    {
+        <tr>
+            <td>
+                @Html.ActionLink((string)item.name, "Details", "users", new { id = item.id }, null)
+            </td>
+            <td>
+                @item.rating
+            </td>
+            <td>
+                @item.text
+            </td>
+        </tr>
+
+    }
+</table>
