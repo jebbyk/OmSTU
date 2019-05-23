@@ -24,7 +24,7 @@ namespace blogDBApp.RequestsClasses
 
     public class Request3Columns
     {
-        public string name{ get; set; }
+        public string name { get; set; }
         public int id { get; set; }
         public int count { get; set; }
     }
@@ -47,7 +47,37 @@ namespace blogDBApp.RequestsClasses
         public int pID { get; set; }
         public string tName { get; set; }
         public int tID { get; set; }
-        public int cRating { get;set; }
+        public int cRating { get; set; }
         public string cText { get; set; }
     }
+
+    public class Request7Columns
+    {
+        public string name { get; set; }
+        public int di { get; set; }
+        public string text { get; set; }
+        public string type { get; set; }
+    }
+
+    public class Request8Columns
+    {
+        public string name { get; set; }
+        public int id { get; set; }
+        public float avg { get; set; }
+        public float max { get; set; }
+    }
+
+    public class Request9Columns
+    {
+        public string name {get;set;}
+        public int id { get; set; }
+        public float avg { get; set; }
+    }
+
+    public class Request10Columns
+    {
+        public string name { get; set; }
+        public int id { get; set; }
+    }
+
 }

@@ -47,6 +47,7 @@ namespace blogDBApp.Controllers
         {
             /*ViewBag.result = db.comments.Where(c => c.users.name == name).
                 Where(c => c.rating > 0).ToList();*/
+            name = name.Trim();
 
             using (var db = new blogDataBaseEntities2())
             {
@@ -114,6 +115,7 @@ namespace blogDBApp.Controllers
 
         public ActionResult Request4(string theme)//пользователи создавших публикации на тему 
         {
+            theme = theme.Trim();
             using (var db = new blogDataBaseEntities2())
             {
                 var param = new NpgsqlParameter("@thm", theme)
@@ -138,6 +140,8 @@ namespace blogDBApp.Controllers
 
         public ActionResult Request5(string theme1, string theme2)//пользователи создавших публикации на тему 
         {
+            theme1 = theme1.Trim();
+            theme2 = theme2.Trim(); 
             using (var db = new blogDataBaseEntities2())
             {
                 var param1 = new NpgsqlParameter("@thm1", theme1)
@@ -173,6 +177,8 @@ namespace blogDBApp.Controllers
 
         public ActionResult Request6(string theme1, string theme2, int? rating)//коменты пользователей написавших их к темам в каких то категориях
         {
+            theme1 = theme1.Trim();
+            theme2 = theme2.Trim();
             using (var db = new blogDataBaseEntities2())
             {
                 var param1 = new NpgsqlParameter("@thm1", theme1)
@@ -209,6 +215,118 @@ namespace blogDBApp.Controllers
                                 ";
                 ViewBag.result = db.Database.SqlQuery<Request6Columns>(sql, param1, param2, param3).ToList();
             }
+            return View();
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Request7()//кол. коментов в каждой теме
+        {
+            //List<Request3Columns> result;
+            using (var db = new blogDataBaseEntities2())
+            {
+                string sql = @" select u.name,  c.text, 'comment' as ""type""
+                                from users u
+                                join comments c
+                                on c.user = u.id
+                                where c.text LIKE '%пло%' or c.text LIKE '%нолог%'
+                                union all
+                                select u.name,  m.text, 'message' as ""type""
+                                from users u
+                                join messages m
+                                on m.sender = u.id
+                                where m.text LIKE '%пло%' or m.text LIKE '%нолог%'
+                                union all
+                                select u.name, p.text, 'publication' as ""type""
+                                from users u
+                                join publications p
+                                on p.user = u.id
+                                where p.text LIKE '%пло%' or p.text LIKE '%нолог%'
+
+                                ; ";
+                ViewBag.result = db.Database.SqlQuery<Request7Columns>(sql).ToList();
+            }
+
+            return View();
+        }
+
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Request8()//кол. коментов в каждой теме
+        {
+            //List<Request3Columns> result;
+            using (var db = new blogDataBaseEntities2())
+            {
+                string sql = @" select t.name, t.id, avg(length(c.text)) as ""avg"", max(length(c.text)) as ""max""
+                                from comments c
+                                join publications p
+                                on p.id = c.publication 
+                                join themes t
+                                on p.theme = t.id
+                                group by t.id
+                                ; ";
+                ViewBag.result = db.Database.SqlQuery<Request8Columns>(sql).ToList();
+            }
+
+            return View();
+        }
+
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Request9()//кол. коментов в каждой теме
+        {
+            //List<Request3Columns> result;
+            using (var db = new blogDataBaseEntities2())
+            {
+                string sql = @" select t.name as ""name"", t.id as ""id"", avg(a.count) as ""avg""
+                                from themes t
+                                left
+                                join (select count(*) as ""count"", p.theme as ""theme""
+                                      from publications p
+                                      left outer join comments c
+                                      on p.id = c.publication
+                                      group by p.id) a
+                                      on a.theme = t.id
+                                      where a.count > 0
+                                    group by t.id
+                                ; ";
+                ViewBag.result = db.Database.SqlQuery<Request9Columns>(sql).ToList();
+            }
+
+            return View();
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Request10()//юзеры которые хотябы что то написали
+        {
+            //List<Request3Columns> result;
+            using (var db = new blogDataBaseEntities2())
+            {
+                string sql = @" select u.name, u.id
+                                from users u
+                                join comments c
+                                on c.user  = u.id
+                                intersect
+                                select u.name, u.id
+                                from users u
+                                join publications p
+                                on p.user = u.id
+                                intersect 
+                                select u.name, u.id
+                                from users u
+                                join messages m
+                                on m.sender = u.id 
+                                ; ";
+                ViewBag.result = db.Database.SqlQuery<Request10Columns>(sql).ToList();
+            }
+
             return View();
         }
 

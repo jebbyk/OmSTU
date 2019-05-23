@@ -28,7 +28,7 @@ namespace blogDBApp.Controllers
         public ActionResult SearchResult(string name)
         {
             ViewBag.themes = db.themes.
-                Where(t => t.name.ToLower().Contains(name.ToLower())).
+                Where(t => t.name.ToLower().Trim().Contains(name.ToLower().Trim())).
                 ToList();
             return View();
         }

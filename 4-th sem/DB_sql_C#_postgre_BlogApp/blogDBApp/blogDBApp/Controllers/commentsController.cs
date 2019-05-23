@@ -22,9 +22,9 @@ namespace blogDBApp.Controllers
         public ActionResult SearchResult(string text, string user, string publication, int? rating, DateTime? dateMin, DateTime? dateMax)
         {
             ViewBag.comments = db.comments.
-                 Where(p => p.text.ToLower().Contains(text.ToLower())).
-                 Where(p => p.users.name.ToLower().Contains(user.ToLower())).
-                 Where(p => p.publications.name.ToLower().Contains(publication.ToLower())).
+                 Where(p => p.text.ToLower().Trim().Contains(text.ToLower().Trim())).
+                 Where(p => p.users.name.ToLower().Trim().Contains(user.ToLower().Trim())).
+                 Where(p => p.publications.name.ToLower().Trim().Contains(publication.ToLower().Trim())).
                  Where(p => p.rating >= rating).
                  Where(p => p.date >= dateMin && p.date <= dateMax).
                  ToList();
@@ -88,6 +88,7 @@ namespace blogDBApp.Controllers
         [Authorize]
         public ActionResult AddNew(int? id)
         {
+            ViewBag.date = DateTime.Now;
             ViewBag.publication = id;
             ViewBag.user =db.users.Where(u => u.name == HttpContext.User.Identity.Name).ToList()[0].id;
             return View();

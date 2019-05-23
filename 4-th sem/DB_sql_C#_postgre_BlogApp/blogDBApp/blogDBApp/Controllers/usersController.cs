@@ -22,9 +22,9 @@ namespace blogDBApp.Controllers
         public ActionResult SearchResult(string name, string mail, string text, bool? moderate)
         {
             ViewBag.users = db.users.
-             Where(p => p.name.ToLower().Contains(name.ToLower())).
-             Where(p => p.mail.ToLower().Contains(mail.ToLower())).
-             Where(p => p.about.ToLower().Contains(text.ToLower())).
+             Where(p => p.name.ToLower().Trim().Contains(name.ToLower().Trim())).
+             Where(p => p.mail.ToLower().Trim().Contains(mail.ToLower().Trim())).
+             Where(p => p.about.ToLower().Trim().Contains(text.ToLower().Trim())).
              Where(p => p.isModer == moderate).
              ToList();
             return View(ViewBag);

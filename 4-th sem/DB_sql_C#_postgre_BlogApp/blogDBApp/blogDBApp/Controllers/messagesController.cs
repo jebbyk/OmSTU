@@ -35,11 +35,11 @@ namespace blogDBApp.Controllers
         public ActionResult SearchResult(string senderName, string recName, string title, DateTime? minDate, DateTime? maxDate, string text)
         {
             ViewBag.messages = db.messages.
-                Where(m => m.users.name.ToLower().Contains(senderName.ToLower())).
-                Where(m => m.users1.name.ToLower().Contains(recName.ToLower())).
-                Where(m => m.name.ToLower().Contains(title.ToLower())).
+                Where(m => m.users.name.ToLower().Trim().Contains(senderName.ToLower().Trim())).
+                Where(m => m.users1.name.ToLower().Trim().Contains(recName.ToLower().Trim())).
+                Where(m => m.name.ToLower().Trim().Contains(title.ToLower().Trim())).
                 Where(m => m.date >= minDate && m.date <= maxDate).
-                Where(m => m.text.ToLower().Contains(text.ToLower())).
+                Where(m => m.text.ToLower().Trim().Contains(text.ToLower().Trim())).
                 ToList();
             return View();
         }
@@ -50,8 +50,12 @@ namespace blogDBApp.Controllers
 
             string loggedUserName = HttpContext.User.Identity.Name;
             int loggedUserID = db.users.Where(u => u.name == loggedUserName).ToList()[0].id;
-            ViewBag.messages = db.messages.
+            ViewBag.resieved = db.messages.
                 Where(m => m.receiver == loggedUserID).
+                ToList();
+
+            ViewBag.sended = db.messages.
+                Where(m => m.sender == loggedUserID).
                 ToList();
 
             return View();
@@ -105,6 +109,7 @@ namespace blogDBApp.Controllers
         [Authorize]
         public ActionResult Send()
         {
+            ViewBag.date = DateTime.Now;
             string loggedUserName = HttpContext.User.Identity.Name;
             int loggedUserID = db.users.Where(u => u.name == loggedUserName).ToList()[0].id;
             ViewBag.receiver = new SelectList(db.users, "id", "name");
@@ -117,7 +122,7 @@ namespace blogDBApp.Controllers
         [Authorize]
         public ActionResult Send([Bind(Include = "id,sender,receiver,name,date,text")] messages messages)
         {
-
+            ViewBag.date = DateTime.Now;
             string loggedUserName = HttpContext.User.Identity.Name;
             int loggedUserID = db.users.Where(u => u.name == loggedUserName).ToList()[0].id;
 

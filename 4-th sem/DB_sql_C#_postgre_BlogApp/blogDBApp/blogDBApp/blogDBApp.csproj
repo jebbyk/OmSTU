@@ -388,6 +388,10 @@
     <Content Include="Views\Home\Request4.cshtml" />
     <Content Include="Views\Home\Request5.cshtml" />
     <Content Include="Views\Home\Request6.cshtml" />
+    <Content Include="Views\Home\Request7.cshtml" />
+    <Content Include="Views\Home\Request8.cshtml" />
+    <Content Include="Views\Home\Request9.cshtml" />
+    <Content Include="Views\Home\Request10.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

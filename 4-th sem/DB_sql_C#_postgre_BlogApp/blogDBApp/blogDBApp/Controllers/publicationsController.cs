@@ -41,12 +41,13 @@ namespace blogDBApp.Controllers
 
         public ActionResult SearchResult(string title, string theme, string text, string user, DateTime? minDate, DateTime? maxDate, int? minRating)
         {
+            ViewBag.date = DateTime.Now;
             ViewBag.publications = db.publications.
-                Where(p => p.users.name.ToLower().Contains(user.ToLower())).
-                Where(p => p.name.ToLower().Contains(title.ToLower())).
-                Where(p => p.text.ToLower().Contains(text.ToLower())).
+                Where(p => p.users.name.ToLower().Trim().Contains(user.ToLower().Trim())).
+                Where(p => p.name.ToLower().Trim().Contains(title.ToLower().Trim())).
+                Where(p => p.text.ToLower().Trim().Contains(text.ToLower().Trim())).
                 Where(p => p.rating >= minRating).
-                Where(p => p.themes.name.ToLower().Contains(theme.ToLower())).
+                Where(p => p.themes.name.ToLower().Trim().Contains(theme.ToLower().Trim())).
                 Where(p => p.date >= minDate && p.date <= maxDate).
                 ToList();
             return View();
@@ -81,6 +82,7 @@ namespace blogDBApp.Controllers
         [Authorize]
         public ActionResult AddNew(int? id)
         {
+            ViewBag.date = DateTime.Now;
             ViewBag.theme = id;
             ViewBag.user = db.users.Where(u => u.name == HttpContext.User.Identity.Name).ToList()[0].id;
             return View();
