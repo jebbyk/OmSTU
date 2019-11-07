@@ -1,0 +1,225 @@
+﻿
+<table class="table">
+    <tr>
+        @using (Html.BeginForm("Request1", "home", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <td>
+                <div class="form-group">
+                    <div class="col-md-10">
+                            <label for="name">Show comments with not 0 rating of user: </label>
+                            <input type="text" name="name" class="form-control" />
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    <div class="col-md-10">
+                        <input type="submit" value="Request1" class="btn btn-default" />
+                    </div>
+                </div>
+            </td>
+        }
+    </tr>
+    <tr>
+        @using (Html.BeginForm("Request2", "home", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                <td>
+                    <div class="col-md-10">
+                        <label for="request2">Show all comments added after latest post</label>
+                    
+                </td>
+                <td>
+                    <div class="col-md-10">
+                        <input type="submit" value="Request2" name="request2" class="btn btn-default" />
+                    </div>
+                </td>
+                
+            </div>
+        }
+    </tr>
+
+    <hr />
+    <tr>
+        @using (Html.BeginForm("Request3", "home", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+
+                <td>
+                    <div class="col-md-10">
+                        <label for="request3">Show count of comments for each publication</label>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-md-10">
+                        <input type="submit" value="Request3" name="request3" class="btn btn-default" />
+                    </div>
+                </td>
+            </div>
+        }
+    </tr>
+
+    <hr />
+    <tr>
+        @using (Html.BeginForm("Request4", "home", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <td>
+                <div class="form-group">
+                    <div class="col-md-10">
+                            <label for="theme">Show users who create publications on theme:</label>
+                            <input type="text" name="theme" class="form-control" />
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    <div class="col-md-10">
+                        <input type="submit" value="Request4" class="btn btn-default" />
+                    </div>
+                </div>
+            </td>
+        }
+    </tr>
+    <tr>
+        @using (Html.BeginForm("Request5", "home", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <td>
+                <div class="form-group">
+                    <div class="col-md-10">
+                            <label for="theme1">Show users who create publications on theme1:</label>
+                            <input type="text" name="theme1" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-10">
+                            <label for="theme2">theme2:</label>
+                            <input type="text" name="theme2" class="form-control" />
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    <div class="col-md-10">
+                        <input type="submit" value="Request5" class="btn btn-default" />
+                    </div>
+                </div>
+            </td>
+            }
+    </tr>
+    <tr>
+        @using (Html.BeginForm("Request6", "home", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <td>
+                <div class="form-group">
+                    <div class="col-md-10">
+                            <label for="theme1">Show users who create publications on theme1:</label>
+                            <input type="text" name="theme1" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-10">
+                            <label for="theme2">theme2:</label>
+                            <input type="text" name="theme2" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-10">
+                            <label for="rating">and it's rating not lower then:</label>
+                            <input type="number" name="rating" class="form-control" />
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    <div class="col-md-10">
+                        <input type="submit" value="Request6" class="btn btn-default" />
+                    </div>
+                </div>
+            </td>
+            }
+    </tr>
+    <tr>
+        @using (Html.BeginForm("Request7", "home", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                
+                <td>
+                    <div class="col-md-10">
+                        <label for="request7">Show bad guys</label>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-md-10">
+                        <input type="submit" value="Request7" name="request7" class="btn btn-default" />
+                    </div>
+                </td>
+            </div>
+        }
+    </tr>
+    <tr>
+        @using (Html.BeginForm("Request8", "home", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+               
+                <td>
+                    <div class="col-md-10">
+                        <label for="request8">Show average and maximum length of the comments for each theme</label>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-md-10">
+                        <input type="submit" value="Request8" name="request8" class="btn btn-default" />
+                    </div>
+                </td>
+            </div>
+        }
+    </tr>
+    <tr>
+        @using (Html.BeginForm("Request9", "home", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                
+                <td>
+                    <div class="col-md-10">
+                        <label for="request9">Show average comments count for each publication</label>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-md-10">
+                        <input type="submit" value="Request9" name="request9" class="btn btn-default" />
+                    </div>
+                </td>
+                
+            </div>
+        }
+    </tr>
+    <tr>
+        @using (Html.BeginForm("Request10", "home", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                
+                <td>
+                    <div class="col-md-10">
+                        <label for="request10">Show users who has full activity</label>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-md-10">
+                        <input type="submit" value="Request10" name="request10" class="btn btn-default" />
+                    </div>
+                </td>
+               
+            </div>
+        }
+    </tr>
+</table>

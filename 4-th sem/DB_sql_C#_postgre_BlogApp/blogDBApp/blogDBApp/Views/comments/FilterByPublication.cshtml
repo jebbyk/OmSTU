@@ -18,6 +18,13 @@
                 <td>
                     @Html.Raw("Rating: " + (int)item.rating)
                 </td>
+                <td>
+                    @item.date
+                </td>
             </tr>
         }
     </table>
+
+    <h3>
+        @Html.ActionLink("Add a commnet", "AddNew","comments", new { id = ViewBag.publicationID}, null)
+    </h3>

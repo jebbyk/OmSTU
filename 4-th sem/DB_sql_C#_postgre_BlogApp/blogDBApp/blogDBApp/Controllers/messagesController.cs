@@ -7,38 +7,62 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using blogDBApp.Models;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+
 
 namespace blogDBApp.Controllers
 {
     public class messagesController : Controller
     {
         private blogDataBaseEntities2 db = new blogDataBaseEntities2();
-
         // GET: messages
+        [Authorize(Roles = "Admin")]
         public ActionResult Index()
         {
             var messages = db.messages.Include(m => m.users).Include(m => m.users1);
             return View(messages.ToList());
         }
 
+
+        [Authorize(Roles = "Admin")]
         public ActionResult Search()
         {
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         public ActionResult SearchResult(string senderName, string recName, string title, DateTime? minDate, DateTime? maxDate, string text)
         {
             ViewBag.messages = db.messages.
-                Where(m => m.users.name.ToLower().Contains(senderName.ToLower())).
-                Where(m => m.users1.name.ToLower().Contains(recName.ToLower())).
-                Where(m => m.name.ToLower().Contains(title.ToLower())).
+                Where(m => m.users.name.ToLower().Trim().Contains(senderName.ToLower().Trim())).
+                Where(m => m.users1.name.ToLower().Trim().Contains(recName.ToLower().Trim())).
+                Where(m => m.name.ToLower().Trim().Contains(title.ToLower().Trim())).
                 Where(m => m.date >= minDate && m.date <= maxDate).
-                Where(m => m.text.ToLower().Contains(text.ToLower())).
+                Where(m => m.text.ToLower().Trim().Contains(text.ToLower().Trim())).
                 ToList();
             return View();
         }
 
+        [Authorize]
+        public ActionResult FilterByUser()
+        {
+
+            string loggedUserName = HttpContext.User.Identity.Name;
+            int loggedUserID = db.users.Where(u => u.name == loggedUserName).ToList()[0].id;
+            ViewBag.resieved = db.messages.
+                Where(m => m.receiver == loggedUserID).
+                ToList();
+
+            ViewBag.sended = db.messages.
+                Where(m => m.sender == loggedUserID).
+                ToList();
+
+            return View();
+        }
+
         // GET: messages/Details/5
+        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -54,6 +78,7 @@ namespace blogDBApp.Controllers
         }
 
         // GET: messages/Create
+        [Authorize]
         public ActionResult Create()
         {
             ViewBag.receiver = new SelectList(db.users, "id", "name");
@@ -66,6 +91,7 @@ namespace blogDBApp.Controllers
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult Create([Bind(Include = "id,sender,receiver,name,date,text")] messages messages)
         {
             if (ModelState.IsValid)
@@ -80,7 +106,40 @@ namespace blogDBApp.Controllers
             return View(messages);
         }
 
+        [Authorize]
+        public ActionResult Send()
+        {
+            ViewBag.date = DateTime.Now;
+            string loggedUserName = HttpContext.User.Identity.Name;
+            int loggedUserID = db.users.Where(u => u.name == loggedUserName).ToList()[0].id;
+            ViewBag.receiver = new SelectList(db.users, "id", "name");
+            ViewBag.sender = loggedUserID;
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public ActionResult Send([Bind(Include = "id,sender,receiver,name,date,text")] messages messages)
+        {
+            ViewBag.date = DateTime.Now;
+            string loggedUserName = HttpContext.User.Identity.Name;
+            int loggedUserID = db.users.Where(u => u.name == loggedUserName).ToList()[0].id;
+
+            if (ModelState.IsValid)
+            {
+                db.messages.Add(messages);
+                db.SaveChanges();
+                return RedirectToAction("FilterByUser");
+            }
+
+            ViewBag.receiver = new SelectList(db.users, "id", "name", messages.receiver);
+            ViewBag.sender = loggedUserID;
+            return View(messages);
+        }
+
         // GET: messages/Edit/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -102,6 +161,7 @@ namespace blogDBApp.Controllers
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit([Bind(Include = "id,sender,receiver,name,date,text")] messages messages)
         {
             if (ModelState.IsValid)
@@ -116,6 +176,7 @@ namespace blogDBApp.Controllers
         }
 
         // GET: messages/Delete/5
+        [Authorize]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -133,6 +194,7 @@ namespace blogDBApp.Controllers
         // POST: messages/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult DeleteConfirmed(int id)
         {
             messages messages = db.messages.Find(id);

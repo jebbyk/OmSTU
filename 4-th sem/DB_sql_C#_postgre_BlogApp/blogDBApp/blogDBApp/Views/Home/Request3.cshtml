@@ -1,0 +1,28 @@
+﻿
+<table class="table">
+    <tr>
+        <td>
+            <h3>
+                publication
+            </h3>
+        </td>
+        <td>
+            <h3>
+                comments count
+            </h3>
+        </td>
+    </tr>
+
+    @foreach (var item in ViewBag.result)
+    {
+        <tr>
+            <td>
+                @Html.ActionLink((string)item.name + " ", "FilterByPublicaation", "comments", new { id = item.id }, null)
+            </td>
+            <td>
+                @item.count
+            </td>
+        </tr>
+
+    }
+</table>

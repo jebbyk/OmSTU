@@ -2,7 +2,9 @@
 <h1>@Html.Raw((string)ViewBag.theme)</h1>
 
 
-
+<h2>
+    @Html.ActionLink("Create", "AddNew", "publications", new { id = ViewBag.themeId }, null)
+</h2>
 
 <table class="table">
     <tr>

@@ -1,0 +1,33 @@
+﻿
+<table class="table">
+    <tr>
+        <td>
+            <h3>user</h3>
+        </td>
+        <td>
+            <h3>
+                comment
+            </h3>
+        </td>
+        <td>
+            <h3>
+                type
+            </h3>
+        </td>
+    </tr>
+
+    @foreach (var item in ViewBag.result)
+    {
+        <tr>
+            <td>
+                @item.name
+            </td>
+            <td>
+                @item.text
+            </td>
+            <td>
+                @item.type
+            </td>
+        </tr>
+    }
+</table>

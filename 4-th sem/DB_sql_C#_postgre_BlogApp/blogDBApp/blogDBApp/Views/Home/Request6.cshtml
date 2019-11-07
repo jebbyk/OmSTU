@@ -1,0 +1,47 @@
+﻿
+<table class="table">
+    <tr>
+        <td>
+            <h3>comment</h3>
+        </td>
+        <td>
+            <h3>user</h3>
+        </td>
+        <td>
+            <h3>
+                publication
+            </h3>
+        </td>
+        <td>
+            <h3>
+                theme
+            </h3>
+        </td>
+        <td>
+            <h3>
+                rating
+            </h3>
+        </td>
+    </tr>
+
+    @foreach (var item in ViewBag.result)
+    {
+        <tr>
+            <td>
+                @item.cText
+            </td>
+            <td>
+                @Html.ActionLink((string)item.uName, "Details", "users", new { id = item.uID }, null)
+            </td>
+            <td>
+                @Html.ActionLink((string)item.pName, "FilterByPublication", "comments", new { id = item.pID }, null)
+            </td>
+            <td>
+                @Html.ActionLink((string)item.tName, "FilterByTheme", "publications", new { id = item.tID }, null)
+            </td>
+            <td>
+                @item.cRating
+            </td>
+        </tr>
+    }
+</table>

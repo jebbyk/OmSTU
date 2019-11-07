@@ -22,9 +22,9 @@ namespace blogDBApp.Controllers
         public ActionResult SearchResult(string text, string user, string publication, int? rating, DateTime? dateMin, DateTime? dateMax)
         {
             ViewBag.comments = db.comments.
-                 Where(p => p.text.ToLower().Contains(text.ToLower())).
-                 Where(p => p.users.name.ToLower().Contains(user.ToLower())).
-                 Where(p => p.publications.name.ToLower().Contains(publication.ToLower())).
+                 Where(p => p.text.ToLower().Trim().Contains(text.ToLower().Trim())).
+                 Where(p => p.users.name.ToLower().Trim().Contains(user.ToLower().Trim())).
+                 Where(p => p.publications.name.ToLower().Trim().Contains(publication.ToLower().Trim())).
                  Where(p => p.rating >= rating).
                  Where(p => p.date >= dateMin && p.date <= dateMax).
                  ToList();
@@ -33,6 +33,7 @@ namespace blogDBApp.Controllers
         }
 
         // GET: comments
+        [Authorize(Roles = "Admin")]
         public ActionResult Index()
         {
             var comments = db.comments.Include(c => c.publications).Include(c => c.users);
@@ -53,6 +54,7 @@ namespace blogDBApp.Controllers
             ViewBag.publicationDate = p.date;
             int pUserID = db.publications.Find(id).user;
             ViewBag.publicationUser = db.users.Find(pUserID).name;
+            ViewBag.publicationID = id;
 
             return View();
         }
@@ -73,10 +75,22 @@ namespace blogDBApp.Controllers
         }
 
         // GET: comments/Create
+        [Authorize]
         public ActionResult Create()
         {
             ViewBag.publication = new SelectList(db.publications, "id", "name");
             ViewBag.user = new SelectList(db.users, "id", "name");
+            return View();
+        }
+
+
+
+        [Authorize]
+        public ActionResult AddNew(int? id)
+        {
+            ViewBag.date = DateTime.Now;
+            ViewBag.publication = id;
+            ViewBag.user =db.users.Where(u => u.name == HttpContext.User.Identity.Name).ToList()[0].id;
             return View();
         }
 
@@ -85,6 +99,7 @@ namespace blogDBApp.Controllers
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Create([Bind(Include = "C_id,text,rating,date,publication,user")] comments comments)
         {
             if (ModelState.IsValid)
@@ -99,7 +114,30 @@ namespace blogDBApp.Controllers
             return View(comments);
         }
 
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public ActionResult AddNew([Bind(Include = "C_id,text,rating,date,publication,user")] comments comments, int? id)
+        {
+            if (ModelState.IsValid)
+            {
+                db.comments.Add(comments);
+                db.SaveChanges();
+                return RedirectToAction("Index","themes");
+            }
+
+            ViewBag.publication = id;
+            ViewBag.user = db.users.Where(u => u.name == HttpContext.User.Identity.Name).ToList()[0].id;
+            return View(comments);
+        }
+
+
+
         // GET: comments/Edit/5
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -121,6 +159,7 @@ namespace blogDBApp.Controllers
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit([Bind(Include = "C_id,text,rating,date,publication,user")] comments comments)
         {
             if (ModelState.IsValid)
@@ -135,6 +174,7 @@ namespace blogDBApp.Controllers
         }
 
         // GET: comments/Delete/5
+        [Authorize]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -152,6 +192,7 @@ namespace blogDBApp.Controllers
         // POST: comments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult DeleteConfirmed(int id)
         {
             comments comments = db.comments.Find(id);

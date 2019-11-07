@@ -22,9 +22,9 @@ namespace blogDBApp.Controllers
         public ActionResult SearchResult(string name, string mail, string text, bool? moderate)
         {
             ViewBag.users = db.users.
-             Where(p => p.name.ToLower().Contains(name.ToLower())).
-             Where(p => p.mail.ToLower().Contains(mail.ToLower())).
-             Where(p => p.about.ToLower().Contains(text.ToLower())).
+             Where(p => p.name.ToLower().Trim().Contains(name.ToLower().Trim())).
+             Where(p => p.mail.ToLower().Trim().Contains(mail.ToLower().Trim())).
+             Where(p => p.about.ToLower().Trim().Contains(text.ToLower().Trim())).
              Where(p => p.isModer == moderate).
              ToList();
             return View(ViewBag);
@@ -76,6 +76,7 @@ namespace blogDBApp.Controllers
         }
 
         // GET: users/Edit/5
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -95,10 +96,12 @@ namespace blogDBApp.Controllers
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit([Bind(Include = "id,name,mail,about,isModer")] users users)
         {
             if (ModelState.IsValid)
             {
+                
                 db.Entry(users).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -107,6 +110,7 @@ namespace blogDBApp.Controllers
         }
 
         // GET: users/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -124,6 +128,7 @@ namespace blogDBApp.Controllers
         // POST: users/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult DeleteConfirmed(int id)
         {
             users users = db.users.Find(id);
