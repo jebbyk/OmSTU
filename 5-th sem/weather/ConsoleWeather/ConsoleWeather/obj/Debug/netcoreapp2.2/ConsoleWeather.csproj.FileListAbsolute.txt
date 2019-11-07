@@ -1,0 +1,11 @@
+/home/jebbyk/Desktop/git/OmSTU/5-th sem/weather/ConsoleWeather/ConsoleWeather/bin/Debug/netcoreapp2.2/ConsoleWeather.deps.json
+/home/jebbyk/Desktop/git/OmSTU/5-th sem/weather/ConsoleWeather/ConsoleWeather/bin/Debug/netcoreapp2.2/ConsoleWeather.runtimeconfig.json
+/home/jebbyk/Desktop/git/OmSTU/5-th sem/weather/ConsoleWeather/ConsoleWeather/bin/Debug/netcoreapp2.2/ConsoleWeather.runtimeconfig.dev.json
+/home/jebbyk/Desktop/git/OmSTU/5-th sem/weather/ConsoleWeather/ConsoleWeather/bin/Debug/netcoreapp2.2/ConsoleWeather.dll
+/home/jebbyk/Desktop/git/OmSTU/5-th sem/weather/ConsoleWeather/ConsoleWeather/bin/Debug/netcoreapp2.2/ConsoleWeather.pdb
+/home/jebbyk/Desktop/git/OmSTU/5-th sem/weather/ConsoleWeather/ConsoleWeather/obj/Debug/netcoreapp2.2/ConsoleWeather.csprojAssemblyReference.cache
+/home/jebbyk/Desktop/git/OmSTU/5-th sem/weather/ConsoleWeather/ConsoleWeather/obj/Debug/netcoreapp2.2/ConsoleWeather.csproj.CoreCompileInputs.cache
+/home/jebbyk/Desktop/git/OmSTU/5-th sem/weather/ConsoleWeather/ConsoleWeather/obj/Debug/netcoreapp2.2/ConsoleWeather.AssemblyInfoInputs.cache
+/home/jebbyk/Desktop/git/OmSTU/5-th sem/weather/ConsoleWeather/ConsoleWeather/obj/Debug/netcoreapp2.2/ConsoleWeather.AssemblyInfo.cs
+/home/jebbyk/Desktop/git/OmSTU/5-th sem/weather/ConsoleWeather/ConsoleWeather/obj/Debug/netcoreapp2.2/ConsoleWeather.dll
+/home/jebbyk/Desktop/git/OmSTU/5-th sem/weather/ConsoleWeather/ConsoleWeather/obj/Debug/netcoreapp2.2/ConsoleWeather.pdb

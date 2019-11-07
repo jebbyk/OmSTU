@@ -5,6 +5,7 @@
     <e p="$USER_HOME$/.Rider2019.2/system/resharper-host/local/Transient/ReSharperHost/v192/SolutionCaches/_Solution1.21839324.00" t="ExcludeRecursive" />
     <e p="$PROJECT_DIR$" t="IncludeFlat">
       <e p="Solution1.sln" t="IncludeFlat" />
+      <e p="SolutionFolder1" t="Include" />
     </e>
   </component>
 </project>
