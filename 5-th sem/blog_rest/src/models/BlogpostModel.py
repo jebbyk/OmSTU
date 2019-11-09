@@ -45,7 +45,7 @@ class BlogpostModel(db.Model):
     def __repr__(self):
         return '<id {}>'.format(self.id)
 
-class BlogpostSchema(Schema)
+class BlogpostSchema(Schema):
     id = fields.Int(dump_only=True)
     title = fields.Str(required=True)
     contents = fields.Str(required=True)

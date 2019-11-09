@@ -4,9 +4,9 @@ from .import db
 
 from ..app import bcrypt
 
-from .BlogpostModel import BlogpostModel
+from .BlogpostModel import BlogpostSchema
 
-class UserSchema(Schema)
+class UserSchema(Schema):
    id = fields.Int(dump_only=True)
    name = fields.Str(required=True)
    email = fields.Email(required=True)
@@ -47,7 +47,7 @@ class UserModel(db.Model):
     def update (self, data):
         for key, item in data.items():
             if key == 'password':
-                self.password = self._generate_hash(value)
+                self.password = self._generate_hash('password')
             setattr(self, key, item)
         self.modified_at = datetime.datetime.utcnow()
         db.session.commit()
