@@ -52,15 +52,14 @@ public class GetWeather
         doc = new XmlDocument ();
         
         var xml = new WebClient().DownloadString(new Uri (weburl));
-
-        // doc.LoadXml (xml);
-        // foreach(XmlNode node in doc.GetElementsByTagName("*"))
-        // {
-        //     Debug.Log(node.Name);
-        // }
-        szTemp = doc.DocumentElement.SelectSingleNode ("temperature").Attributes["value"].Value;
+        doc.LoadXml (xml);
+        foreach(XmlNode node in doc.GetElementsByTagName("*"))
+        {
+             Console.Out.WriteLine(node.Name);
+        }
+        /*szTemp = doc.DocumentElement.SelectSingleNode ("temperature").Attributes["value"].Value;
         szSun = doc.DocumentElement.SelectSingleNode("sun").Attributes["value"].Value;
         temp = double.Parse (szTemp) - 273.16;
-        Console.Out.WriteLine("Temp. " + temp.ToString("N2") + " Celcius" + ", Sun: " + szSun);
+        Console.Out.WriteLine("Temp. " + temp.ToString("N2") + " Celcius" + ", Sun: " + szSun);*/
     }
 }
