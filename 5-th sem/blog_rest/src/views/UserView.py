@@ -5,6 +5,7 @@ from ..shared.Authentication import Auth
 user_api = Blueprint('users', __name__)
 user_schema = UserSchema()
 
+
 @user_api.route('/', methods=['POST'])
 def create():
     req_data = request.get_json()
@@ -21,16 +22,20 @@ def create():
     user = UserModel(data)
     user.save()
 
-    ser_data = Auth.generate_token(ser_data.get('id'))
+    #ser_data = user_schema.dump(user).data
+    #token = Auth.generate_token(ser_data.get('id'))
 
-    return custom_response({'jwt_token': token}, 201)
+    #return custom_response({'jwt_token': token}, 201)
+    return 'motherfucker'
+
 
 @user_api.route('/', methods=['GET'])
-@Auth.auth_requred
+@Auth.auth_required
 def get_all():
     users = UserModel.get_all_users()
     ser_users = user_schema.dump(users, many=True).data
     return custom_response(ser_users, 200)
+
 
 @user_api.route('/login', methods=['POST'])
 def login():
@@ -58,8 +63,9 @@ def login():
 
     return custom_response({'jwt_token': token}, 200)
 
+
 @user_api.route('/<int:user_id>', methods=['GET'])
-@Auth.auth_requred
+@Auth.auth_required
 def get_a_user(user_id):
     user = UserModel.get_one_user(user_id)
     if not user:
@@ -68,8 +74,9 @@ def get_a_user(user_id):
     ser_user = user_schema.dump(user).data
     return custom_response(ser_user, 200)
 
+
 @user_api.route('/me', methods=['PUT'])
-@Auth.auth_requred
+@Auth.auth_required
 def update():
     req_data = request.get_json()
     data, error = user_schema.load(req_data, partial=True)
@@ -81,15 +88,17 @@ def update():
     ser_user = user_schema.dump(user).data
     return custom_response(ser_user, 200)
 
+
 @user_api.route('/me', methods=['DELETE'])
-@Auth.auth_requred
+@Auth.auth_required
 def delete():
     user = UserModel.get_one_user(g.user.get('id'))
     user.delete()
     return custom_response({'message': 'deleted'}, 204)
 
+
 @user_api.route('/me', methods=['GET'])
-@Auth.auth_requred
+@Auth.auth_required
 def get_me():
     user = UserModel.get_one_user(g.user.get('id'))
     ser_user = user_schema.dump(user).data

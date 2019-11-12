@@ -6,14 +6,21 @@ from ..app import bcrypt
 
 from .BlogpostModel import BlogpostSchema
 
+
 class UserSchema(Schema):
-   id = fields.Int(dump_only=True)
-   name = fields.Str(required=True)
-   email = fields.Email(required=True)
-   password = fields.Str(required=True)
-   created_at = fields.DateTime(dump_only=True)
-   modified_at = fields.DateTime(dump_only=True)
-   blogposts = fields.Nested(BlogpostSchema, many=True)
+
+    """
+    User schema
+    """
+
+    id = fields.Int(dump_only=True)
+    name = fields.Str(required=True)
+    email = fields.Email(required=True)
+    password = fields.Str(required=True)
+    created_at = fields.DateTime(dump_only=True)
+    modified_at = fields.DateTime(dump_only=True)
+    blogposts = fields.Nested(BlogpostSchema, many=True)
+
 
 class UserModel(db.Model):
     """
@@ -29,8 +36,6 @@ class UserModel(db.Model):
     created_at = db.Column(db.DateTime)
     modified_at = db.Column(db.DateTime)
 
-    #class constructor
-
     def __init__(self, data):
         self.name = data.get('name')
         self.email = data.get('email')
@@ -44,7 +49,7 @@ class UserModel(db.Model):
         db.session.add(self)
         db.session.commit()
 
-    def update (self, data):
+    def update(self, data):
         for key, item in data.items():
             if key == 'password':
                 self.password = self._generate_hash('password')
@@ -61,12 +66,11 @@ class UserModel(db.Model):
         return UserModel.query.all()
 
     @staticmethod
-    def get_one_user():
-         return UserModel.query.get(id)
+    def get_one_user(id):
+        return UserModel.query.get(id)
 
     def __repr(self):
         return '<id {}'.format(self.id)
-
 
     def __generate_hash(self, password):
         return bcrypt.generate_password_hash(password, rounds=10).decode("utf-8")

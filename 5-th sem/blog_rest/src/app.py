@@ -5,13 +5,14 @@ from .models import db, bcrypt
 
 from .views.UserView import user_api as user_blueprint
 
+
 def create_app(env_name):
     """
     Create app
     :param env_name:
     :return:
     """
-    #initialization
+
     app = Flask(__name__)
 
     app.config.from_object(app_config[env_name])
@@ -20,7 +21,7 @@ def create_app(env_name):
 
     app.register_blueprint(user_blueprint, url_prifix='/api/v1/users')
 
-    @app.route('/', methods = ['GET'])
+    @app.route('/', methods=['GET'])
     def index():
         """
         endpoint

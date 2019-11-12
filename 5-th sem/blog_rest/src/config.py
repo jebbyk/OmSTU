@@ -1,5 +1,6 @@
 import os
 
+
 class Development(object):
     """
     Development environment configuration
@@ -10,6 +11,7 @@ class Development(object):
     JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY')
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL')
 
+
 class Production (object):
     """
     Production environment configuration
@@ -19,6 +21,7 @@ class Production (object):
     TESTING = False
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL')
     JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY')
+
 
 app_config = {
     'development': Development,

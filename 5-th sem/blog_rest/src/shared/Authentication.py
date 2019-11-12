@@ -3,11 +3,12 @@ import os
 import datetime
 from flask import json, Response, request, g
 from ..models.UserModel import UserModel
+from functools import wraps
 
-class Auth():
 
+class Auth:
     @staticmethod
-    def auth_requred(func):
+    def auth_required(func):
         @wraps(func)
         def decorated_auth(*args, **kwargs):
             if 'api_token' not in request.headers:
@@ -19,7 +20,7 @@ class Auth():
             token= request.headers.get('api-token')
             data = Auth.decode_token(token)
             if data['error']:
-                return  Response(
+                return Response(
                     mimetype="application/json",
                     response=json.dumps(data['error']),
                     status=400
@@ -35,6 +36,7 @@ class Auth():
             g.user = {'id': user_id}
             return func(*args, **kwargs)
         return decorated_auth
+
 
     @staticmethod
     def generate_token(user_id):
@@ -56,15 +58,15 @@ class Auth():
                 status=400
             )
 
-        @staticmethod
-        def decode_token(token):
-            re = {'data':{}, 'error': {}}
-            try:
-                payload = jwt.decode(token, os.getenv('JWT_SECRET_KEY'))
-                re['data'] = {'user_id': payload['sub']}
-                return re
-            except jwt.ExpiredSignatureError as e1:
-                re['error'] = {'message':'token expired, please login again'}
-                return re
-            except jwt.InvalidTokenError:
-                re['error'] = {'message': 'Invalid token, please try again with a new token'}
+    @staticmethod
+    def decode_token(token):
+        re = {'data': {}, 'error': {}}
+        try:
+            payload = jwt.decode(token, os.getenv('JWT_SECRET_KEY'))
+            re['data'] = {'user_id': payload['sub']}
+            return re
+        except jwt.ExpiredSignatureError as e1:
+            re['error'] = {'message': 'token expired, please login again'}
+            return re
+        except jwt.InvalidTokenError:
+            re['error'] = {'message': 'Invalid token, please try again with a new token'}
