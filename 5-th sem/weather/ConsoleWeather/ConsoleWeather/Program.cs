@@ -55,11 +55,17 @@ public class GetWeather
         doc.LoadXml (xml);
         foreach(XmlNode node in doc.GetElementsByTagName("*"))
         {
-             Console.Out.WriteLine(node.Name);
+             Console.Out.WriteLine(node.Name); 
+             foreach(XmlAttribute attr in node.Attributes)
+             {
+                 Console.Out.WriteLine("| " + attr.Name + " " + attr.Value);
+             }
+             Console.WriteLine("=====================");
+             Console.WriteLine(" ");
         }
         /*szTemp = doc.DocumentElement.SelectSingleNode ("temperature").Attributes["value"].Value;
         szSun = doc.DocumentElement.SelectSingleNode("sun").Attributes["value"].Value;
         temp = double.Parse (szTemp) - 273.16;
-        Console.Out.WriteLine("Temp. " + temp.ToString("N2") + " Celcius" + ", Sun: " + szSun);*/
+        Console.Out.WriteLine("Temp. " + temp.ToString("N2") + " Celcius");*/
     }
 }

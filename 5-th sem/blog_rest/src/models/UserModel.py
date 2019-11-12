@@ -7,21 +7,6 @@ from ..app import bcrypt
 from .BlogpostModel import BlogpostSchema
 
 
-class UserSchema(Schema):
-
-    """
-    User schema
-    """
-
-    id = fields.Int(dump_only=True)
-    name = fields.Str(required=True)
-    email = fields.Email(required=True)
-    password = fields.Str(required=True)
-    created_at = fields.DateTime(dump_only=True)
-    modified_at = fields.DateTime(dump_only=True)
-    blogposts = fields.Nested(BlogpostSchema, many=True)
-
-
 class UserModel(db.Model):
     """
     user Model
@@ -29,7 +14,7 @@ class UserModel(db.Model):
 
     __tablename__ = 'users'
 
-    id = db.Column (db.Integer, primary_key = True)
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128), nullable=False)
     email = db.Column(db.String(128), unique=True, nullable=False)
     password = db.Column(db.String(128), nullable=True)
@@ -66,8 +51,8 @@ class UserModel(db.Model):
         return UserModel.query.all()
 
     @staticmethod
-    def get_one_user(id):
-        return UserModel.query.get(id)
+    def get_one_user(user_id):
+        return UserModel.query.get(user_id)
 
     def __repr(self):
         return '<id {}'.format(self.id)
@@ -77,3 +62,18 @@ class UserModel(db.Model):
 
     def chech_hash(self, password):
         return bcrypt.check_password_hash(self.password, password)
+
+
+class UserSchema(Schema):
+
+    """
+    User schema
+    """
+
+    id = fields.Int(dump_only=True)
+    name = fields.Str(required=True)
+    email = fields.Email(required=True)
+    password = fields.Str(required=True)
+    created_at = fields.DateTime(dump_only=True)
+    modified_at = fields.DateTime(dump_only=True)
+    blogposts = fields.Nested(BlogpostSchema, many=True)

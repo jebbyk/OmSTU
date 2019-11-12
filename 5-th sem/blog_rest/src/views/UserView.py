@@ -17,16 +17,15 @@ def create():
     user_in_db = UserModel.get_user_by_email(data.get('email'))
     if user_in_db:
         message = {'error': 'User already exist, please supply anotehr email addres'}
-        return  custom_response(message, 400)
+        return custom_response(message, 400)
 
     user = UserModel(data)
     user.save()
 
-    #ser_data = user_schema.dump(user).data
-    #token = Auth.generate_token(ser_data.get('id'))
+    ser_data = user_schema.dump(user).data
+    token = Auth.generate_token(ser_data.get('id'))
 
-    #return custom_response({'jwt_token': token}, 201)
-    return 'motherfucker'
+    return custom_response({'jwt_token': token}, 201)
 
 
 @user_api.route('/', methods=['GET'])
