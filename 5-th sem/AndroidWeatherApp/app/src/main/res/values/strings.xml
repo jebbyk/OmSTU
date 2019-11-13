@@ -12,4 +12,8 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="title_activity_weather">WeatherActivity</string>
+    <string name="result">result will be there</string>
+    <string name="enter_city_name">Enter city name</string>
+    <string name="get_info">Get info</string>
 </resources>
