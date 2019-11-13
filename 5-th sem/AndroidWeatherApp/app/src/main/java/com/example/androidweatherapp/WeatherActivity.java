@@ -17,7 +17,9 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Iterator;
 
+import static com.example.androidweatherapp.Utils.JsonUtils.json2text;
 import static com.example.androidweatherapp.Utils.WebUtils.generateURL;
 import static com.example.androidweatherapp.Utils.WebUtils.getResponceFromURL;
 import static java.lang.System.in;
@@ -28,6 +30,8 @@ public class WeatherActivity extends AppCompatActivity {
     private TextView resultText;
 
     class OWQueryTask extends AsyncTask<URL, Void, String>{
+
+
 
         @Override
         protected String doInBackground(URL... urls) {
@@ -42,34 +46,19 @@ public class WeatherActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(String response){
+
+            String result = null;
             try {
                   JSONObject jsonResponse = new JSONObject(response);
-//
-//                JSONArray weatherInfoArray = jsonResponse.getJSONArray("weather");
-//                JSONObject weatherInfoObject = weatherInfoArray.getJSONObject(0);
-//                String mainInfo = weatherInfoObject.getString("main");
-//                String description = weatherInfoObject.getString("description");
-//
-//                JSONObject mainInfoObject = jsonResponse.getJSONObject("main");
-//                JSONObject tempObject = mainInfoObject.getJSONObject("temp");
-//                JSONObject pressureObect = mainInfoObject.getJSONObject("pressure");
-//
-//                JSONObject visibilityObject = jsonResponse.getJSONObject("visibility");
-//
-//                JSONObject windObject = jsonResponse.getJSONObject("wind");
-//                JSONObject windSpeed = windObject.getJSONObject("speed");
-//                JSONObject windDir = windObject.getJSONObject("deg");
 
-
-
-
+                  result = json2text(jsonResponse);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
 
 
-            resultText.setText(response);
+            resultText.setText(result);
         }
     }
 
