@@ -15,7 +15,7 @@ KeySym key_sym;//переменная для ковертирования кла
 GC gc;//ссылк на обьект для рисования
 pthread_mutex_t hmtx;//мьютекс для блокировки доступа к такси
 
-XColor l_green, d_green, white, gray, d_gray, yelow, red, blue;//используемые цвета
+XColor l_green, d_green, white, gray, d_gray, yelow, red, blue, balck;//используемые цвета
 unsigned int stop_size  = 16;//размер остановки
 
 typedef struct{//структура для координат
@@ -35,16 +35,16 @@ stop stops_list[4];
 void SetStops()//расположение всех остановок и остановочных мест для каждой остановки
 {
     stops_list[0].position.x = 64;//координаты самих остановок
-    stops_list[0].position.y = 200;
+    stops_list[0].position.y = 256;
 
-    stops_list[1].position.x = 300;
-    stops_list[1].position.y = 128;
+    stops_list[1].position.x = 400;
+    stops_list[1].position.y = 256;
 
-    stops_list[2].position.x = 600;
-    stops_list[2].position.y = 300;
+    stops_list[2].position.x = 800;
+    stops_list[2].position.y = 256;
 
-    stops_list[3].position.x = 756;
-    stops_list[3].position.y = 150;
+    stops_list[3].position.x = 1200;
+    stops_list[3].position.y = 256;
 
     for(int i = 0; i < 4; i++)
     {
@@ -292,7 +292,8 @@ void showContent()//фнукция для отображения всего пр
         XSetForeground(dspl, gc, d_gray.pixel);//выбираем серую кистьдля рисования дороги
         if(i > 0)
         {
-            XDrawLine(dspl, hwnd, gc, op.x, op.y, p.x, p.y);//рисуем линию от предыдущей остановки к текущй
+            XDrawLine(dspl, hwnd, gc, op.x, op.y-4, p.x, p.y-4);
+            XDrawLine(dspl, hwnd, gc, op.x, op.y+4, p.x, p.y+4);//рисуем линию от предыдущей остановки к текущй
         }
         op = p;//координаты текущей остановки после рисованя становятся координатами предыдущей
     }
@@ -302,50 +303,9 @@ void showContent()//фнукция для отображения всего пр
     for(int i = 0; i < people_count; i++)//проходим циклом по всему ссписку людей в масиве
     {
         if(people_list[i].sleep == 1) XSetForeground(dspl, gc, d_gray.pixel);//елси человек спит, то рисуем его серым 
-        else XSetForeground(dspl, gc, white.pixel);//иначи рисуем белым
+        else XSetForeground(dspl, gc, black.pixel);//иначи рисуем белым
         XFillArc(dspl, hwnd, gc, people_list[i].position.x - 2, people_list[i].position.y - 2, 4, 4, 0,360*64);//куржок символизирующий персонажа
-        char c[2] = "";
-        sprintf(c, "%d", i);//преобразуем текущий номер элемента массива в букву 
-        XSetForeground(dspl, gc, white.pixel);//устанавливаем цвет рисования - белый
-        XDrawString(dspl, hwnd, gc, 820, 16 + i * 18, c, 2);//пишем номер человека в нужных координатах
-        XSetForeground(dspl, gc, d_gray.pixel);//устанавливаем цвет рисованя - серый
-        if(people_list[i].walk_stop == 1) {//если человек сейчкс идет к остановке
-            XSetForeground(dspl, gc, d_green.pixel);//устанавливаем темно зеленый цвет рисования
-            XDrawString(dspl, hwnd, gc, 840, 16 + i * 18, "wk_st", 5);//выводим текст в таблицу
-        }
-        if(people_list[i].walk_taxi == 1) {//делаем так же с остальными флагами в таблице, разукрашивая их в разные цвета для наглядности 
-            XSetForeground(dspl, gc, yelow.pixel);
-            XDrawString(dspl, hwnd, gc, 880, 16 + i * 18, "wk_tx", 5);
-        }
-        if(people_list[i].walk_out == 1) {
-            XSetForeground(dspl, gc, blue.pixel);
-            XDrawString(dspl, hwnd, gc, 920, 16 + i * 18, "wk_ot", 5);
-        }
-        if(people_list[i].wait == 1) {
-            XSetForeground(dspl, gc, d_gray.pixel);
-            XDrawString(dspl, hwnd, gc, 960, 16 + i * 18, "wait", 4);
-        }
-        if(people_list[i].drive == 1) {
-            XSetForeground(dspl, gc, yelow.pixel);
-            XDrawString(dspl, hwnd, gc, 1000, 16 + i * 18, "drive", 5);
-        }
-        if(people_list[i].direction == 1) 
-        {
-            XSetForeground(dspl, gc, red.pixel);
-            XDrawString(dspl, hwnd, gc, 1060, 16 + i * 18, "bkwd", 4);
-        }
-        if(people_list[i].direction == 0) 
-        {
-            XSetForeground(dspl, gc, l_green.pixel);
-            XDrawString(dspl, hwnd, gc, 1100, 16 + i * 18, "frwd", 4);
-        }
-         XSetForeground(dspl, gc, d_green.pixel);
-         char num[1] = "";
-         sprintf(num, "%d", people_list[i].curent_stop);
-         XDrawString(dspl, hwnd, gc, 1140 + people_list[i].curent_stop * 12, 16 + i * 18, num, 1);//отображение номера текущей остановки
-
     }
-
     XFlush(dspl);// отправление графической информации в само окно на вывод
 }
 
@@ -357,7 +317,7 @@ void main()
     gc = XDefaultGC(dspl,0);//дескриптор для рисования в графическом окне
     if(dspl == 0) {printf("Error XOpenDisplay\n"); exit(1);}//выводим ошибку если не получиолсь соткрыть дисплей
     screen = XDefaultScreen(dspl);//сохранаяем инфо о экране
-    hwnd = XCreateSimpleWindow(dspl, RootWindow(dspl, screen), 100,50,1200,600,3, WhitePixel(dspl,screen), BlackPixel(dspl,screen));//созаем простое графическое окно с размерами 1200 на 600 
+    hwnd = XCreateSimpleWindow(dspl, RootWindow(dspl, screen), 100,50,1200,600,3, BlackPixel(dspl,screen), WhitePixel(dspl,screen));//созаем простое графическое окно с размерами 1200 на 600 
 
     Colormap screen_colormap;//созадем новую палитру цветов 
     
@@ -370,9 +330,10 @@ void main()
     XAllocNamedColor(dspl, screen_colormap, "white", &white, &white);
     XAllocNamedColor(dspl, screen_colormap, "dark green", &d_green, &d_green);
     XAllocNamedColor(dspl, screen_colormap, "sky blue", &blue, &blue);
+    XAllocNamedColor(dspl, screen_colormap, "black", &black, &black);
 
     XSetForeground(dspl, gc, yelow.pixel);//утсанавливаем желлтый цвет рисования
-    XSetBackground(dspl, gc, BlackPixel(dspl, screen));//черный цвет фона
+    XSetBackground(dspl, gc, WhitePixel(dspl, screen));//черный цвет фона
 
     if(hwnd == 0) {printf("Error XCreateSimpleWindow\n"); exit(1);}//если произошли ошибки с окном то выводим предупреждение и выходим
     XSelectInput(dspl, hwnd, ExposureMask | KeyPressMask );//здес указываем какой ввод с мыши и клавиатуры мы будем считывать во время работы программы

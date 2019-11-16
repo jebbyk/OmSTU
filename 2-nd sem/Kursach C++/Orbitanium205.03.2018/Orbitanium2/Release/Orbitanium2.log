@@ -1,3 +1,2 @@
 ﻿  main.cpp
-  LINK : указан параметр /LTCG, но не требуется создание кода; удалите /LTCG из командной строки компоновки для повышения производительности компоновщика
-  Orbitanium2.vcxproj -> W:\Users\Jebbyk\source\repos\Orbitanium205.03.2018\Release\Orbitanium2.exe
+c:\users\jebbyk\documents\github\omstu\2-nd sem\kursach c++\orbitanium205.03.2018\orbitanium2\componentcontainer.h(4): fatal error C1083: Не удается открыть файл включение: SFML/Graphics.hpp: No such file or directory,

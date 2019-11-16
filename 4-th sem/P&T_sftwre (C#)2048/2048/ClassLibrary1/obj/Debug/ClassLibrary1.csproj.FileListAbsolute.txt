@@ -1,0 +1,6 @@
+C:\Users\Jebbyk\Documents\GitHub\OmSTU\4-th sem\P&T_sftwre (C#)2048\2048\ClassLibrary1\bin\Debug\ClassLibrary1.dll
+C:\Users\Jebbyk\Documents\GitHub\OmSTU\4-th sem\P&T_sftwre (C#)2048\2048\ClassLibrary1\bin\Debug\ClassLibrary1.pdb
+C:\Users\Jebbyk\Documents\GitHub\OmSTU\4-th sem\P&T_sftwre (C#)2048\2048\ClassLibrary1\obj\Debug\ClassLibrary1.csprojAssemblyReference.cache
+C:\Users\Jebbyk\Documents\GitHub\OmSTU\4-th sem\P&T_sftwre (C#)2048\2048\ClassLibrary1\obj\Debug\ClassLibrary1.csproj.CoreCompileInputs.cache
+C:\Users\Jebbyk\Documents\GitHub\OmSTU\4-th sem\P&T_sftwre (C#)2048\2048\ClassLibrary1\obj\Debug\ClassLibrary1.dll
+C:\Users\Jebbyk\Documents\GitHub\OmSTU\4-th sem\P&T_sftwre (C#)2048\2048\ClassLibrary1\obj\Debug\ClassLibrary1.pdb
