@@ -11,12 +11,13 @@ public class JsonUtils {
     public static String json2text(JSONObject jsonObj) throws JSONException {
         padd++;
         //Iterating Key Set
-        String result = null;
+        String result = "";
         Iterator<String> keys = jsonObj.keys();
         while (keys.hasNext()) {
 
             String key = (String)keys.next();
             Object valObj = jsonObj.get(key);
+
             //If next entry is Object
             if (valObj instanceof JSONObject) {
                 // call printJSON on nested object
@@ -28,7 +29,7 @@ public class JsonUtils {
                 {
                     result += "  ";
                 }
-                result += ("NestedArraykey : " + key);
+                result += ("arr: " + key);
                 result += jsonArr2text((JSONArray) valObj);
 
             } else {
@@ -38,7 +39,15 @@ public class JsonUtils {
                     result += "  ";
                 }
                 result += (key);
-                result += (": " + valObj.toString() + "\n");
+                float value = 0;
+                String strValue = "";
+                if(key.contains("temp")){
+                    value = Float.parseFloat( valObj.toString());
+                    strValue = Float.toString(value - 273.15f);
+                }else{
+                    strValue = valObj.toString();
+                }
+                result += (": " + strValue + "\n");
             }
         }
         padd--;
@@ -48,7 +57,7 @@ public class JsonUtils {
     public static String jsonArr2text(JSONArray jarray) throws JSONException {
         //Get Object from Array
         padd++;
-        String result = null;
+        String result = "";
         for (int i = 0; i < jarray.length(); i++) {
             result += json2text(jarray.getJSONObject(i));
         }

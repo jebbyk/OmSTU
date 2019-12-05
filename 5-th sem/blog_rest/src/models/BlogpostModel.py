@@ -40,8 +40,8 @@ class BlogpostModel(db.Model):
         return BlogpostModel.query.all()
 
     @staticmethod
-    def get_one_blogpost(id):
-        return BlogpostModel.query.get(id)
+    def get_one_blogpost(_id):
+        return BlogpostModel.query.get(_id)
 
     def __repr__(self):
         return '<id {}>'.format(self.id)

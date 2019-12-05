@@ -1,5 +1,6 @@
 package com.example.androidweatherapp;
 
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -29,6 +30,8 @@ public class WeatherActivity extends AppCompatActivity {
     private Button searchButton;
     private TextView resultText;
 
+    SharedPreferences sp;
+
     class OWQueryTask extends AsyncTask<URL, Void, String>{
 
 
@@ -36,10 +39,15 @@ public class WeatherActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(URL... urls) {
             String response = null;
+            sp = getPreferences(MODE_PRIVATE);
             try {
                 response = getResponceFromURL(urls[0]);
+                SharedPreferences.Editor ed = sp.edit();
+                ed.putString("data", response.toString());
+                ed.commit();
             } catch (IOException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
+                response = sp.getString("data", "no saved data");
             }
 
             return response;
@@ -50,14 +58,10 @@ public class WeatherActivity extends AppCompatActivity {
             String result = null;
             try {
                   JSONObject jsonResponse = new JSONObject(response);
-
                   result = json2text(jsonResponse);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-
-
             resultText.setText(result);
         }
     }
