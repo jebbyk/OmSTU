@@ -47,7 +47,7 @@ public class GetWeather
         API_KEY = "368e827be4b38db51ff960ca88b5c396";
 
         weburl = "http://api.openweathermap.org/data/2.5/weather?q=" + CityName + "&mode=xml&APPID=" + API_KEY;
-        //weburl = "http://api.openweathermap.org/data/2.5/forecast?id=524901&APPID=368e827be4b38db51ff960ca88b5c396";
+        //weburl = "http://api.openweathermap.org/data/2.5/forecast?id=524901&units=metric&APPID=368e827be4b38db51ff960ca88b5c396";
 
         doc = new XmlDocument ();
         
