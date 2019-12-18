@@ -2,7 +2,7 @@ from flask import request, json, Response, Blueprint, g
 from ..models.UserModel import UserModel, UserSchema
 from ..shared.Authentication import Auth
 
-user_api = Blueprint('user_api', __name__)
+user_api = Blueprint('users', __name__)
 user_schema = UserSchema()
 
 
