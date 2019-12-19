@@ -1,7 +1,7 @@
 import jwt
 import os
 import datetime
-from flask import json, Response, request, g
+from flask import json, jsonify, Response, request, g
 from ..models.UserModel import UserModel
 from functools import wraps
 
@@ -37,13 +37,12 @@ class Auth:
             return func(*args, **kwargs)
         return decorated_auth
 
-
     @staticmethod
     def generate_token(user_id):
         try:
             payload = {
                 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1),
-                'eat': datetime.datetime.utcnow(),
+                'iat': datetime.datetime.utcnow(),
                 'sub': user_id
             }
             return jwt.encode(
@@ -54,7 +53,7 @@ class Auth:
         except Exception as e:
             return Response(
                 mimetype="application/json",
-                response=json.dumps({'error', 'error in generating user token'}),
+                response=json.dumps({'error': 'error in generating user token'}),
                 status=400
             )
 

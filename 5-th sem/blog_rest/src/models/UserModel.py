@@ -1,8 +1,8 @@
 from marshmallow import fields, Schema
 import datetime
-from .import db
+from .import db, bcrypt
 
-from ..app import bcrypt
+#from ..app import bcrypt
 
 from .BlogpostModel import BlogpostSchema
 
@@ -28,7 +28,7 @@ class UserModel(db.Model):
         self.password = self.__generate_hash(data.get('password'))
         self.created_at = datetime.datetime.utcnow()
         self.modified_at = datetime.datetime.utcnow()
-        blogposts = db.realtionship('BolgpostModel', backref='users', lazy=True)
+        blogposts = db.relationship('BolgpostModel', backref='users', lazy=True)
 
     def save(self):
         db.session.add(self)
@@ -53,6 +53,10 @@ class UserModel(db.Model):
     @staticmethod
     def get_one_user(user_id):
         return UserModel.query.get(user_id)
+
+    @staticmethod
+    def get_user_by_email(user_email):
+        return UserModel.query.filter_by(email=user_email).first()
 
     def __repr(self):
         return '<id {}'.format(self.id)

@@ -20,7 +20,8 @@ manager.add_command('db', MigrateCommand)
 if __name__ == '__main__':
     manager.run()
 
-@manger.command
+
+@manager.command
 def list_routes():
     import urllib
     output = []

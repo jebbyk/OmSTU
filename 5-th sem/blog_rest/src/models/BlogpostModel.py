@@ -7,7 +7,7 @@ class BlogpostModel(db.Model):
     """
     Blogpost Model
     """
-    __tablenamme__ = 'blogposts'
+    __tablename__ = 'blogposts'
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(128), nullable=False)

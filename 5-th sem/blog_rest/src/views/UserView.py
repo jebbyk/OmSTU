@@ -1,4 +1,4 @@
-from flask import request, json, Response, Blueprint, g
+from flask import request, json, jsonify, Response, Blueprint, g
 from ..models.UserModel import UserModel, UserSchema
 from ..shared.Authentication import Auth
 
@@ -9,10 +9,10 @@ user_schema = UserSchema()
 @user_api.route('/', methods=['POST'])
 def create():
     req_data = request.get_json()
-    data, error = user_schema.load(req_data)
+    data = user_schema.load(req_data)
 
-    if error:
-        return custom_response(error, 400)
+    if 'error' in data:
+        return custom_response(data.get('error'), 400)
 
     user_in_db = UserModel.get_user_by_email(data.get('email'))
     if user_in_db:
@@ -40,10 +40,7 @@ def get_all():
 def login():
     req_data = request.get_json()
 
-    data, error = user_schema.load(req_data, partial=True)
-
-    if error:
-        return custom_response(error, 400)
+    data = user_schema.load(req_data, partial=True)
 
     if not data.get('email') or not data.get('password'):
         return custom_response({'error': 'you need email and password to sign in'}, 400)
@@ -78,9 +75,7 @@ def get_a_user(user_id):
 @Auth.auth_required
 def update():
     req_data = request.get_json()
-    data, error = user_schema.load(req_data, partial=True)
-    if error:
-        return custom_response(error, 400)
+    data = user_schema.load(req_data, partial=True)
 
     user = UserModel.get_one_user(g.user.get('id'))
     user.update(data)
