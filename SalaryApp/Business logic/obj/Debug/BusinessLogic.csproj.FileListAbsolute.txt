@@ -1,0 +1,6 @@
+C:\Users\user\Desktop\Github\SalaryApp\Business logic\bin\Debug\Business logic.dll
+C:\Users\user\Desktop\Github\SalaryApp\Business logic\bin\Debug\Business logic.pdb
+C:\Users\user\Desktop\Github\SalaryApp\Business logic\obj\Debug\BusinessLogic.csproj.AssemblyReference.cache
+C:\Users\user\Desktop\Github\SalaryApp\Business logic\obj\Debug\BusinessLogic.csproj.CoreCompileInputs.cache
+C:\Users\user\Desktop\Github\SalaryApp\Business logic\obj\Debug\Business logic.dll
+C:\Users\user\Desktop\Github\SalaryApp\Business logic\obj\Debug\Business logic.pdb

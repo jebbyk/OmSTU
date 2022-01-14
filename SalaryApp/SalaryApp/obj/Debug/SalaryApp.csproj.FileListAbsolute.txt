@@ -23,3 +23,6 @@ C:\Users\user\Desktop\Github\SalaryApp\SalaryApp\obj\Debug\SalaryApp.pdb
 C:\Users\user\Desktop\Github\SalaryApp\SalaryApp\bin\Debug\SalaryApp.exe.config
 C:\Users\user\Desktop\Github\SalaryApp\SalaryApp\bin\Debug\SalaryApp.exe
 C:\Users\user\Desktop\Github\SalaryApp\SalaryApp\bin\Debug\SalaryApp.pdb
+C:\Users\user\Desktop\Github\SalaryApp\SalaryApp\bin\Debug\Business logic.dll
+C:\Users\user\Desktop\Github\SalaryApp\SalaryApp\bin\Debug\Business logic.pdb
+C:\Users\user\Desktop\Github\SalaryApp\SalaryApp\obj\Debug\SalaryApp.csproj.CopyComplete

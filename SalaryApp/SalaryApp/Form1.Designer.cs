@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.textBoxSurname = new System.Windows.Forms.TextBox();
-            this.textBoxFirstName = new System.Windows.Forms.TextBox();
+            this.textBoxName = new System.Windows.Forms.TextBox();
             this.textBoxPatronymic = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -39,31 +39,32 @@
             this.textBoxBusiness = new System.Windows.Forms.TextBox();
             this.textBoxHours = new System.Windows.Forms.TextBox();
             this.labelSalary = new System.Windows.Forms.Label();
-            this.labelFullName = new System.Windows.Forms.Label();
+            this.labelSurnameAndInitials = new System.Windows.Forms.Label();
             this.textBoxPremium = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.comboBox = new System.Windows.Forms.ComboBox();
+            this.buttonCalculation = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // textBoxSurname
             // 
             this.textBoxSurname.Location = new System.Drawing.Point(96, 10);
             this.textBoxSurname.Name = "textBoxSurname";
-            this.textBoxSurname.Size = new System.Drawing.Size(100, 22);
+            this.textBoxSurname.Size = new System.Drawing.Size(120, 22);
             this.textBoxSurname.TabIndex = 0;
             // 
-            // textBoxFirstName
+            // textBoxName
             // 
-            this.textBoxFirstName.Location = new System.Drawing.Point(96, 38);
-            this.textBoxFirstName.Name = "textBoxFirstName";
-            this.textBoxFirstName.Size = new System.Drawing.Size(100, 22);
-            this.textBoxFirstName.TabIndex = 1;
+            this.textBoxName.Location = new System.Drawing.Point(96, 38);
+            this.textBoxName.Name = "textBoxName";
+            this.textBoxName.Size = new System.Drawing.Size(120, 22);
+            this.textBoxName.TabIndex = 1;
             // 
             // textBoxPatronymic
             // 
             this.textBoxPatronymic.Location = new System.Drawing.Point(96, 66);
             this.textBoxPatronymic.Name = "textBoxPatronymic";
-            this.textBoxPatronymic.Size = new System.Drawing.Size(100, 22);
+            this.textBoxPatronymic.Size = new System.Drawing.Size(120, 22);
             this.textBoxPatronymic.TabIndex = 2;
             // 
             // label1
@@ -128,20 +129,20 @@
             // labelSalary
             // 
             this.labelSalary.AutoSize = true;
-            this.labelSalary.Location = new System.Drawing.Point(327, 116);
+            this.labelSalary.Location = new System.Drawing.Point(352, 126);
             this.labelSalary.Name = "labelSalary";
             this.labelSalary.Size = new System.Drawing.Size(252, 16);
             this.labelSalary.TabIndex = 17;
             this.labelSalary.Text = "___________________________________";
             // 
-            // labelFullName
+            // labelSurnameAndInitials
             // 
-            this.labelFullName.AutoSize = true;
-            this.labelFullName.Location = new System.Drawing.Point(327, 91);
-            this.labelFullName.Name = "labelFullName";
-            this.labelFullName.Size = new System.Drawing.Size(252, 16);
-            this.labelFullName.TabIndex = 22;
-            this.labelFullName.Text = "___________________________________";
+            this.labelSurnameAndInitials.AutoSize = true;
+            this.labelSurnameAndInitials.Location = new System.Drawing.Point(352, 101);
+            this.labelSurnameAndInitials.Name = "labelSurnameAndInitials";
+            this.labelSurnameAndInitials.Size = new System.Drawing.Size(252, 16);
+            this.labelSurnameAndInitials.TabIndex = 22;
+            this.labelSurnameAndInitials.Text = "___________________________________";
             // 
             // textBoxPremium
             // 
@@ -159,27 +160,38 @@
             this.label7.TabIndex = 25;
             this.label7.Text = "Инженер: премия";
             // 
-            // comboBox1
+            // comboBox
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
+            this.comboBox.FormattingEnabled = true;
+            this.comboBox.Items.AddRange(new object[] {
             "Инженер",
             "Рабочий",
             "Менеджер"});
-            this.comboBox1.Location = new System.Drawing.Point(200, 108);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 24);
-            this.comboBox1.TabIndex = 26;
+            this.comboBox.Location = new System.Drawing.Point(225, 101);
+            this.comboBox.Name = "comboBox";
+            this.comboBox.Size = new System.Drawing.Size(121, 24);
+            this.comboBox.TabIndex = 26;
+            // 
+            // buttonCalculation
+            // 
+            this.buttonCalculation.Location = new System.Drawing.Point(96, 101);
+            this.buttonCalculation.Name = "buttonCalculation";
+            this.buttonCalculation.Size = new System.Drawing.Size(100, 23);
+            this.buttonCalculation.TabIndex = 27;
+            this.buttonCalculation.Text = "Рассчитать";
+            this.buttonCalculation.UseVisualStyleBackColor = true;
+            this.buttonCalculation.Click += new System.EventHandler(this.buttonCalculation_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(694, 287);
-            this.Controls.Add(this.comboBox1);
+            this.ClientSize = new System.Drawing.Size(651, 167);
+            this.Controls.Add(this.buttonCalculation);
+            this.Controls.Add(this.comboBox);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.textBoxPremium);
-            this.Controls.Add(this.labelFullName);
+            this.Controls.Add(this.labelSurnameAndInitials);
             this.Controls.Add(this.labelSalary);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label6);
@@ -189,7 +201,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBoxPatronymic);
-            this.Controls.Add(this.textBoxFirstName);
+            this.Controls.Add(this.textBoxName);
             this.Controls.Add(this.textBoxSurname);
             this.Name = "Form1";
             this.Text = "Salary";
@@ -201,7 +213,7 @@
         #endregion
 
         private System.Windows.Forms.TextBox textBoxSurname;
-        private System.Windows.Forms.TextBox textBoxFirstName;
+        private System.Windows.Forms.TextBox textBoxName;
         private System.Windows.Forms.TextBox textBoxPatronymic;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
@@ -211,10 +223,11 @@
         private System.Windows.Forms.TextBox textBoxBusiness;
         private System.Windows.Forms.TextBox textBoxHours;
         private System.Windows.Forms.Label labelSalary;
-        private System.Windows.Forms.Label labelFullName;
+        private System.Windows.Forms.Label labelSurnameAndInitials;
         private System.Windows.Forms.TextBox textBoxPremium;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox comboBox;
+        private System.Windows.Forms.Button buttonCalculation;
     }
 }
 

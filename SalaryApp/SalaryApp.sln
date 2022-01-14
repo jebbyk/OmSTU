@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalaryApp", "SalaryApp\SalaryApp.csproj", "{B924C05A-D987-420F-9685-D0BB71C26E86}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLogic", "Business logic\BusinessLogic.csproj", "{78258D76-9F56-49BD-81C3-9070FAEC7DBD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{B924C05A-D987-420F-9685-D0BB71C26E86}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B924C05A-D987-420F-9685-D0BB71C26E86}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B924C05A-D987-420F-9685-D0BB71C26E86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78258D76-9F56-49BD-81C3-9070FAEC7DBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78258D76-9F56-49BD-81C3-9070FAEC7DBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78258D76-9F56-49BD-81C3-9070FAEC7DBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78258D76-9F56-49BD-81C3-9070FAEC7DBD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
