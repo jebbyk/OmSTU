@@ -1,0 +1,25 @@
+E:\Github\OmSTU\1 курс\Управление запросами на изменения, дефектами и проблемами в программном обеспечении\SalaryApp\bin\Debug\SalaryApp.exe.config
+E:\Github\OmSTU\1 курс\Управление запросами на изменения, дефектами и проблемами в программном обеспечении\SalaryApp\bin\Debug\SalaryApp.exe
+E:\Github\OmSTU\1 курс\Управление запросами на изменения, дефектами и проблемами в программном обеспечении\SalaryApp\bin\Debug\SalaryApp.pdb
+E:\Github\OmSTU\1 курс\Управление запросами на изменения, дефектами и проблемами в программном обеспечении\SalaryApp\bin\Debug\BL.dll
+E:\Github\OmSTU\1 курс\Управление запросами на изменения, дефектами и проблемами в программном обеспечении\SalaryApp\bin\Debug\BL.pdb
+E:\Github\OmSTU\1 курс\Управление запросами на изменения, дефектами и проблемами в программном обеспечении\SalaryApp\obj\Debug\SalaryApp.csproj.AssemblyReference.cache
+E:\Github\OmSTU\1 курс\Управление запросами на изменения, дефектами и проблемами в программном обеспечении\SalaryApp\obj\Debug\SalaryApp.csproj.SuggestedBindingRedirects.cache
+E:\Github\OmSTU\1 курс\Управление запросами на изменения, дефектами и проблемами в программном обеспечении\SalaryApp\obj\Debug\SalaryApp.Form1.resources
+E:\Github\OmSTU\1 курс\Управление запросами на изменения, дефектами и проблемами в программном обеспечении\SalaryApp\obj\Debug\SalaryApp.Properties.Resources.resources
+E:\Github\OmSTU\1 курс\Управление запросами на изменения, дефектами и проблемами в программном обеспечении\SalaryApp\obj\Debug\SalaryApp.csproj.GenerateResource.cache
+E:\Github\OmSTU\1 курс\Управление запросами на изменения, дефектами и проблемами в программном обеспечении\SalaryApp\obj\Debug\SalaryApp.csproj.CoreCompileInputs.cache
+E:\Github\OmSTU\1 курс\Управление запросами на изменения, дефектами и проблемами в программном обеспечении\SalaryApp\obj\Debug\SalaryApp.csproj.CopyComplete
+E:\Github\OmSTU\1 курс\Управление запросами на изменения, дефектами и проблемами в программном обеспечении\SalaryApp\obj\Debug\SalaryApp.exe
+E:\Github\OmSTU\1 курс\Управление запросами на изменения, дефектами и проблемами в программном обеспечении\SalaryApp\obj\Debug\SalaryApp.pdb
+C:\Users\user\Desktop\Github\SalaryApp\SalaryApp\obj\Debug\SalaryApp.csproj.AssemblyReference.cache
+C:\Users\user\Desktop\Github\SalaryApp\SalaryApp\obj\Debug\SalaryApp.csproj.SuggestedBindingRedirects.cache
+C:\Users\user\Desktop\Github\SalaryApp\SalaryApp\obj\Debug\SalaryApp.Form1.resources
+C:\Users\user\Desktop\Github\SalaryApp\SalaryApp\obj\Debug\SalaryApp.Properties.Resources.resources
+C:\Users\user\Desktop\Github\SalaryApp\SalaryApp\obj\Debug\SalaryApp.csproj.GenerateResource.cache
+C:\Users\user\Desktop\Github\SalaryApp\SalaryApp\obj\Debug\SalaryApp.csproj.CoreCompileInputs.cache
+C:\Users\user\Desktop\Github\SalaryApp\SalaryApp\obj\Debug\SalaryApp.exe
+C:\Users\user\Desktop\Github\SalaryApp\SalaryApp\obj\Debug\SalaryApp.pdb
+C:\Users\user\Desktop\Github\SalaryApp\SalaryApp\bin\Debug\SalaryApp.exe.config
+C:\Users\user\Desktop\Github\SalaryApp\SalaryApp\bin\Debug\SalaryApp.exe
+C:\Users\user\Desktop\Github\SalaryApp\SalaryApp\bin\Debug\SalaryApp.pdb

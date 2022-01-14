@@ -1,0 +1,31 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "b924c05a-d987-420f-9685-d0bb71c26e86": {
+      "ProjectGuid": "b924c05a-d987-420f-9685-d0bb71c26e86",
+      "DisplayName": "SalaryApp",
+      "ColorIndex": 0
+    },
+    "776e8896-10c2-4092-8139-fc216e803cff": {
+      "ProjectGuid": "776e8896-10c2-4092-8139-fc216e803cff",
+      "DisplayName": "BL",
+      "ColorIndex": 1
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "Прочие файлы",
+      "ColorIndex": -1
+    },
+    "30a60e71-5ab9-4a02-b03e-386cda6212cb": {
+      "ProjectGuid": "30a60e71-5ab9-4a02-b03e-386cda6212cb",
+      "DisplayName": "UnitTests",
+      "ColorIndex": 2
+    },
+    "64e6bae6-ccfa-46a3-90d6-afa037d67d8b": {
+      "ProjectGuid": "64e6bae6-ccfa-46a3-90d6-afa037d67d8b",
+      "DisplayName": "UnitTests",
+      "ColorIndex": 3
+    }
+  },
+  "NextColorIndex": 4
+}
