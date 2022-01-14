@@ -1,0 +1,23 @@
+C:\Users\user\Desktop\Github\SalaryApp\UnitTestsSalaryApp\bin\Debug\ru\Microsoft.TestPlatform.AdapterUtilities.resources.dll
+C:\Users\user\Desktop\Github\SalaryApp\UnitTestsSalaryApp\bin\Debug\ru\Microsoft.TestPlatform.CoreUtilities.resources.dll
+C:\Users\user\Desktop\Github\SalaryApp\UnitTestsSalaryApp\bin\Debug\ru\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.resources.dll
+C:\Users\user\Desktop\Github\SalaryApp\UnitTestsSalaryApp\bin\Debug\ru\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.resources.dll
+C:\Users\user\Desktop\Github\SalaryApp\UnitTestsSalaryApp\bin\Debug\ru\Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+C:\Users\user\Desktop\Github\SalaryApp\UnitTestsSalaryApp\bin\Debug\ru\Microsoft.VisualStudio.TestPlatform.TestFramework.resources.dll
+C:\Users\user\Desktop\Github\SalaryApp\UnitTestsSalaryApp\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll
+C:\Users\user\Desktop\Github\SalaryApp\UnitTestsSalaryApp\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll
+C:\Users\user\Desktop\Github\SalaryApp\UnitTestsSalaryApp\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll
+C:\Users\user\Desktop\Github\SalaryApp\UnitTestsSalaryApp\bin\Debug\Microsoft.TestPlatform.AdapterUtilities.dll
+C:\Users\user\Desktop\Github\SalaryApp\UnitTestsSalaryApp\bin\Debug\UnitTestsSalaryApp.dll
+C:\Users\user\Desktop\Github\SalaryApp\UnitTestsSalaryApp\bin\Debug\UnitTestsSalaryApp.pdb
+C:\Users\user\Desktop\Github\SalaryApp\UnitTestsSalaryApp\bin\Debug\Business logic.dll
+C:\Users\user\Desktop\Github\SalaryApp\UnitTestsSalaryApp\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.dll
+C:\Users\user\Desktop\Github\SalaryApp\UnitTestsSalaryApp\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll
+C:\Users\user\Desktop\Github\SalaryApp\UnitTestsSalaryApp\bin\Debug\Business logic.pdb
+C:\Users\user\Desktop\Github\SalaryApp\UnitTestsSalaryApp\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.xml
+C:\Users\user\Desktop\Github\SalaryApp\UnitTestsSalaryApp\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.xml
+C:\Users\user\Desktop\Github\SalaryApp\UnitTestsSalaryApp\obj\Debug\UnitTestsSalaryApp.csproj.AssemblyReference.cache
+C:\Users\user\Desktop\Github\SalaryApp\UnitTestsSalaryApp\obj\Debug\UnitTestsSalaryApp.csproj.CoreCompileInputs.cache
+C:\Users\user\Desktop\Github\SalaryApp\UnitTestsSalaryApp\obj\Debug\UnitTestsSalaryApp.csproj.CopyComplete
+C:\Users\user\Desktop\Github\SalaryApp\UnitTestsSalaryApp\obj\Debug\UnitTestsSalaryApp.dll
+C:\Users\user\Desktop\Github\SalaryApp\UnitTestsSalaryApp\obj\Debug\UnitTestsSalaryApp.pdb
